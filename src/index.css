@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background: #0a0b0f;
+  color: #c9cdd4;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, Consolas, monospace;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
