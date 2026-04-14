@@ -9,7 +9,7 @@ import { generateSectorPreviews, generateSector } from '../generation/sector'
 import { generateArrivalNarration } from '../generation/narration'
 import { resolveAction, resolveCombat } from '../generation/action-resolver'
 import { compressSector } from '../generation/compressor'
-import { generateCaptainAnalysis, type CaptainAnalysis } from '../generation/captain-profile'
+import { generateCaptainAnalysis } from '../generation/captain-profile'
 import { createLLMProvider } from '../llm/client'
 import { RETREAT_COSTS } from '../config'
 

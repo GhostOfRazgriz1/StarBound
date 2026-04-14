@@ -184,7 +184,7 @@ export interface ShipClass {
   weaknesses: string[]
 }
 
-export const SHIP_CLASSES: Record<ShipClassId, ShipClass> = {
+export const SHIP_CLASSES: Record<Exclude<ShipClassId, 'custom'>, ShipClass> = {
   explorer: {
     id: 'explorer',
     name: 'Atlas-Class Explorer',

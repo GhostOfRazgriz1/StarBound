@@ -1,8 +1,9 @@
 import { useGameStore } from '../../storage/game-store'
 import { setSelectedShip } from '../../storage/session'
-import { SHIP_CLASSES, CUSTOM_SHIP_MAX, type ShipClassId } from '../../types/game'
+import { SHIP_CLASSES, CUSTOM_SHIP_MAX } from '../../types/game'
 
-const shipOrder: ShipClassId[] = ['explorer', 'corvette', 'freighter', 'scout']
+type PresetShipId = keyof typeof SHIP_CLASSES
+const shipOrder: PresetShipId[] = ['explorer', 'corvette', 'freighter', 'scout']
 
 function StatBar({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
   const pct = (value / max) * 100
@@ -20,7 +21,7 @@ function StatBar({ label, value, max, color }: { label: string; value: number; m
 export function ShipSelectScreen() {
   const setPhase = useGameStore((s) => s.setPhase)
 
-  function handleSelect(id: ShipClassId) {
+  function handleSelect(id: PresetShipId) {
     setSelectedShip(id)
     setPhase('scenario_select')
   }
