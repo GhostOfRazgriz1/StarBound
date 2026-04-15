@@ -84,6 +84,8 @@ export function SetupScreen() {
                 ['openai', 'OpenAI'],
                 ['anthropic', 'Anthropic'],
                 ['google', 'Google AI'],
+                ['deepseek', 'DeepSeek'],
+                ['qwen', 'Qwen'],
                 ['openrouter', 'OpenRouter'],
               ] as const).map(([p, label]) => (
                 <button
@@ -111,6 +113,8 @@ export function SetupScreen() {
                 provider === 'openai' ? 'sk-...' :
                 provider === 'anthropic' ? 'sk-ant-...' :
                 provider === 'google' ? 'AIza...' :
+                provider === 'deepseek' ? 'sk-...' :
+                provider === 'qwen' ? 'sk-...' :
                 'sk-or-...'
               }
               className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500"

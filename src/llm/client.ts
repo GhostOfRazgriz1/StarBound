@@ -15,6 +15,10 @@ export function createLLMProvider(config: LLMConfig): LLMProvider {
       return new GoogleProvider(config.apiKey, config.model)
     case 'openrouter':
       return new OpenRouterProvider(config.apiKey, config.model)
+    case 'deepseek':
+      return new OpenAIProvider(config.apiKey, config.model, 'https://api.deepseek.com/v1')
+    case 'qwen':
+      return new OpenAIProvider(config.apiKey, config.model, 'https://dashscope.aliyuncs.com/compatible-mode/v1')
     default:
       throw new Error(`Unknown provider: ${config.provider}`)
   }

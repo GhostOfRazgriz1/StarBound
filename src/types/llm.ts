@@ -1,4 +1,4 @@
-export type LLMProviderId = 'openai' | 'anthropic' | 'google' | 'openrouter'
+export type LLMProviderId = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'deepseek' | 'qwen'
 
 export interface LLMConfig {
   provider: LLMProviderId
@@ -103,4 +103,11 @@ export const MODEL_PRICING: Record<string, { input: number; output: number }> = 
   'anthropic/claude-sonnet-4':       { input: 3.50,  output: 17.50 },
   'meta-llama/llama-4-maverick':     { input: 0.50,  output: 0.70 },
   'deepseek/deepseek-chat-v3':       { input: 0.30,  output: 0.90 },
+  // DeepSeek
+  'deepseek-chat':     { input: 0.27,  output: 1.10 },
+  'deepseek-reasoner': { input: 0.55,  output: 2.19 },
+  // Qwen (Alibaba)
+  'qwen-plus':         { input: 0.80,  output: 2.00 },
+  'qwen-turbo':        { input: 0.30,  output: 0.60 },
+  'qwen-max':          { input: 2.40,  output: 9.60 },
 }

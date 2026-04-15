@@ -97,4 +97,6 @@ export const AVAILABLE_MODELS: Record<string, string[]> = {
   anthropic: ['claude-haiku-4-5-20251001', 'claude-sonnet-4-6', 'claude-opus-4-6'],
   google: ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.5-pro'],
   openrouter: ['google/gemini-2.5-flash', 'anthropic/claude-sonnet-4', 'meta-llama/llama-4-maverick', 'deepseek/deepseek-chat-v3'],
+  deepseek: ['deepseek-chat', 'deepseek-reasoner'],
+  qwen: ['qwen-plus', 'qwen-turbo', 'qwen-max'],
 }
