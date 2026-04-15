@@ -10,12 +10,13 @@ import { FO_ARCHETYPES } from '../types/fo'
 import { getCustomShipStats } from './session'
 import { createDefaultCaptainProfile } from '../types/fo'
 import { TOTAL_SECTORS } from '../config'
-import { loadStandingOrders } from './cross-run'
+import { loadStandingOrders, loadLanguage } from './cross-run'
 
 interface GameStore {
   // Top-level state
   phase: GamePhase
   playerName: string
+  language: string
   llmConfig: LLMConfig | null
   run: RunState | null
   foMemory: FOCrossRunMemory | null
@@ -84,6 +85,7 @@ interface GameStore {
 export const useGameStore = create<GameStore>((set, get) => ({
   phase: 'setup',
   playerName: '',
+  language: loadLanguage(),
   llmConfig: null,
   run: null,
   foMemory: null,

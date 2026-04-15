@@ -4,10 +4,18 @@ import type { FOCrossRunMemory } from '../types/fo'
 import { FO_ARCHETYPES, getFamiliarityTier } from '../types/fo'
 import { buildSystemPrompt } from '../prompts/system'
 import { useGameStore } from '../storage/game-store'
+import { LANGUAGES } from '../i18n'
 
 function getPlayerName(): string | undefined {
   const name = useGameStore.getState().playerName
   return name || undefined
+}
+
+function getLanguageInstruction(): string {
+  const lang = useGameStore.getState().language
+  if (lang === 'en') return ''
+  const langName = LANGUAGES[lang] ?? 'English'
+  return `\nIMPORTANT: All string values in the JSON (names, descriptions, text) MUST be in ${langName}. JSON keys remain in English.`
 }
 
 export function buildContext(
@@ -38,6 +46,7 @@ export function buildGenerationContext(
     'You are a game content generator for a text-based space exploration game.',
     'You generate structured JSON content based on the current game state.',
     'Always respond with valid JSON only, no additional text.',
+    getLanguageInstruction(),
     '',
     '## Current Run State',
     runStateCompact,

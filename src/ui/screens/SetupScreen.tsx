@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import type { LLMProviderId, LLMConfig } from '../../types/llm'
 import { useGameStore } from '../../storage/game-store'
-import { saveLLMConfig, loadLLMConfig, loadPlayerName, savePlayerName } from '../../storage/cross-run'
+import { saveLLMConfig, loadLLMConfig, loadPlayerName, savePlayerName, saveLanguage, loadLanguage } from '../../storage/cross-run'
 import { AVAILABLE_MODELS } from '../../config'
+import { LANGUAGES } from '../../i18n'
 
 export function SetupScreen() {
   const setPhase = useGameStore((s) => s.setPhase)
@@ -10,6 +11,7 @@ export function SetupScreen() {
 
   const saved = loadLLMConfig()
   const [playerName, setPlayerName] = useState(loadPlayerName())
+  const [language, setLanguage] = useState(loadLanguage())
   const [provider, setProvider] = useState<LLMProviderId>(saved?.provider ?? 'openai')
   const [apiKey, setApiKey] = useState(saved?.apiKey ?? '')
   const [model, setModel] = useState(saved?.model ?? AVAILABLE_MODELS.openai[0])
@@ -33,7 +35,8 @@ export function SetupScreen() {
     }
 
     savePlayerName(playerName.trim())
-    useGameStore.setState({ playerName: playerName.trim() })
+    saveLanguage(language)
+    useGameStore.setState({ playerName: playerName.trim(), language })
     const config: LLMConfig = { provider, apiKey: apiKey.trim(), model }
     saveLLMConfig(config)
     setLLMConfig(config)
@@ -62,9 +65,27 @@ export function SetupScreen() {
           </div>
 
           <div>
+            <label className="block text-sm text-gray-400 mb-2">Language</label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm focus:outline-none focus:border-blue-500"
+            >
+              {Object.entries(LANGUAGES).map(([code, name]) => (
+                <option key={code} value={code}>{name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
             <label className="block text-sm text-gray-400 mb-2">LLM Provider</label>
-            <div className="flex gap-2">
-              {(['openai', 'anthropic'] as const).map((p) => (
+            <div className="flex gap-2 flex-wrap">
+              {([
+                ['openai', 'OpenAI'],
+                ['anthropic', 'Anthropic'],
+                ['google', 'Google AI'],
+                ['openrouter', 'OpenRouter'],
+              ] as const).map(([p, label]) => (
                 <button
                   key={p}
                   onClick={() => handleProviderChange(p)}
@@ -74,7 +95,7 @@ export function SetupScreen() {
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                   }`}
                 >
-                  {p === 'openai' ? 'OpenAI' : 'Anthropic'}
+                  {label}
                 </button>
               ))}
             </div>
@@ -86,7 +107,12 @@ export function SetupScreen() {
               type="password"
               value={apiKey}
               onChange={(e) => { setApiKey(e.target.value); setError(null) }}
-              placeholder={provider === 'openai' ? 'sk-...' : 'sk-ant-...'}
+              placeholder={
+                provider === 'openai' ? 'sk-...' :
+                provider === 'anthropic' ? 'sk-ant-...' :
+                provider === 'google' ? 'AIza...' :
+                'sk-or-...'
+              }
               className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500"
             />
             <p className="text-xs text-gray-600 mt-1">

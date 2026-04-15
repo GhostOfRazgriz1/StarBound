@@ -1,6 +1,8 @@
 import type { RunState } from '../types/game'
 import type { FOPersonality, FOCrossRunMemory, FamiliarityTier } from '../types/fo'
 import { buildFOPromptBlock } from './fo-personality'
+import { useGameStore } from '../storage/game-store'
+import { LANGUAGES } from '../i18n'
 
 export function buildSystemPrompt(
   runState: RunState,
@@ -14,10 +16,17 @@ export function buildSystemPrompt(
   const shipState = serializeShipState(runState)
   const sectorContext = serializeSectorContext(runState)
 
+  const lang = useGameStore.getState().language
+  const langName = LANGUAGES[lang] ?? 'English'
+  const langInstruction = lang !== 'en'
+    ? `\n\n# LANGUAGE\nAll narration, foComment, action labels, and action descriptions MUST be written in ${langName}. JSON keys remain in English. Only the string VALUES should be in ${langName}.`
+    : ''
+
   const sections = [
     '# GAME CONTEXT',
     'You are running a text-based space exploration game. The player is the Captain of an exploration vessel on a deep space mission.',
     'You play the role of the First Officer (FO). You narrate events AND speak as the FO character.',
+    langInstruction,
     '',
     '# OUTPUT FORMAT',
     'Always respond with valid JSON containing these fields:',

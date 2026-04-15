@@ -12,6 +12,7 @@ const STORAGE_KEYS = {
   STANDING_ORDERS: 'starbound_standing_orders',
   LLM_CONFIG: 'starbound_llm_config',
   PLAYER_NAME: 'starbound_player_name',
+  LANGUAGE: 'starbound_language',
 } as const
 
 function load<T>(key: string, fallback: T): T {
@@ -115,4 +116,13 @@ export function loadPlayerName(): string {
 
 export function savePlayerName(name: string): void {
   save(STORAGE_KEYS.PLAYER_NAME, name)
+}
+
+// Language
+export function loadLanguage(): string {
+  return load<string>(STORAGE_KEYS.LANGUAGE, 'en')
+}
+
+export function saveLanguage(language: string): void {
+  save(STORAGE_KEYS.LANGUAGE, language)
 }
