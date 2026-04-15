@@ -3,6 +3,7 @@ import type { Equipment } from '../../types/equipment'
 import type { Ship } from '../../types/game'
 import { RARITY_CONFIG } from '../../types/equipment'
 import { useGameStore } from '../../storage/game-store'
+import { t } from '../../i18n'
 
 export function TradePanel() {
   const showTrade = useGameStore((s) => s.showTrade)
@@ -25,18 +26,18 @@ export function TradePanel() {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-800">
           <div>
-            <h2 className="text-lg font-semibold text-gray-100">Trade — {traderName}</h2>
+            <h2 className="text-lg font-semibold text-gray-100">{t('trade.title')} — {traderName}</h2>
             <div className="flex gap-4 mt-1 text-xs font-mono">
-              <span className="text-yellow-400">Credits: {ship.credits}</span>
-              <span className="text-amber-500">Fuel: {ship.fuel}/{ship.maxFuel}</span>
-              <span className="text-emerald-500">Supplies: {ship.supplies}/{ship.maxSupplies}</span>
+              <span className="text-yellow-400">{t('status.credits')}: {ship.credits}</span>
+              <span className="text-amber-500">{t('status.fuel')}: {ship.fuel}/{ship.maxFuel}</span>
+              <span className="text-emerald-500">{t('status.supplies')}: {ship.supplies}/{ship.maxSupplies}</span>
             </div>
           </div>
           <button
             onClick={closeTrade}
             className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-sm transition-colors"
           >
-            Done
+            {t('trade.done')}
           </button>
         </div>
 
@@ -44,10 +45,10 @@ export function TradePanel() {
           {/* Buy column */}
           <div className="p-4">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              Buy
+              {t('trade.buy')}
             </h3>
             {stock.length === 0 ? (
-              <p className="text-xs text-gray-600 italic">Nothing left in stock</p>
+              <p className="text-xs text-gray-600 italic">{t('trade.nothingInStock')}</p>
             ) : (
               <div className="space-y-2">
                 {stock.map((item, i) => (
@@ -65,10 +66,10 @@ export function TradePanel() {
           {/* Sell / Cargo column */}
           <div className="p-4">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              Cargo ({cargo.length})
+              {t('cargo.title')} ({cargo.length})
             </h3>
             {cargo.length === 0 ? (
-              <p className="text-xs text-gray-600 italic">Nothing in cargo</p>
+              <p className="text-xs text-gray-600 italic">{t('trade.nothingInCargo')}</p>
             ) : (
               <div className="space-y-2">
                 {cargo.map((item) => (
@@ -98,13 +99,13 @@ function BuyItemCard({ item, ship, onBuy }: { item: TraderItem; ship: Ship; onBu
   // Build description
   let typeLabel: string
   if (item.type === 'fuel') {
-    typeLabel = `Fuel +${item.amount ?? 20}`
+    typeLabel = `${t('status.fuel')} +${item.amount ?? 20}`
   } else if (item.type === 'supplies') {
-    typeLabel = `Supplies +${item.amount ?? 20}`
+    typeLabel = `${t('status.supplies')} +${item.amount ?? 20}`
   } else if (item.type === 'equipment') {
-    typeLabel = 'Equipment'
+    typeLabel = t('trade.equipment')
   } else {
-    typeLabel = 'Intel'
+    typeLabel = t('trade.intel')
   }
 
   return (
@@ -124,7 +125,7 @@ function BuyItemCard({ item, ship, onBuy }: { item: TraderItem; ship: Ship; onBu
         disabled={disabled}
         className="mt-1 px-2 py-1 text-xs rounded border transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-blue-900/40 border-blue-800/50 text-blue-400 hover:bg-blue-800/40"
       >
-        {isFull ? 'Full' : !canAfford ? `Need ${item.price}cr` : `Buy — ${item.price}cr`}
+        {isFull ? t('trade.full') : !canAfford ? t('trade.needCredits', { amount: item.price }) : t('trade.buyFor', { price: item.price })}
       </button>
     </div>
   )
@@ -155,7 +156,7 @@ function CargoItemCard({
       <p className="text-xs text-gray-500">{item.effect}</p>
       {currentInSlot && (
         <p className="text-[10px] text-gray-600">
-          Replaces: {currentInSlot.name}
+          {t('cargo.replaces', { name: currentInSlot.name })}
         </p>
       )}
       <div className="flex gap-1 pt-1">
@@ -163,13 +164,13 @@ function CargoItemCard({
           onClick={onEquip}
           className="px-2 py-0.5 text-[10px] rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors"
         >
-          Equip
+          {t('cargo.equip')}
         </button>
         <button
           onClick={onSell}
           className="px-2 py-0.5 text-[10px] rounded bg-green-900/40 border border-green-800/50 text-green-400 hover:bg-green-800/40 transition-colors"
         >
-          Sell — {sellValue}cr
+          {t('trade.sellFor', { price: sellValue })}
         </button>
       </div>
     </div>

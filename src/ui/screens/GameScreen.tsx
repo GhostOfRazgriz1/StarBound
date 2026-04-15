@@ -10,6 +10,7 @@ import { SectorSelect } from '../components/SectorSelect'
 import { CostIndicator } from '../components/CostIndicator'
 import { FO_ARCHETYPES } from '../../types/fo'
 import type { SectorPreview } from '../../types/encounters'
+import { t } from '../../i18n'
 
 export function GameScreen() {
   const run = useGameStore((s) => s.run)
@@ -33,7 +34,7 @@ export function GameScreen() {
       {/* Sidebar */}
       <div className="w-64 shrink-0 border-r border-gray-800 p-4 flex flex-col gap-4 overflow-y-auto">
         <div className="text-center">
-          <p className="text-xs text-gray-600 uppercase tracking-wider">First Officer</p>
+          <p className="text-xs text-gray-600 uppercase tracking-wider">{t('game.firstOfficer')}</p>
           <p className="text-sm text-gray-300 font-semibold">{fo.fullName}</p>
         </div>
 
@@ -54,15 +55,15 @@ export function GameScreen() {
             <h2 className="text-lg text-gray-200">
               {run.currentSector
                 ? run.currentSector.name
-                : `Sector ${run.currentSectorNumber} of ${run.totalSectors}`}
+                : t('game.sectorOf', { current: run.currentSectorNumber, total: run.totalSectors })}
             </h2>
             <p className="text-xs text-gray-600">
-              Arc: Stage {run.storyArc.stage} — {run.storyArc.antagonist}
+              {t('game.arcStage', { stage: run.storyArc.stage, antagonist: run.storyArc.antagonist })}
             </p>
           </div>
           {run.phase === 'combat' && (
             <span className="px-2 py-1 bg-red-900/50 border border-red-700 rounded text-xs text-red-400 uppercase">
-              Combat
+              {t('game.combat')}
             </span>
           )}
         </div>
@@ -91,8 +92,8 @@ export function GameScreen() {
         {loading && (
           <div className="mt-3 text-sm text-gray-500 animate-pulse">
             {run.phase === 'sector_select'
-              ? 'Scanning nearby sectors...'
-              : 'Processing...'}
+              ? t('game.scanning')
+              : t('game.processing')}
           </div>
         )}
 
@@ -104,7 +105,7 @@ export function GameScreen() {
               onClick={() => useGameStore.getState().setError(null)}
               className="ml-2 text-red-500 hover:text-red-300 underline"
             >
-              dismiss
+              {t('game.dismiss')}
             </button>
           </div>
         )}

@@ -4,6 +4,7 @@ import { getSelectedFO, getSelectedShip, getSelectedScenario, getCustomShipStats
 import { SCENARIOS } from '../../config'
 import { initializeRun } from '../../engine/game-engine'
 import { SHIP_CLASSES, PROVISIONING } from '../../types/game'
+import { t } from '../../i18n'
 
 export function ProvisioningScreen() {
   const error = useGameStore((s) => s.error)
@@ -75,26 +76,26 @@ export function ProvisioningScreen() {
     <div className="flex flex-col items-center justify-center min-h-svh p-8">
       <div className="max-w-lg w-full space-y-8">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-gray-100">Provision Your Ship</h2>
+          <h2 className="text-2xl font-bold text-gray-100">{t('provision.title')}</h2>
           <p className="text-gray-500 text-sm">
-            Allocate your {budget} credit budget between fuel, supplies, and spending money.
+            {t('provision.subtitle', { budget })}
           </p>
         </div>
 
         {/* Budget display */}
         <div className="flex items-center justify-center gap-6">
           <div className="text-center">
-            <p className="text-xs text-gray-500">Budget</p>
+            <p className="text-xs text-gray-500">{t('provision.budgetLabel')}</p>
             <p className="text-2xl font-bold text-gray-300 font-mono">{budget}</p>
           </div>
           <div className="text-gray-700">-</div>
           <div className="text-center">
-            <p className="text-xs text-gray-500">Provisions</p>
+            <p className="text-xs text-gray-500">{t('provision.provisionsLabel')}</p>
             <p className="text-2xl font-bold text-yellow-400 font-mono">{totalProvisionCost}</p>
           </div>
           <div className="text-gray-700">=</div>
           <div className="text-center">
-            <p className="text-xs text-gray-500">Credits</p>
+            <p className="text-xs text-gray-500">{t('provision.creditsLabel')}</p>
             <p className={`text-2xl font-bold font-mono ${overBudget ? 'text-red-400' : 'text-green-400'}`}>
               {remainingCredits}
             </p>
@@ -104,7 +105,7 @@ export function ProvisioningScreen() {
         {/* Sliders */}
         <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-6">
           <ProvisionSlider
-            label="Fuel"
+            label={t('status.fuel')}
             value={fuel}
             min={baseFuel}
             max={maxFuel}
@@ -114,7 +115,7 @@ export function ProvisioningScreen() {
             onChange={setFuel}
           />
           <ProvisionSlider
-            label="Supplies"
+            label={t('status.supplies')}
             value={supplies}
             min={baseSupplies}
             max={maxSupplies}
@@ -127,12 +128,12 @@ export function ProvisioningScreen() {
 
         {/* Summary */}
         <div className="text-xs text-gray-600 text-center space-y-1">
-          <p>Base allocation (free): {baseFuel} fuel + {baseSupplies} supplies</p>
-          <p>Extra fuel: {Math.max(0, fuel - baseFuel)} units = {fuelCost}cr | Extra supplies: {Math.max(0, supplies - baseSupplies)} units = {suppliesCost}cr</p>
+          <p>{t('provision.baseAllocation', { fuel: baseFuel, supplies: baseSupplies })}</p>
+          <p>{t('provision.extraFuel', { amount: Math.max(0, fuel - baseFuel), cost: fuelCost })} | {t('provision.extraSupplies', { amount: Math.max(0, supplies - baseSupplies), cost: suppliesCost })}</p>
         </div>
 
         {overBudget && (
-          <p className="text-red-400 text-sm text-center">Over budget! Reduce fuel or supplies.</p>
+          <p className="text-red-400 text-sm text-center">{t('provision.overBudget')}</p>
         )}
 
         <div className="flex gap-4 justify-center">
@@ -141,14 +142,14 @@ export function ProvisioningScreen() {
             disabled={overBudget || starting}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {starting ? 'Launching...' : 'Launch Mission'}
+            {starting ? t('provision.launching') : t('provision.launchMission')}
           </button>
           <button
             onClick={() => useGameStore.getState().setPhase('scenario_select')}
             disabled={starting}
             className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded font-medium transition-colors disabled:opacity-50"
           >
-            Back
+            {t('provision.back')}
           </button>
         </div>
 
@@ -243,9 +244,9 @@ function ProvisionSlider({
       </div>
 
       <div className="flex justify-between text-[10px] text-gray-600">
-        <span>{min} (min)</span>
-        <span>{baseline} (free)</span>
-        <span>{max} (max)</span>
+        <span>{t('provision.min', { value: min })}</span>
+        <span>{t('provision.free', { value: baseline })}</span>
+        <span>{t('provision.max', { value: max })}</span>
       </div>
     </div>
   )

@@ -3,7 +3,7 @@ import type { LLMProviderId, LLMConfig } from '../../types/llm'
 import { useGameStore } from '../../storage/game-store'
 import { saveLLMConfig, loadLLMConfig, loadPlayerName, savePlayerName, saveLanguage, loadLanguage } from '../../storage/cross-run'
 import { AVAILABLE_MODELS } from '../../config'
-import { LANGUAGES } from '../../i18n'
+import { LANGUAGES, t } from '../../i18n'
 
 export function SetupScreen() {
   const setPhase = useGameStore((s) => s.setPhase)
@@ -26,11 +26,11 @@ export function SetupScreen() {
 
   function handleContinue() {
     if (!playerName.trim()) {
-      setError('What should we call you, Captain?')
+      setError(t('setup.errorNoName'))
       return
     }
     if (!apiKey.trim()) {
-      setError('Please enter your API key')
+      setError(t('setup.errorNoKey'))
       return
     }
 
@@ -47,18 +47,18 @@ export function SetupScreen() {
     <div className="flex flex-col items-center justify-center min-h-svh p-8">
       <div className="max-w-lg w-full space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-gray-100 tracking-tight">STARBOUND</h1>
-          <p className="text-gray-500 text-sm">A text-based space exploration game powered by AI</p>
+          <h1 className="text-4xl font-bold text-gray-100 tracking-tight">{t('setup.title')}</h1>
+          <p className="text-gray-500 text-sm">{t('setup.subtitle')}</p>
         </div>
 
         <div className="space-y-6 bg-gray-900/50 border border-gray-800 rounded-lg p-6">
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Captain Name</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('setup.captainName')}</label>
             <input
               type="text"
               value={playerName}
               onChange={(e) => { setPlayerName(e.target.value); setError(null) }}
-              placeholder="What should the crew call you?"
+              placeholder={t('setup.captainNamePlaceholder')}
               className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500"
               maxLength={30}
             />
@@ -78,7 +78,7 @@ export function SetupScreen() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-2">LLM Provider</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('setup.llmProvider')}</label>
             <div className="flex gap-2 flex-wrap">
               {([
                 ['openai', 'OpenAI'],
@@ -104,7 +104,7 @@ export function SetupScreen() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-2">API Key</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('setup.apiKey')}</label>
             <input
               type="password"
               value={apiKey}
@@ -120,12 +120,12 @@ export function SetupScreen() {
               className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500"
             />
             <p className="text-xs text-gray-600 mt-1">
-              Your key is stored locally and never sent to our servers.
+              {t('setup.apiKeyHint')}
             </p>
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Model</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('setup.model')}</label>
             <select
               value={model}
               onChange={(e) => setModel(e.target.value)}
@@ -145,12 +145,12 @@ export function SetupScreen() {
             onClick={handleContinue}
             className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded font-medium transition-colors"
           >
-            Continue
+            {t('setup.continue')}
           </button>
         </div>
 
         <p className="text-center text-xs text-gray-600">
-          BYOK — You bring your own API key. All LLM calls are made directly from your browser.
+          {t('setup.byokNote')}
         </p>
       </div>
     </div>

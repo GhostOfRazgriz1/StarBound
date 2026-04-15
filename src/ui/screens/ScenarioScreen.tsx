@@ -3,8 +3,15 @@ import { useGameStore } from '../../storage/game-store'
 import { setSelectedScenario } from '../../storage/session'
 import { SCENARIOS } from '../../config'
 import type { ScenarioId } from '../../types/game'
+import { t } from '../../i18n'
+import type { TranslationKey } from '../../i18n'
 
 const scenarioOrder: ScenarioId[] = ['deep_space_survey', 'distress_signal', 'first_contact', 'border_patrol']
+
+/** Convert snake_case scenario id to camelCase for translation keys */
+function scenarioKeyPrefix(id: ScenarioId): string {
+  return id.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+}
 
 export function ScenarioScreen() {
   const [depth, setDepth] = useState<'standard' | 'deep'>('standard')
@@ -18,8 +25,8 @@ export function ScenarioScreen() {
     <div className="flex flex-col items-center justify-center min-h-svh p-8">
       <div className="max-w-2xl w-full space-y-8">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-gray-100">Select Mission</h2>
-          <p className="text-gray-500 text-sm">Each mission shapes the encounters and story you'll experience.</p>
+          <h2 className="text-2xl font-bold text-gray-100">{t('scenario.title')}</h2>
+          <p className="text-gray-500 text-sm">{t('scenario.subtitle')}</p>
         </div>
 
         <div className="flex justify-center gap-4">
@@ -31,7 +38,7 @@ export function ScenarioScreen() {
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            Standard (faster, cheaper)
+            {t('scenario.standard')}
           </button>
           <button
             onClick={() => setDepth('deep')}
@@ -41,7 +48,7 @@ export function ScenarioScreen() {
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            Deep (richer, more tokens)
+            {t('scenario.deep')}
           </button>
         </div>
 
@@ -57,9 +64,9 @@ export function ScenarioScreen() {
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-100 group-hover:text-blue-400 transition-colors">
-                      {scenario.name}
+                      {t(`scenario.${scenarioKeyPrefix(id)}.name` as TranslationKey)}
                     </h3>
-                    <p className="text-sm text-gray-500 mt-1">{scenario.description}</p>
+                    <p className="text-sm text-gray-500 mt-1">{t(`scenario.${scenarioKeyPrefix(id)}.description` as TranslationKey)}</p>
                   </div>
                   <span className="text-xs text-yellow-400 font-mono shrink-0 ml-3">
                     {scenario.provisioningBudget}cr
@@ -74,7 +81,7 @@ export function ScenarioScreen() {
           onClick={() => useGameStore.getState().setPhase('ship_select')}
           className="text-sm text-gray-600 hover:text-gray-400 transition-colors"
         >
-          Back to ship selection
+          {t('scenario.backToShip')}
         </button>
       </div>
     </div>

@@ -3,12 +3,13 @@ import type { Equipment } from '../../types/equipment'
 import type { ShipEquipment } from '../../types/game'
 import { RARITY_CONFIG } from '../../types/equipment'
 import { useGameStore } from '../../storage/game-store'
+import { t } from '../../i18n'
 
-const SLOT_LABELS: Record<string, string> = {
-  weapons: 'Weapons',
-  shields: 'Shields',
-  engine: 'Engine',
-  special: 'Special',
+const SLOT_KEYS: Record<string, 'equip.weapons' | 'equip.shields' | 'equip.engine' | 'equip.special'> = {
+  weapons: 'equip.weapons',
+  shields: 'equip.shields',
+  engine: 'equip.engine',
+  special: 'equip.special',
 }
 
 export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment: ShipEquipment }) {
@@ -23,7 +24,7 @@ export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment
         className="w-full p-3 flex items-center justify-between text-left hover:bg-gray-800/30 transition-colors rounded-lg"
       >
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Cargo ({cargo.length})
+          {t('cargo.title')} ({cargo.length})
         </h3>
         <span className="text-xs text-gray-600">{open ? '▲' : '▼'}</span>
       </button>
@@ -31,7 +32,7 @@ export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment
       {open && (
         <div className="px-3 pb-3 space-y-2">
           {cargo.length === 0 ? (
-            <p className="text-xs text-gray-700 italic">Empty</p>
+            <p className="text-xs text-gray-700 italic">{t('cargo.empty')}</p>
           ) : (
             cargo.map((item) => {
               const currentInSlot = equipment[item.slot]
@@ -49,7 +50,7 @@ export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment
                         {item.name}
                       </span>
                       <span className="text-xs text-gray-600 ml-1">
-                        [{SLOT_LABELS[item.slot]}]
+                        [{t(SLOT_KEYS[item.slot])}]
                       </span>
                     </div>
                     <span
@@ -67,7 +68,7 @@ export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment
 
                   {currentInSlot && (
                     <p className="text-[10px] text-gray-600">
-                      Replaces: {currentInSlot.name}
+                      {t('cargo.replaces', { name: currentInSlot.name })}
                     </p>
                   )}
 
@@ -76,13 +77,13 @@ export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment
                       onClick={() => equipFromCargo(item.id)}
                       className="px-2 py-0.5 text-[10px] rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors"
                     >
-                      Equip
+                      {t('cargo.equip')}
                     </button>
                     <button
                       onClick={() => dropFromCargo(item.id)}
                       className="px-2 py-0.5 text-[10px] rounded bg-gray-800 border border-gray-700 text-gray-500 hover:text-red-400 hover:border-red-800/50 transition-colors"
                     >
-                      Drop
+                      {t('cargo.drop')}
                     </button>
                   </div>
                 </div>

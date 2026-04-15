@@ -1,4 +1,5 @@
 import type { SectorPreview } from '../../types/encounters'
+import { t } from '../../i18n'
 
 interface SectorSelectProps {
   sectors: SectorPreview[]
@@ -30,10 +31,10 @@ export function SectorSelect({ sectors, onSelect, currentSector, totalSectors, d
     <div className="space-y-4">
       <div className="text-center space-y-1">
         <p className="text-sm text-gray-500">
-          Sector {currentSector} of {totalSectors}
+          {t('sector.sectorOf', { current: currentSector, total: totalSectors })}
         </p>
-        <h3 className="text-lg text-gray-200">Choose Your Next Destination</h3>
-        <p className="text-xs text-gray-600">Long-range sensors have detected the following:</p>
+        <h3 className="text-lg text-gray-200">{t('sector.chooseDestination')}</h3>
+        <p className="text-xs text-gray-600">{t('sector.sensorsDetected')}</p>
       </div>
 
       <div className="grid gap-3">
@@ -50,10 +51,10 @@ export function SectorSelect({ sectors, onSelect, currentSector, totalSectors, d
               </h4>
               <div className="flex items-center gap-3 text-xs text-gray-500">
                 <span className="flex items-center gap-1">
-                  Risk <RiskBar level={sector.riskLevel} />
+                  {t('sector.risk')} <RiskBar level={sector.riskLevel} />
                 </span>
                 <span className="flex items-center gap-1">
-                  Interest <RiskBar level={sector.interestLevel} />
+                  {t('sector.interest')} <RiskBar level={sector.interestLevel} />
                 </span>
               </div>
             </div>

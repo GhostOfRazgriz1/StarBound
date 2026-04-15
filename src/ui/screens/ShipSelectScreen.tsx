@@ -1,6 +1,8 @@
 import { useGameStore } from '../../storage/game-store'
 import { setSelectedShip } from '../../storage/session'
 import { SHIP_CLASSES, CUSTOM_SHIP_MAX } from '../../types/game'
+import { t } from '../../i18n'
+import type { TranslationKey } from '../../i18n'
 
 type PresetShipId = keyof typeof SHIP_CLASSES
 const shipOrder: PresetShipId[] = ['explorer', 'corvette', 'freighter', 'scout']
@@ -33,8 +35,8 @@ export function ShipSelectScreen() {
     <div className="flex flex-col items-center justify-center min-h-svh p-8">
       <div className="max-w-3xl w-full space-y-8">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-gray-100">Choose Your Ship</h2>
-          <p className="text-gray-500 text-sm">Each vessel has different strengths — pick the one that matches your playstyle.</p>
+          <h2 className="text-2xl font-bold text-gray-100">{t('ship.title')}</h2>
+          <p className="text-gray-500 text-sm">{t('ship.subtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -47,14 +49,14 @@ export function ShipSelectScreen() {
                 className="bg-gray-900/50 border border-gray-800 hover:border-blue-500/50 rounded-lg p-5 text-left transition-colors group"
               >
                 <h3 className="text-base font-semibold text-gray-100 group-hover:text-blue-400 transition-colors">
-                  {ship.name}
+                  {t(`ship.${id}.name` as TranslationKey)}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1 mb-3">{ship.description}</p>
+                <p className="text-xs text-gray-500 mt-1 mb-3">{t(`ship.${id}.description` as TranslationKey)}</p>
 
                 <div className="space-y-1.5 mb-3">
-                  <StatBar label="Hull" value={ship.stats.maxHull} max={statMax} color="#3b82f6" />
-                  <StatBar label="Fuel" value={ship.stats.maxFuel} max={statMax} color="#f59e0b" />
-                  <StatBar label="Supplies" value={ship.stats.maxSupplies} max={statMax} color="#10b981" />
+                  <StatBar label={t('status.hull')} value={ship.stats.maxHull} max={statMax} color="#3b82f6" />
+                  <StatBar label={t('status.fuel')} value={ship.stats.maxFuel} max={statMax} color="#f59e0b" />
+                  <StatBar label={t('status.supplies')} value={ship.stats.maxSupplies} max={statMax} color="#10b981" />
                 </div>
 
                 <div className="flex gap-4 text-xs">
@@ -81,7 +83,7 @@ export function ShipSelectScreen() {
             onClick={() => setPhase('ship_custom')}
             className="px-5 py-3 border border-dashed border-gray-700 hover:border-blue-500/50 rounded-lg text-sm text-gray-400 hover:text-blue-400 transition-colors"
           >
-            Or build a custom ship...
+            {t('ship.buildCustom')}
           </button>
         </div>
 
@@ -89,7 +91,7 @@ export function ShipSelectScreen() {
           onClick={() => setPhase('fo_select')}
           className="text-sm text-gray-600 hover:text-gray-400 transition-colors"
         >
-          Back to FO selection
+          {t('ship.backToFO')}
         </button>
       </div>
     </div>

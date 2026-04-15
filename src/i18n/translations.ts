@@ -143,6 +143,63 @@ export type TranslationKey =
   | 'cost.tokens'
   | 'cost.estCost'
 
+  // FO Characters
+  | 'fo.chen.name'
+  | 'fo.chen.tagline'
+  | 'fo.chen.description'
+  | 'fo.chen.priority'
+  | 'fo.osei.name'
+  | 'fo.osei.tagline'
+  | 'fo.osei.description'
+  | 'fo.osei.priority'
+  | 'fo.vasquez.name'
+  | 'fo.vasquez.tagline'
+  | 'fo.vasquez.description'
+  | 'fo.vasquez.priority'
+
+  // Ship Classes
+  | 'ship.explorer.name'
+  | 'ship.explorer.description'
+  | 'ship.explorer.strengths'
+  | 'ship.explorer.weaknesses'
+  | 'ship.corvette.name'
+  | 'ship.corvette.description'
+  | 'ship.corvette.strengths'
+  | 'ship.corvette.weaknesses'
+  | 'ship.freighter.name'
+  | 'ship.freighter.description'
+  | 'ship.freighter.strengths'
+  | 'ship.freighter.weaknesses'
+  | 'ship.scout.name'
+  | 'ship.scout.description'
+  | 'ship.scout.strengths'
+  | 'ship.scout.weaknesses'
+
+  // Scenarios
+  | 'scenario.deepSpaceSurvey.name'
+  | 'scenario.deepSpaceSurvey.description'
+  | 'scenario.distressSignal.name'
+  | 'scenario.distressSignal.description'
+  | 'scenario.firstContact.name'
+  | 'scenario.firstContact.description'
+  | 'scenario.borderPatrol.name'
+  | 'scenario.borderPatrol.description'
+
+  // Language selector
+  | 'setup.language'
+
+  // Provisioning fuel/supplies labels
+  | 'provision.fuel'
+  | 'provision.supplies'
+
+  // Captain profile / run end
+  | 'end.captainProfile'
+
+  // Trade panel extras
+  | 'trade.cargo'
+  | 'trade.fuelPlus'
+  | 'trade.suppliesPlus'
+
 export type Translations = Record<TranslationKey, string>
 
 export const translations: Record<string, Translations> = {
@@ -290,6 +347,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'Tokens: {count}',
     'cost.estCost': 'Est. cost: {cost}',
+
+    // FO Characters
+    'fo.chen.name': 'Commander Reva Chen',
+    'fo.chen.tagline': "I've buried enough crew for one career, Captain.",
+    'fo.chen.description': 'Veteran officer. Cautious, protective of the crew, dry humor. Excellent tactical instincts but tends to misjudge diplomatic situations.',
+    'fo.chen.priority': 'crew safety',
+    'fo.osei.name': 'Lieutenant Kael Osei',
+    'fo.osei.tagline': 'Captain, do you realize what we are looking at?',
+    'fo.osei.description': 'Science officer. Bold, curious, gets excited about first contact and anomalies. Tends to downplay danger in pursuit of discovery.',
+    'fo.osei.priority': 'discovery',
+    'fo.vasquez.name': 'Ensign Mira Vasquez',
+    'fo.vasquez.tagline': 'Three options. Two of them get us killed.',
+    'fo.vasquez.description': 'Tactical prodigy. Strategic, calculating, mission-focused. Excellent with ship systems but misreads alien intentions and treats everything like a chess problem.',
+    'fo.vasquez.priority': 'mission',
+
+    // Ship Classes
+    'ship.explorer.name': 'Atlas-Class Explorer',
+    'ship.explorer.description': 'A balanced vessel built for deep space survey missions. No major weaknesses, no standout strengths — reliable in any situation.',
+    'ship.explorer.strengths': 'Balanced stats, Good fuel range, Solid hull',
+    'ship.explorer.weaknesses': 'No starting equipment, No specialization',
+    'ship.corvette.name': 'Talon-Class Corvette',
+    'ship.corvette.description': 'A nimble warship with reinforced armor and military-grade weapons. Burns through fuel fast and carries minimal supplies.',
+    'ship.corvette.strengths': 'High hull, Starting weapons, High morale',
+    'ship.corvette.weaknesses': 'Low fuel capacity, Low supplies, Burns resources fast',
+    'ship.freighter.name': 'Oxbow-Class Freighter',
+    'ship.freighter.description': 'A converted cargo hauler with massive supply bays and extra fuel tanks. Slow and lightly armed, but you can carry everything you find.',
+    'ship.freighter.strengths': 'Huge fuel/supply capacity, Trading advantage, Long range',
+    'ship.freighter.weaknesses': 'Weak hull, No combat equipment, Sluggish',
+    'ship.scout.name': 'Whisper-Class Scout',
+    'ship.scout.description': 'A fast, stealthy reconnaissance ship with advanced sensors. Fragile but hard to pin down — built for information, not confrontation.',
+    'ship.scout.strengths': 'Cheap retreats, Stealth options, Good fuel range',
+    'ship.scout.weaknesses': 'Low hull, Poor in direct combat',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': 'Deep Space Survey',
+    'scenario.deepSpaceSurvey.description': 'Chart the uncharted. A standard exploration mission into unknown space — but the frontier is rarely quiet.',
+    'scenario.distressSignal.name': 'Distress Signal',
+    'scenario.distressSignal.description': 'A frontier colony has gone silent. Race through hostile space to find out why — before whatever silenced them finds you.',
+    'scenario.firstContact.name': 'First Contact',
+    'scenario.firstContact.description': 'Signals of intelligent origin detected beyond the rim. Make contact — carefully. Not everyone out here wants to be found.',
+    'scenario.borderPatrol.name': 'Border Patrol',
+    'scenario.borderPatrol.description': 'The outer colonies are under siege. Patrol the border, protect the settlements, and find out who is behind the raids.',
+
+    // Language selector
+    'setup.language': 'Language',
+
+    // Provisioning labels
+    'provision.fuel': 'Fuel',
+    'provision.supplies': 'Supplies',
+
+    // Captain profile
+    'end.captainProfile': 'Captain Profile',
+
+    // Trade extras
+    'trade.cargo': 'Cargo',
+    'trade.fuelPlus': 'Fuel +{amount}',
+    'trade.suppliesPlus': 'Supplies +{amount}',
   },
 
   zh: {
@@ -436,6 +550,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'Token：{count}',
     'cost.estCost': '预估费用：{cost}',
+
+    // FO Characters
+    'fo.chen.name': '指挥官 雷娃·陈',
+    'fo.chen.tagline': '我这辈子已经埋葬了够多的船员了，舰长。',
+    'fo.chen.description': '资深军官。谨慎，保护船员，冷幽默。战术直觉出色，但容易误判外交局势。',
+    'fo.chen.priority': '船员安全',
+    'fo.osei.name': '中尉 卡尔·奥塞',
+    'fo.osei.tagline': '舰长，你意识到我们在看什么了吗？',
+    'fo.osei.description': '科学官。大胆、好奇，对第一次接触和异常现象非常兴奋。为追求发现而倾向于低估危险。',
+    'fo.osei.priority': '探索发现',
+    'fo.vasquez.name': '少尉 米拉·巴斯克斯',
+    'fo.vasquez.tagline': '三个选项，其中两个会害死我们。',
+    'fo.vasquez.description': '战术天才。战略性强，精于算计，以任务为中心。精通舰船系统，但容易误读外星意图，把一切当成棋局。',
+    'fo.vasquez.priority': '任务',
+
+    // Ship Classes
+    'ship.explorer.name': '阿特拉斯级探索舰',
+    'ship.explorer.description': '为深空探测任务打造的均衡型舰船。没有明显弱点，也没有突出优势——在任何情况下都可靠。',
+    'ship.explorer.strengths': '均衡属性, 良好的燃料续航, 坚固的船体',
+    'ship.explorer.weaknesses': '无初始装备, 无专精方向',
+    'ship.corvette.name': '利爪级护卫舰',
+    'ship.corvette.description': '一艘灵活的战舰，配备加固装甲和军用武器。燃料消耗快，补给携带量少。',
+    'ship.corvette.strengths': '高船体值, 初始武器, 高士气',
+    'ship.corvette.weaknesses': '低燃料容量, 低补给量, 资源消耗快',
+    'ship.freighter.name': '牛轭级货船',
+    'ship.freighter.description': '由货运船改装而成，配有巨大的补给舱和额外燃料箱。速度慢且轻武装，但你可以携带找到的一切。',
+    'ship.freighter.strengths': '超大燃料/补给容量, 交易优势, 长续航',
+    'ship.freighter.weaknesses': '薄弱的船体, 无战斗装备, 行动迟缓',
+    'ship.scout.name': '低语级侦察舰',
+    'ship.scout.description': '一艘快速、隐蔽的侦察船，配备先进传感器。脆弱但难以捕捉——为情报而生，不为对抗而造。',
+    'ship.scout.strengths': '低成本撤退, 隐身选项, 良好的燃料续航',
+    'ship.scout.weaknesses': '低船体值, 正面战斗弱',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': '深空勘测',
+    'scenario.deepSpaceSurvey.description': '探索未知领域。一次进入未知空间的标准探索任务——但前沿地带很少平静。',
+    'scenario.distressSignal.name': '求救信号',
+    'scenario.distressSignal.description': '一个边境殖民地失去了联络。穿越敌对空间找出原因——在使他们沉默的东西找到你之前。',
+    'scenario.firstContact.name': '第一次接触',
+    'scenario.firstContact.description': '在边缘之外探测到智慧生命的信号。小心地建立联系。并非这里的每个存在都想被发现。',
+    'scenario.borderPatrol.name': '边境巡逻',
+    'scenario.borderPatrol.description': '外围殖民地正遭受围攻。巡逻边境，保护定居点，找出袭击背后的黑手。',
+
+    // Language selector
+    'setup.language': '语言',
+
+    // Provisioning labels
+    'provision.fuel': '燃料',
+    'provision.supplies': '补给',
+
+    // Captain profile
+    'end.captainProfile': '舰长档案',
+
+    // Trade extras
+    'trade.cargo': '货物',
+    'trade.fuelPlus': '燃料 +{amount}',
+    'trade.suppliesPlus': '补给 +{amount}',
   },
 
   ja: {
@@ -582,6 +753,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'トークン：{count}',
     'cost.estCost': '推定コスト：{cost}',
+
+    // FO Characters
+    'fo.chen.name': 'レヴァ・チェン司令官',
+    'fo.chen.tagline': '私はもう十分な数の乗組員を葬ってきました、艦長。',
+    'fo.chen.description': 'ベテラン士官。慎重で乗組員を守り、辛辣なユーモアを持つ。戦術的直感に優れるが、外交的状況を誤判断しやすい。',
+    'fo.chen.priority': '乗組員の安全',
+    'fo.osei.name': 'カエル・オセイ中尉',
+    'fo.osei.tagline': '艦長、我々が見ているものが何か分かりますか？',
+    'fo.osei.description': '科学士官。大胆で好奇心旺盛、ファーストコンタクトや異常現象に興奮する。発見を追い求め危険を軽視する傾向がある。',
+    'fo.osei.priority': '発見',
+    'fo.vasquez.name': 'ミラ・バスケス少尉',
+    'fo.vasquez.tagline': '選択肢は三つ。うち二つは死につながる。',
+    'fo.vasquez.description': '戦術の天才。戦略的で計算高く、任務重視。艦船システムに精通するが、異星人の意図を読み違え、すべてをチェスの問題として扱う。',
+    'fo.vasquez.priority': '任務',
+
+    // Ship Classes
+    'ship.explorer.name': 'アトラス級探査船',
+    'ship.explorer.description': '深宇宙探査任務向けに設計されたバランス型船体。大きな弱点も突出した強みもなく、あらゆる状況で頼れる。',
+    'ship.explorer.strengths': 'バランスの取れたステータス, 良好な燃料航続距離, 頑丈な船体',
+    'ship.explorer.weaknesses': '初期装備なし, 専門分野なし',
+    'ship.corvette.name': 'タロン級コルベット',
+    'ship.corvette.description': '強化装甲と軍用兵器を備えた機敏な戦闘艦。燃料消費が激しく、補給品の搭載量は最小限。',
+    'ship.corvette.strengths': '高い船体値, 初期武装あり, 高い士気',
+    'ship.corvette.weaknesses': '低い燃料容量, 少ない物資, 資源消費が激しい',
+    'ship.freighter.name': 'オックスボウ級貨物船',
+    'ship.freighter.description': '巨大な補給庫と追加燃料タンクを備えた改造貨物船。鈍重で軽武装だが、見つけたものは何でも運べる。',
+    'ship.freighter.strengths': '巨大な燃料・物資容量, 取引優位, 長い航続距離',
+    'ship.freighter.weaknesses': '弱い船体, 戦闘装備なし, 鈍足',
+    'ship.scout.name': 'ウィスパー級偵察船',
+    'ship.scout.description': '高性能センサーを備えた高速ステルス偵察船。脆いが捉えにくい——情報収集のために造られた船。',
+    'ship.scout.strengths': '低コスト撤退, ステルスオプション, 良好な燃料航続距離',
+    'ship.scout.weaknesses': '低い船体値, 直接戦闘に弱い',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': '深宇宙探査',
+    'scenario.deepSpaceSurvey.description': '未知を踏査せよ。未知の宇宙への標準的な探査任務——だがフロンティアが静かであることは稀だ。',
+    'scenario.distressSignal.name': '救難信号',
+    'scenario.distressSignal.description': '辺境の植民地が沈黙した。敵対宙域を駆け抜け、原因を突き止めろ——沈黙させた何かに見つかる前に。',
+    'scenario.firstContact.name': 'ファーストコンタクト',
+    'scenario.firstContact.description': '縁辺部の向こうから知的起源の信号を検出。慎重に接触せよ。ここにいる全員が見つかりたいわけではない。',
+    'scenario.borderPatrol.name': '国境警備',
+    'scenario.borderPatrol.description': '外縁植民地が包囲されている。国境を巡回し、入植地を守り、襲撃の背後にいる者を突き止めよ。',
+
+    // Language selector
+    'setup.language': '言語',
+
+    // Provisioning labels
+    'provision.fuel': '燃料',
+    'provision.supplies': '物資',
+
+    // Captain profile
+    'end.captainProfile': '艦長プロフィール',
+
+    // Trade extras
+    'trade.cargo': '貨物',
+    'trade.fuelPlus': '燃料 +{amount}',
+    'trade.suppliesPlus': '物資 +{amount}',
   },
 
   ko: {
@@ -728,6 +956,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': '토큰: {count}',
     'cost.estCost': '예상 비용: {cost}',
+
+    // FO Characters
+    'fo.chen.name': '레바 첸 사령관',
+    'fo.chen.tagline': '한 경력 동안 충분히 많은 승무원을 묻었습니다, 함장님.',
+    'fo.chen.description': '베테랑 장교. 신중하며 승무원을 보호하고, 건조한 유머 감각을 지닌다. 뛰어난 전술적 직감을 가졌으나 외교적 상황을 잘못 판단하는 경향이 있다.',
+    'fo.chen.priority': '승무원 안전',
+    'fo.osei.name': '카엘 오세이 중위',
+    'fo.osei.tagline': '함장님, 우리가 뭘 보고 있는지 아십니까?',
+    'fo.osei.description': '과학 장교. 대담하고 호기심이 많으며, 첫 접촉과 이상 현상에 흥분한다. 발견을 추구하느라 위험을 경시하는 경향이 있다.',
+    'fo.osei.priority': '발견',
+    'fo.vasquez.name': '미라 바스케스 소위',
+    'fo.vasquez.tagline': '선택지는 셋. 그중 둘은 우리를 죽음으로 이끈다.',
+    'fo.vasquez.description': '전술 천재. 전략적이고 계산적이며 임무에 집중한다. 함선 시스템에 능숙하지만 외계인의 의도를 잘못 읽고 모든 것을 체스 문제로 취급한다.',
+    'fo.vasquez.priority': '임무',
+
+    // Ship Classes
+    'ship.explorer.name': '아틀라스급 탐사선',
+    'ship.explorer.description': '심우주 탐사 임무를 위해 설계된 균형 잡힌 함선. 큰 약점도 두드러진 강점도 없다 — 어떤 상황에서도 신뢰할 수 있다.',
+    'ship.explorer.strengths': '균형 잡힌 스탯, 양호한 연료 항속거리, 견고한 선체',
+    'ship.explorer.weaknesses': '초기 장비 없음, 전문화 없음',
+    'ship.corvette.name': '탈론급 초계함',
+    'ship.corvette.description': '강화 장갑과 군용 무기를 갖춘 민첩한 전투함. 연료 소모가 빠르고 보급품 적재량이 적다.',
+    'ship.corvette.strengths': '높은 선체, 초기 무기, 높은 사기',
+    'ship.corvette.weaknesses': '낮은 연료 용량, 적은 보급품, 빠른 자원 소모',
+    'ship.freighter.name': '옥스보우급 화물선',
+    'ship.freighter.description': '거대한 보급 창고와 추가 연료 탱크를 갖춘 개조 화물선. 느리고 경무장이지만, 발견한 모든 것을 실을 수 있다.',
+    'ship.freighter.strengths': '거대한 연료/보급 용량, 거래 이점, 긴 항속거리',
+    'ship.freighter.weaknesses': '약한 선체, 전투 장비 없음, 느림',
+    'ship.scout.name': '위스퍼급 정찰선',
+    'ship.scout.description': '첨단 센서를 갖춘 빠르고 은밀한 정찰함. 취약하지만 잡기 어렵다 — 정보 수집을 위해 만들어졌다.',
+    'ship.scout.strengths': '저비용 후퇴, 스텔스 옵션, 양호한 연료 항속거리',
+    'ship.scout.weaknesses': '낮은 선체, 직접 전투에 취약',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': '심우주 탐사',
+    'scenario.deepSpaceSurvey.description': '미지의 영역을 탐사하라. 미지의 우주로 향하는 표준 탐사 임무 — 하지만 변경 지대는 좀처럼 조용하지 않다.',
+    'scenario.distressSignal.name': '조난 신호',
+    'scenario.distressSignal.description': '변경 식민지가 침묵했다. 적대적 우주를 가로질러 원인을 밝혀라 — 그들을 침묵시킨 무언가가 당신을 찾기 전에.',
+    'scenario.firstContact.name': '첫 접촉',
+    'scenario.firstContact.description': '변경 너머에서 지적 기원의 신호가 감지되었다. 조심스럽게 접촉하라. 여기 있는 모든 존재가 발견되길 원하지는 않는다.',
+    'scenario.borderPatrol.name': '변경 순찰',
+    'scenario.borderPatrol.description': '외곽 식민지가 포위당하고 있다. 변경을 순찰하고, 정착지를 보호하며, 습격의 배후를 밝혀내라.',
+
+    // Language selector
+    'setup.language': '언어',
+
+    // Provisioning labels
+    'provision.fuel': '연료',
+    'provision.supplies': '보급품',
+
+    // Captain profile
+    'end.captainProfile': '함장 프로필',
+
+    // Trade extras
+    'trade.cargo': '화물',
+    'trade.fuelPlus': '연료 +{amount}',
+    'trade.suppliesPlus': '보급품 +{amount}',
   },
 
   es: {
@@ -874,6 +1159,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'Tokens: {count}',
     'cost.estCost': 'Costo est.: {cost}',
+
+    // FO Characters
+    'fo.chen.name': 'Comandante Reva Chen',
+    'fo.chen.tagline': 'Ya he enterrado suficientes tripulantes para toda una carrera, capitán.',
+    'fo.chen.description': 'Oficial veterana. Cautelosa, protectora con la tripulación, humor seco. Excelentes instintos tácticos pero tiende a juzgar mal las situaciones diplomáticas.',
+    'fo.chen.priority': 'seguridad de la tripulación',
+    'fo.osei.name': 'Teniente Kael Osei',
+    'fo.osei.tagline': 'Capitán, ¿se da cuenta de lo que estamos viendo?',
+    'fo.osei.description': 'Oficial de ciencias. Audaz, curioso, se emociona con el primer contacto y las anomalías. Tiende a minimizar el peligro en busca de descubrimientos.',
+    'fo.osei.priority': 'descubrimiento',
+    'fo.vasquez.name': 'Alférez Mira Vasquez',
+    'fo.vasquez.tagline': 'Tres opciones. Dos de ellas nos matan.',
+    'fo.vasquez.description': 'Prodigio táctico. Estratégica, calculadora, centrada en la misión. Excelente con los sistemas de la nave pero malinterpreta las intenciones alienígenas y trata todo como un problema de ajedrez.',
+    'fo.vasquez.priority': 'misión',
+
+    // Ship Classes
+    'ship.explorer.name': 'Explorador clase Atlas',
+    'ship.explorer.description': 'Una nave equilibrada diseñada para misiones de exploración en el espacio profundo. Sin debilidades importantes ni fortalezas destacadas — fiable en cualquier situación.',
+    'ship.explorer.strengths': 'Estadísticas equilibradas, Buen alcance de combustible, Casco sólido',
+    'ship.explorer.weaknesses': 'Sin equipo inicial, Sin especialización',
+    'ship.corvette.name': 'Corbeta clase Talon',
+    'ship.corvette.description': 'Un ágil buque de guerra con blindaje reforzado y armas de grado militar. Consume combustible rápidamente y lleva suministros mínimos.',
+    'ship.corvette.strengths': 'Casco alto, Armas iniciales, Moral alta',
+    'ship.corvette.weaknesses': 'Baja capacidad de combustible, Pocos suministros, Consumo rápido de recursos',
+    'ship.freighter.name': 'Carguero clase Oxbow',
+    'ship.freighter.description': 'Un carguero reconvertido con enormes bahías de suministros y tanques extra de combustible. Lento y ligeramente armado, pero puedes llevar todo lo que encuentres.',
+    'ship.freighter.strengths': 'Enorme capacidad de combustible/suministros, Ventaja comercial, Gran alcance',
+    'ship.freighter.weaknesses': 'Casco débil, Sin equipo de combate, Lento',
+    'ship.scout.name': 'Explorador clase Whisper',
+    'ship.scout.description': 'Una nave de reconocimiento rápida y sigilosa con sensores avanzados. Frágil pero difícil de localizar — construida para la información, no para el combate.',
+    'ship.scout.strengths': 'Retiradas baratas, Opciones de sigilo, Buen alcance de combustible',
+    'ship.scout.weaknesses': 'Casco bajo, Pobre en combate directo',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': 'Exploración del espacio profundo',
+    'scenario.deepSpaceSurvey.description': 'Cartografía lo desconocido. Una misión de exploración estándar en el espacio desconocido — pero la frontera rara vez está en calma.',
+    'scenario.distressSignal.name': 'Señal de socorro',
+    'scenario.distressSignal.description': 'Una colonia fronteriza ha quedado en silencio. Atraviesa el espacio hostil para averiguar por qué — antes de que lo que los silenció te encuentre a ti.',
+    'scenario.firstContact.name': 'Primer contacto',
+    'scenario.firstContact.description': 'Señales de origen inteligente detectadas más allá del borde. Haz contacto — con cuidado. No todos aquí quieren ser encontrados.',
+    'scenario.borderPatrol.name': 'Patrulla fronteriza',
+    'scenario.borderPatrol.description': 'Las colonias exteriores están bajo asedio. Patrulla la frontera, protege los asentamientos y descubre quién está detrás de las incursiones.',
+
+    // Language selector
+    'setup.language': 'Idioma',
+
+    // Provisioning labels
+    'provision.fuel': 'Combustible',
+    'provision.supplies': 'Suministros',
+
+    // Captain profile
+    'end.captainProfile': 'Perfil del capitán',
+
+    // Trade extras
+    'trade.cargo': 'Carga',
+    'trade.fuelPlus': 'Combustible +{amount}',
+    'trade.suppliesPlus': 'Suministros +{amount}',
   },
 
   fr: {
@@ -1020,6 +1362,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'Tokens : {count}',
     'cost.estCost': 'Coût est. : {cost}',
+
+    // FO Characters
+    'fo.chen.name': 'Commandant Reva Chen',
+    'fo.chen.tagline': "J'ai enterré assez d'équipiers pour toute une carrière, capitaine.",
+    'fo.chen.description': "Officier vétéran. Prudente, protectrice envers l'équipage, humour pince-sans-rire. Excellents instincts tactiques mais tend à mal juger les situations diplomatiques.",
+    'fo.chen.priority': "sécurité de l'équipage",
+    'fo.osei.name': 'Lieutenant Kael Osei',
+    'fo.osei.tagline': 'Capitaine, réalisez-vous ce que nous regardons ?',
+    'fo.osei.description': "Officier scientifique. Audacieux, curieux, s'enthousiasme pour les premiers contacts et les anomalies. Tend à minimiser le danger dans sa quête de découverte.",
+    'fo.osei.priority': 'découverte',
+    'fo.vasquez.name': 'Enseigne Mira Vasquez',
+    'fo.vasquez.tagline': 'Trois options. Deux nous tuent.',
+    'fo.vasquez.description': "Prodige tactique. Stratégique, calculatrice, focalisée sur la mission. Excellente avec les systèmes du vaisseau mais interprète mal les intentions extraterrestres et traite tout comme un problème d'échecs.",
+    'fo.vasquez.priority': 'mission',
+
+    // Ship Classes
+    'ship.explorer.name': 'Explorateur classe Atlas',
+    'ship.explorer.description': "Un vaisseau équilibré conçu pour les missions d'exploration spatiale profonde. Pas de faiblesse majeure, pas de force marquante — fiable en toute situation.",
+    'ship.explorer.strengths': 'Statistiques équilibrées, Bonne autonomie en carburant, Coque solide',
+    'ship.explorer.weaknesses': "Pas d'équipement initial, Pas de spécialisation",
+    'ship.corvette.name': 'Corvette classe Talon',
+    'ship.corvette.description': 'Un vaisseau de guerre agile avec un blindage renforcé et des armes de qualité militaire. Consomme le carburant rapidement et transporte un minimum de provisions.',
+    'ship.corvette.strengths': 'Coque élevée, Armes de départ, Moral élevé',
+    'ship.corvette.weaknesses': 'Faible capacité de carburant, Peu de provisions, Consommation rapide de ressources',
+    'ship.freighter.name': 'Cargo classe Oxbow',
+    'ship.freighter.description': "Un cargo reconverti avec d'immenses soutes et des réservoirs supplémentaires. Lent et légèrement armé, mais vous pouvez tout transporter.",
+    'ship.freighter.strengths': 'Énorme capacité carburant/provisions, Avantage commercial, Grande autonomie',
+    'ship.freighter.weaknesses': 'Coque fragile, Pas d\'équipement de combat, Lent',
+    'ship.scout.name': 'Éclaireur classe Whisper',
+    'ship.scout.description': "Un vaisseau de reconnaissance rapide et furtif avec des capteurs avancés. Fragile mais difficile à coincer — conçu pour l'information, pas pour l'affrontement.",
+    'ship.scout.strengths': 'Retraites économiques, Options furtives, Bonne autonomie en carburant',
+    'ship.scout.weaknesses': 'Coque faible, Médiocre en combat direct',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': 'Exploration spatiale profonde',
+    'scenario.deepSpaceSurvey.description': "Cartographiez l'inexploré. Une mission d'exploration standard dans l'espace inconnu — mais la frontière est rarement tranquille.",
+    'scenario.distressSignal.name': 'Signal de détresse',
+    'scenario.distressSignal.description': "Une colonie frontalière s'est tue. Foncez à travers l'espace hostile pour découvrir pourquoi — avant que ce qui les a fait taire ne vous trouve.",
+    'scenario.firstContact.name': 'Premier contact',
+    'scenario.firstContact.description': "Signaux d'origine intelligente détectés au-delà de la bordure. Établissez le contact — prudemment. Tous ceux qui sont ici ne souhaitent pas être trouvés.",
+    'scenario.borderPatrol.name': 'Patrouille frontalière',
+    'scenario.borderPatrol.description': 'Les colonies extérieures sont assiégées. Patrouuillez la frontière, protégez les colonies et découvrez qui est derrière les raids.',
+
+    // Language selector
+    'setup.language': 'Langue',
+
+    // Provisioning labels
+    'provision.fuel': 'Carburant',
+    'provision.supplies': 'Provisions',
+
+    // Captain profile
+    'end.captainProfile': 'Profil du capitaine',
+
+    // Trade extras
+    'trade.cargo': 'Cargaison',
+    'trade.fuelPlus': 'Carburant +{amount}',
+    'trade.suppliesPlus': 'Provisions +{amount}',
   },
 
   de: {
@@ -1166,6 +1565,63 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'Tokens: {count}',
     'cost.estCost': 'Gesch. Kosten: {cost}',
+
+    // FO Characters
+    'fo.chen.name': 'Commander Reva Chen',
+    'fo.chen.tagline': 'Ich habe in meiner Karriere genug Besatzungsmitglieder begraben, Kapitän.',
+    'fo.chen.description': 'Erfahrene Offizierin. Vorsichtig, beschützerisch gegenüber der Crew, trockener Humor. Ausgezeichnete taktische Instinkte, aber neigt dazu, diplomatische Situationen falsch einzuschätzen.',
+    'fo.chen.priority': 'Sicherheit der Crew',
+    'fo.osei.name': 'Leutnant Kael Osei',
+    'fo.osei.tagline': 'Kapitän, ist Ihnen klar, was wir hier sehen?',
+    'fo.osei.description': 'Wissenschaftsoffizier. Kühn, neugierig, begeistert sich für Erstkontakte und Anomalien. Neigt dazu, Gefahren bei der Jagd nach Entdeckungen herunterzuspielen.',
+    'fo.osei.priority': 'Entdeckung',
+    'fo.vasquez.name': 'Fähnrich Mira Vasquez',
+    'fo.vasquez.tagline': 'Drei Optionen. Zwei davon bringen uns um.',
+    'fo.vasquez.description': 'Taktisches Wunderkind. Strategisch, berechnend, missionsfokussiert. Hervorragend mit Schiffssystemen, aber liest die Absichten von Aliens falsch und behandelt alles wie ein Schachproblem.',
+    'fo.vasquez.priority': 'Mission',
+
+    // Ship Classes
+    'ship.explorer.name': 'Atlas-Klasse Erkundungsschiff',
+    'ship.explorer.description': 'Ein ausgewogenes Schiff für Tiefraumerkundungsmissionen. Keine großen Schwächen, keine herausragenden Stärken — in jeder Lage zuverlässig.',
+    'ship.explorer.strengths': 'Ausgewogene Werte, Gute Treibstoffreichweite, Solide Hülle',
+    'ship.explorer.weaknesses': 'Keine Startausrüstung, Keine Spezialisierung',
+    'ship.corvette.name': 'Talon-Klasse Korvette',
+    'ship.corvette.description': 'Ein wendiges Kriegsschiff mit verstärkter Panzerung und Militärwaffen. Verbraucht schnell Treibstoff und trägt minimale Vorräte.',
+    'ship.corvette.strengths': 'Hohe Hülle, Startbewaffnung, Hohe Moral',
+    'ship.corvette.weaknesses': 'Geringe Treibstoffkapazität, Wenig Vorräte, Schneller Ressourcenverbrauch',
+    'ship.freighter.name': 'Oxbow-Klasse Frachter',
+    'ship.freighter.description': 'Ein umgebauter Frachter mit riesigen Versorgungsbuchten und zusätzlichen Treibstofftanks. Langsam und leicht bewaffnet, aber man kann alles mitnehmen, was man findet.',
+    'ship.freighter.strengths': 'Riesige Treibstoff-/Vorratskapazität, Handelsvorteil, Große Reichweite',
+    'ship.freighter.weaknesses': 'Schwache Hülle, Keine Kampfausrüstung, Schwerfällig',
+    'ship.scout.name': 'Whisper-Klasse Aufklärer',
+    'ship.scout.description': 'Ein schnelles, getarntes Aufklärungsschiff mit fortschrittlichen Sensoren. Zerbrechlich, aber schwer zu fassen — gebaut für Information, nicht für Konfrontation.',
+    'ship.scout.strengths': 'Günstige Rückzüge, Tarnoptionen, Gute Treibstoffreichweite',
+    'ship.scout.weaknesses': 'Niedrige Hülle, Schlecht im direkten Kampf',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': 'Tiefraumerkundung',
+    'scenario.deepSpaceSurvey.description': 'Kartiere das Unbekannte. Eine Standard-Erkundungsmission in den unbekannten Weltraum — aber die Grenze ist selten ruhig.',
+    'scenario.distressSignal.name': 'Notsignal',
+    'scenario.distressSignal.description': 'Eine Grenzkolonie ist verstummt. Durchquere feindlichen Raum, um herauszufinden warum — bevor das, was sie zum Schweigen brachte, dich findet.',
+    'scenario.firstContact.name': 'Erstkontakt',
+    'scenario.firstContact.description': 'Signale intelligenten Ursprungs jenseits des Randes entdeckt. Nimm Kontakt auf — vorsichtig. Nicht jeder hier draußen will gefunden werden.',
+    'scenario.borderPatrol.name': 'Grenzpatrouille',
+    'scenario.borderPatrol.description': 'Die äußeren Kolonien stehen unter Belagerung. Patrouilliere die Grenze, schütze die Siedlungen und finde heraus, wer hinter den Überfällen steckt.',
+
+    // Language selector
+    'setup.language': 'Sprache',
+
+    // Provisioning labels
+    'provision.fuel': 'Treibstoff',
+    'provision.supplies': 'Vorräte',
+
+    // Captain profile
+    'end.captainProfile': 'Kapitänsprofil',
+
+    // Trade extras
+    'trade.cargo': 'Fracht',
+    'trade.fuelPlus': 'Treibstoff +{amount}',
+    'trade.suppliesPlus': 'Vorräte +{amount}',
   },
 
   pt: {
@@ -1312,5 +1768,62 @@ export const translations: Record<string, Translations> = {
     // Cost
     'cost.tokens': 'Tokens: {count}',
     'cost.estCost': 'Custo est.: {cost}',
+
+    // FO Characters
+    'fo.chen.name': 'Comandante Reva Chen',
+    'fo.chen.tagline': 'Já enterrei tripulantes suficientes para uma carreira inteira, capitão.',
+    'fo.chen.description': 'Oficial veterana. Cautelosa, protetora da tripulação, humor seco. Excelentes instintos táticos, mas tende a julgar mal situações diplomáticas.',
+    'fo.chen.priority': 'segurança da tripulação',
+    'fo.osei.name': 'Tenente Kael Osei',
+    'fo.osei.tagline': 'Capitão, percebe o que estamos a ver?',
+    'fo.osei.description': 'Oficial de ciências. Ousado, curioso, fica entusiasmado com primeiros contactos e anomalias. Tende a minimizar o perigo na busca por descobertas.',
+    'fo.osei.priority': 'descoberta',
+    'fo.vasquez.name': 'Alferes Mira Vasquez',
+    'fo.vasquez.tagline': 'Três opções. Duas delas nos matam.',
+    'fo.vasquez.description': 'Prodígio tático. Estratégica, calculista, focada na missão. Excelente com sistemas da nave, mas interpreta mal as intenções alienígenas e trata tudo como um problema de xadrez.',
+    'fo.vasquez.priority': 'missão',
+
+    // Ship Classes
+    'ship.explorer.name': 'Explorador classe Atlas',
+    'ship.explorer.description': 'Uma nave equilibrada projetada para missões de exploração no espaço profundo. Sem fraquezas importantes nem forças destacadas — confiável em qualquer situação.',
+    'ship.explorer.strengths': 'Estatísticas equilibradas, Boa autonomia de combustível, Casco sólido',
+    'ship.explorer.weaknesses': 'Sem equipamento inicial, Sem especialização',
+    'ship.corvette.name': 'Corveta classe Talon',
+    'ship.corvette.description': 'Uma nave de guerra ágil com blindagem reforçada e armas de grau militar. Consome combustível rapidamente e carrega suprimentos mínimos.',
+    'ship.corvette.strengths': 'Casco alto, Armas iniciais, Moral alto',
+    'ship.corvette.weaknesses': 'Baixa capacidade de combustível, Poucos suprimentos, Consumo rápido de recursos',
+    'ship.freighter.name': 'Cargueiro classe Oxbow',
+    'ship.freighter.description': 'Um cargueiro convertido com enormes baías de suprimentos e tanques extras de combustível. Lento e levemente armado, mas pode carregar tudo que encontrar.',
+    'ship.freighter.strengths': 'Enorme capacidade de combustível/suprimentos, Vantagem comercial, Longo alcance',
+    'ship.freighter.weaknesses': 'Casco fraco, Sem equipamento de combate, Lento',
+    'ship.scout.name': 'Batedor classe Whisper',
+    'ship.scout.description': 'Uma nave de reconhecimento rápida e furtiva com sensores avançados. Frágil, mas difícil de capturar — construída para informação, não para confronto.',
+    'ship.scout.strengths': 'Retiradas baratas, Opções furtivas, Boa autonomia de combustível',
+    'ship.scout.weaknesses': 'Casco baixo, Fraco em combate direto',
+
+    // Scenarios
+    'scenario.deepSpaceSurvey.name': 'Exploração do espaço profundo',
+    'scenario.deepSpaceSurvey.description': 'Mapeie o desconhecido. Uma missão de exploração padrão no espaço desconhecido — mas a fronteira raramente é tranquila.',
+    'scenario.distressSignal.name': 'Sinal de socorro',
+    'scenario.distressSignal.description': 'Uma colônia de fronteira ficou em silêncio. Atravesse o espaço hostil para descobrir o motivo — antes que o que os silenciou encontre você.',
+    'scenario.firstContact.name': 'Primeiro contato',
+    'scenario.firstContact.description': 'Sinais de origem inteligente detectados além da borda. Faça contato — com cuidado. Nem todos aqui querem ser encontrados.',
+    'scenario.borderPatrol.name': 'Patrulha de fronteira',
+    'scenario.borderPatrol.description': 'As colônias exteriores estão sob cerco. Patrulhe a fronteira, proteja os assentamentos e descubra quem está por trás dos ataques.',
+
+    // Language selector
+    'setup.language': 'Idioma',
+
+    // Provisioning labels
+    'provision.fuel': 'Combustível',
+    'provision.supplies': 'Suprimentos',
+
+    // Captain profile
+    'end.captainProfile': 'Perfil do capitão',
+
+    // Trade extras
+    'trade.cargo': 'Carga',
+    'trade.fuelPlus': 'Combustível +{amount}',
+    'trade.suppliesPlus': 'Suprimentos +{amount}',
   },
 }

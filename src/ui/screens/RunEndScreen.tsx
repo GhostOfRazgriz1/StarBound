@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useGameStore } from '../../storage/game-store'
 import { FO_ARCHETYPES } from '../../types/fo'
 import { CostIndicator } from '../components/CostIndicator'
+import { t } from '../../i18n'
 
 export function RunEndScreen() {
   const run = useGameStore((s) => s.run)
@@ -71,12 +72,12 @@ export function RunEndScreen() {
         {/* Mission outcome */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-gray-100">
-            {survived ? 'Mission Complete' : 'Ship Destroyed'}
+            {survived ? t('end.missionComplete') : t('end.shipDestroyed')}
           </h1>
           <p className="text-gray-500">
             {survived
-              ? 'You made it back to Federation space.'
-              : 'The void claims another explorer.'}
+              ? t('end.survivedText')
+              : t('end.destroyedText')}
           </p>
         </div>
 
@@ -105,7 +106,7 @@ export function RunEndScreen() {
             <div className="grid grid-cols-2 gap-4">
               {analysis.strengths && analysis.strengths.length > 0 && (
                 <div>
-                  <p className="text-xs text-green-500 uppercase tracking-wider mb-1">Strengths</p>
+                  <p className="text-xs text-green-500 uppercase tracking-wider mb-1">{t('end.strengths')}</p>
                   {analysis.strengths.map((s, i) => (
                     <p key={i} className="text-xs text-gray-400">+ {s}</p>
                   ))}
@@ -113,7 +114,7 @@ export function RunEndScreen() {
               )}
               {analysis.blindSpots && analysis.blindSpots.length > 0 && (
                 <div>
-                  <p className="text-xs text-red-400 uppercase tracking-wider mb-1">Blind Spots</p>
+                  <p className="text-xs text-red-400 uppercase tracking-wider mb-1">{t('end.blindSpots')}</p>
                   {analysis.blindSpots.map((s, i) => (
                     <p key={i} className="text-xs text-gray-500">- {s}</p>
                   ))}
@@ -137,49 +138,49 @@ export function RunEndScreen() {
                 onClick={handleCopy}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded transition-colors"
               >
-                {copied ? 'Copied!' : 'Copy to share'}
+                {copied ? t('end.copied') : t('end.copyToShare')}
               </button>
             </div>
           </div>
         ) : (
           <div className="text-center text-sm text-gray-600 animate-pulse">
-            Analyzing your command style...
+            {t('end.analyzing')}
           </div>
         )}
 
         {/* Mission stats */}
         <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Mission Report</h3>
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">{t('end.missionReport')}</h3>
 
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <span className="text-gray-500">Sectors explored</span>
+              <span className="text-gray-500">{t('end.sectorsExplored')}</span>
               <p className="text-gray-200 text-lg">{sectorsExplored}</p>
             </div>
             <div>
-              <span className="text-gray-500">Retreats</span>
+              <span className="text-gray-500">{t('end.retreats')}</span>
               <p className="text-gray-200 text-lg">{retreats}</p>
             </div>
             <div>
-              <span className="text-gray-500">Final hull</span>
+              <span className="text-gray-500">{t('end.finalHull')}</span>
               <p className="text-gray-200 text-lg">{run.ship.hull}%</p>
             </div>
             <div>
-              <span className="text-gray-500">Credits remaining</span>
+              <span className="text-gray-500">{t('end.creditsRemaining')}</span>
               <p className="text-gray-200 text-lg">{run.ship.credits}</p>
             </div>
             <div>
-              <span className="text-gray-500">First Officer</span>
+              <span className="text-gray-500">{t('end.firstOfficer')}</span>
               <p className="text-gray-200">{fo.fullName}</p>
             </div>
             <div>
-              <span className="text-gray-500">FO agreement rate</span>
+              <span className="text-gray-500">{t('end.foAgreement')}</span>
               <p className="text-gray-200">{Math.round(run.captainProfile.followsFOAdvice * 100)}%</p>
             </div>
           </div>
 
           <div className="pt-3 border-t border-gray-800">
-            <h4 className="text-xs text-gray-500 uppercase mb-2">Sectors Visited</h4>
+            <h4 className="text-xs text-gray-500 uppercase mb-2">{t('end.sectorsVisited')}</h4>
             <div className="space-y-1">
               {run.sectorMap.map((s, i) => (
                 <div key={i} className="text-xs text-gray-400 flex gap-2">
@@ -200,13 +201,13 @@ export function RunEndScreen() {
             onClick={() => setPhase('scenario_select')}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium transition-colors"
           >
-            New Mission
+            {t('end.newMission')}
           </button>
           <button
             onClick={() => setPhase('setup')}
             className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded font-medium transition-colors"
           >
-            Settings
+            {t('end.settings')}
           </button>
         </div>
       </div>

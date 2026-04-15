@@ -2,19 +2,20 @@ import { useState } from 'react'
 import { useGameStore } from '../../storage/game-store'
 import { setSelectedShip, setCustomShipStats } from '../../storage/session'
 import { CUSTOM_SHIP_BUDGET, CUSTOM_SHIP_MIN, CUSTOM_SHIP_MAX } from '../../types/game'
+import { t } from '../../i18n'
 
 interface StatConfig {
   key: 'maxHull' | 'maxFuel' | 'maxSupplies'
-  label: string
+  labelKey: 'status.hull' | 'status.fuel' | 'status.supplies'
   icon: string
   color: string
-  description: string
+  descKey: 'custom.hullDesc' | 'custom.fuelDesc' | 'custom.suppliesDesc'
 }
 
 const STATS: StatConfig[] = [
-  { key: 'maxHull', label: 'Hull', icon: 'H', color: '#3b82f6', description: 'How much damage your ship can take' },
-  { key: 'maxFuel', label: 'Fuel', icon: 'F', color: '#f59e0b', description: 'How far you can travel between refueling' },
-  { key: 'maxSupplies', label: 'Supplies', icon: 'S', color: '#10b981', description: 'Crew sustenance and repair materials' },
+  { key: 'maxHull', labelKey: 'status.hull', icon: 'H', color: '#3b82f6', descKey: 'custom.hullDesc' },
+  { key: 'maxFuel', labelKey: 'status.fuel', icon: 'F', color: '#f59e0b', descKey: 'custom.fuelDesc' },
+  { key: 'maxSupplies', labelKey: 'status.supplies', icon: 'S', color: '#10b981', descKey: 'custom.suppliesDesc' },
 ]
 
 const DEFAULT_ALLOC = Math.floor(CUSTOM_SHIP_BUDGET / 3) // 100 each
@@ -68,9 +69,9 @@ export function CustomShipScreen() {
     <div className="flex flex-col items-center justify-center min-h-svh p-8">
       <div className="max-w-lg w-full space-y-8">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-gray-100">Build Custom Ship</h2>
+          <h2 className="text-2xl font-bold text-gray-100">{t('custom.title')}</h2>
           <p className="text-gray-500 text-sm">
-            Allocate {CUSTOM_SHIP_BUDGET} points across your ship's systems. No starting equipment.
+            {t('custom.subtitle', { budget: CUSTOM_SHIP_BUDGET })}
           </p>
         </div>
 
@@ -78,19 +79,19 @@ export function CustomShipScreen() {
         <div className="flex items-center justify-center gap-4">
           <div className="text-center">
             <p className="text-3xl font-bold text-gray-100">{spent}</p>
-            <p className="text-xs text-gray-500">spent</p>
+            <p className="text-xs text-gray-500">{t('custom.spent')}</p>
           </div>
           <div className="text-gray-700">/</div>
           <div className="text-center">
             <p className="text-3xl font-bold text-gray-500">{CUSTOM_SHIP_BUDGET}</p>
-            <p className="text-xs text-gray-500">budget</p>
+            <p className="text-xs text-gray-500">{t('custom.budget')}</p>
           </div>
           {remaining > 0 && (
             <>
               <div className="text-gray-700">=</div>
               <div className="text-center">
                 <p className="text-3xl font-bold text-yellow-400">{remaining}</p>
-                <p className="text-xs text-gray-500">unspent</p>
+                <p className="text-xs text-gray-500">{t('custom.unspent')}</p>
               </div>
             </>
           )}
@@ -105,8 +106,8 @@ export function CustomShipScreen() {
               <div key={stat.key} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-sm font-semibold text-gray-200">{stat.label}</span>
-                    <p className="text-xs text-gray-600">{stat.description}</p>
+                    <span className="text-sm font-semibold text-gray-200">{t(stat.labelKey)}</span>
+                    <p className="text-xs text-gray-600">{t(stat.descKey)}</p>
                   </div>
                   <span className="text-lg font-bold tabular-nums" style={{ color: stat.color }}>
                     {value}
@@ -155,7 +156,7 @@ export function CustomShipScreen() {
 
         {/* Preview comparison */}
         <div className="text-xs text-gray-600 text-center">
-          Balanced (Explorer) = 100 / 100 / 100
+          {t('custom.balancedRef')}
         </div>
 
         <div className="flex gap-4 justify-center">
@@ -163,13 +164,13 @@ export function CustomShipScreen() {
             onClick={handleConfirm}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium transition-colors"
           >
-            Confirm Ship
+            {t('custom.confirmShip')}
           </button>
           <button
             onClick={() => setPhase('ship_select')}
             className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded font-medium transition-colors"
           >
-            Back to Presets
+            {t('custom.backToPresets')}
           </button>
         </div>
       </div>

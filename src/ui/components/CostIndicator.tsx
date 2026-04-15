@@ -1,5 +1,6 @@
 import { useGameStore } from '../../storage/game-store'
 import { estimateCostUSD, formatCost } from '../../llm/token-estimator'
+import { t } from '../../i18n'
 
 export function CostIndicator() {
   const tokens = useGameStore((s) => s.totalTokensUsed)
@@ -9,8 +10,8 @@ export function CostIndicator() {
 
   return (
     <div className="text-xs text-gray-600 flex items-center gap-3">
-      <span>Tokens: {(tokens.input + tokens.output).toLocaleString()}</span>
-      <span>Est. cost: {formatCost(cost)}</span>
+      <span>{t('cost.tokens', { count: (tokens.input + tokens.output).toLocaleString() })}</span>
+      <span>{t('cost.estCost', { cost: formatCost(cost) })}</span>
     </div>
   )
 }

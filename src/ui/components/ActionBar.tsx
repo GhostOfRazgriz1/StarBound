@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { GameAction } from '../../types/game'
+import { t } from '../../i18n'
 
 interface ActionBarProps {
   actions: GameAction[]
@@ -51,7 +52,7 @@ export function ActionBar({ actions, onAction, disabled }: ActionBarProps) {
           value={freeText}
           onChange={(e) => setFreeText(e.target.value)}
           disabled={disabled}
-          placeholder="Or type your own action..."
+          placeholder={t('action.placeholder')}
           className="flex-1 bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-blue-500 disabled:opacity-40"
         />
         <button
@@ -59,7 +60,7 @@ export function ActionBar({ actions, onAction, disabled }: ActionBarProps) {
           disabled={disabled || !freeText.trim()}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Send
+          {t('action.send')}
         </button>
       </form>
     </div>

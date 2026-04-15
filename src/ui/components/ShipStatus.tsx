@@ -1,4 +1,5 @@
 import type { Ship } from '../../types/game'
+import { t } from '../../i18n'
 
 function StatusBar({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
   const pct = Math.max(0, Math.min(100, (value / max) * 100))
@@ -21,13 +22,13 @@ function StatusBar({ label, value, max, color }: { label: string; value: number;
 export function ShipStatus({ ship }: { ship: Ship }) {
   return (
     <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4 space-y-3">
-      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ship Status</h3>
-      <StatusBar label="Hull" value={ship.hull} max={ship.maxHull} color="#3b82f6" />
-      <StatusBar label="Fuel" value={ship.fuel} max={ship.maxFuel} color="#f59e0b" />
-      <StatusBar label="Supplies" value={ship.supplies} max={ship.maxSupplies} color="#10b981" />
-      <StatusBar label="Morale" value={ship.morale} max={100} color="#8b5cf6" />
+      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('status.shipStatus')}</h3>
+      <StatusBar label={t('status.hull')} value={ship.hull} max={ship.maxHull} color="#3b82f6" />
+      <StatusBar label={t('status.fuel')} value={ship.fuel} max={ship.maxFuel} color="#f59e0b" />
+      <StatusBar label={t('status.supplies')} value={ship.supplies} max={ship.maxSupplies} color="#10b981" />
+      <StatusBar label={t('status.morale')} value={ship.morale} max={100} color="#8b5cf6" />
       <div className="flex justify-between text-sm pt-1 border-t border-gray-800">
-        <span className="text-gray-500">Credits</span>
+        <span className="text-gray-500">{t('status.credits')}</span>
         <span className="text-gray-300">{ship.credits}</span>
       </div>
     </div>
