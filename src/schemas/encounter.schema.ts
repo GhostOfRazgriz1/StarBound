@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { consumableLootSchema } from './action-result.schema'
 
 // --- Helpers for LLM output normalization ---
 
@@ -81,6 +82,10 @@ export const derelictSchema = z.object({
     if (!val || typeof val !== 'object' || Array.isArray(val)) return null
     try { return equipmentLootSchema.parse(val) } catch { return null }
   }),
+  consumableLoot: z.any().transform((val) => {
+    if (!val || typeof val !== 'object' || Array.isArray(val)) return null
+    try { return consumableLootSchema.parse(val) } catch { return null }
+  }).optional(),
   clue: coerceString('no clear connection'),
 }).passthrough()
 
@@ -111,8 +116,9 @@ export const traderItemSchema = z.object({
     if (['equipment', 'weapon', 'shield', 'armor', 'gear'].includes(lower)) return 'equipment'
     if (['fuel', 'energy', 'power'].includes(lower)) return 'fuel'
     if (['supplies', 'food', 'medical', 'supply'].includes(lower)) return 'supplies'
+    if (['consumable', 'item', 'usable', 'single-use', 'one-time'].includes(lower)) return 'consumable'
     return 'info'
-  }) as z.ZodType<'equipment' | 'fuel' | 'supplies' | 'info'>,
+  }) as z.ZodType<'equipment' | 'fuel' | 'supplies' | 'info' | 'consumable'>,
   price: z.number(),
   effect: coerceString('standard'),
   amount: z.any().transform((val) => {
@@ -123,6 +129,10 @@ export const traderItemSchema = z.object({
   equipment: z.any().transform((val) => {
     if (!val || typeof val !== 'object' || Array.isArray(val)) return undefined
     try { return equipmentLootSchema.parse(val) } catch { return undefined }
+  }).optional(),
+  consumable: z.any().transform((val) => {
+    if (!val || typeof val !== 'object' || Array.isArray(val)) return undefined
+    try { return consumableLootSchema.parse(val) } catch { return undefined }
   }).optional(),
 }).transform((item) => {
   // Infer amount for fuel/supplies if not provided

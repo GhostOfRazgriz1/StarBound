@@ -1,4 +1,5 @@
 import type { Equipment } from './equipment'
+import type { Consumable } from './consumable'
 
 export type EncounterType =
   | 'civilization'
@@ -54,6 +55,7 @@ export interface DerelictEncounter {
   condition: string          // structural state
   hazard: string             // danger to boarding party
   loot: Equipment | null     // potential equipment find
+  consumableLoot?: Omit<Consumable, 'id'> | null
   clue: string               // connects to story arc
 }
 
@@ -87,11 +89,12 @@ export interface TraderEncounter {
 
 export interface TraderItem {
   name: string
-  type: 'equipment' | 'fuel' | 'supplies' | 'info'
+  type: 'equipment' | 'fuel' | 'supplies' | 'info' | 'consumable'
   price: number
   effect: string
   amount?: number            // how much fuel/supplies this restores
   equipment?: Equipment      // if type is 'equipment'
+  consumable?: Omit<Consumable, 'id'>  // if type is 'consumable'
 }
 
 export interface QuietEncounter {

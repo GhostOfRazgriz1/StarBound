@@ -2,6 +2,8 @@ import type { LLMProvider } from '../llm/providers/base'
 import type { Scenario, GameAction, RunState, ShipClassId } from '../types/game'
 import type { SectorPreview, PirateEncounter } from '../types/encounters'
 import type { Equipment } from '../types/equipment'
+import type { Consumable } from '../types/consumable'
+import { CONSUMABLE_RESOLUTION } from '../types/consumable'
 import type { FOArchetype } from '../types/fo'
 import { useGameStore } from '../storage/game-store'
 import { loadFOMemory, saveFOMemory, saveRunToLifetimeStats, saveStandingOrders, saveArtifact } from '../storage/cross-run'
@@ -214,8 +216,10 @@ export async function performAction(
           ...handleEquipmentGains(result.stateChanges, run),
           { id: 'depart', label: 'Continue to next sector', description: 'Leave this sector and move on.', type: 'navigate' as const },
         ])
+        handleConsumableGains(result.stateChanges)
       } else {
         handleEquipmentGains(result.stateChanges, run)
+        handleConsumableGains(result.stateChanges)
         store.setAvailableActions(result.newActions.map((a) => ({
           ...a,
           type: a.type as 'explore' | 'combat' | 'dialogue' | 'trade' | 'navigate' | 'retreat' | 'special',
@@ -236,6 +240,7 @@ export async function performAction(
       store.appendNarration(`${result.narration}\n\nFO: "${result.foComment}"`)
       applyStateChanges(result.stateChanges)
       handleEquipmentGains(result.stateChanges, run)
+      handleConsumableGains(result.stateChanges)
 
       if (result.combatTriggered) {
         const r = useGameStore.getState().run!
@@ -455,4 +460,115 @@ function handleEquipmentGains(stateChanges: Record<string, unknown> | object, ru
     }
   }
   return []
+}
+
+function handleConsumableGains(stateChanges: Record<string, unknown> | object): void {
+  const store = useGameStore.getState()
+  const gained = (stateChanges as { consumablesGained?: Array<{ name: string; type: string; effect: string; magnitude?: number; uses?: number }> }).consumablesGained
+
+  if (gained && Array.isArray(gained)) {
+    for (const c of gained) {
+      const cType = c.type as Consumable['type']
+      const consumable: Consumable = {
+        id: crypto.randomUUID(),
+        name: c.name,
+        type: cType,
+        effect: c.effect,
+        resolution: CONSUMABLE_RESOLUTION[cType] ?? 'triggered',
+        magnitude: c.magnitude,
+        uses: c.uses ?? 1,
+      }
+      store.addConsumable(consumable)
+    }
+  }
+
+  const lost = (stateChanges as { consumablesLost?: string[] }).consumablesLost
+  if (lost && Array.isArray(lost)) {
+    for (const id of lost) {
+      store.removeConsumable(id)
+    }
+  }
+}
+
+export async function useConsumableItem(consumableId: string): Promise<void> {
+  const store = useGameStore.getState()
+  const run = store.run
+  if (!run) return
+
+  const consumable = (run.ship.consumables || []).find((c) => c.id === consumableId)
+  if (!consumable) return
+
+  if (consumable.resolution === 'instant') {
+    const used = store.useConsumable(consumableId)
+    if (!used) return
+
+    const mag = consumable.magnitude ?? 20
+    let stateChange: Record<string, number> = {}
+    let narration = ''
+    let foComment = ''
+
+    switch (consumable.type) {
+      case 'repair':
+        stateChange = { hull: mag }
+        narration = `You activate the ${consumable.name}. Hull integrity improves. **+${mag} hull.**`
+        foComment = `Hull patched up. We're holding together better now.`
+        break
+      case 'fuel':
+        stateChange = { fuel: mag }
+        narration = `You crack open the ${consumable.name} and feed it into the reactor. **+${mag} fuel.**`
+        foComment = `Tanks a bit healthier. Good call using that.`
+        break
+      case 'shield':
+        stateChange = { hull: Math.floor(mag * 0.5), morale: 5 }
+        narration = `You activate the ${consumable.name}. A temporary energy barrier shimmers around the hull. **+${Math.floor(mag * 0.5)} hull, +5 morale.**`
+        foComment = `That'll buy us some breathing room if things get rough.`
+        break
+      case 'decoy':
+        stateChange = { morale: 10 }
+        narration = `You deploy the ${consumable.name}. A holographic duplicate of your ship splits off on an evasive vector. **+10 morale.**`
+        foComment = `Anyone tracking us just got confused. Smart move.`
+        break
+    }
+
+    store.applyStateChanges(stateChange)
+    store.appendNarration(`${narration}\n\nFO: "${foComment}"`)
+  } else {
+    // Triggered consumable — LLM resolves
+    store.setLoading(true)
+    store.setError(null)
+
+    try {
+      const provider = getProvider()
+      const foMemory = getFOMemory()
+      if (!foMemory) throw new Error('No FO memory')
+
+      const used = store.useConsumable(consumableId)
+      if (!used) return
+
+      const updatedRun = useGameStore.getState().run!
+      const { result, tokensUsed } = await resolveAction(
+        provider,
+        updatedRun,
+        foMemory,
+        `use_consumable`,
+        `Use ${consumable.name}`,
+        `The Captain activates "${consumable.name}" (${consumable.type}). Description: ${consumable.effect}. Resolve the unpredictable effect based on the current context. It can be beneficial, harmful, or surprising.`,
+      )
+      store.addTokensUsed(tokensUsed)
+
+      store.appendNarration(`${result.narration}\n\nFO: "${result.foComment}"`)
+      applyStateChanges(result.stateChanges)
+      handleEquipmentGains(result.stateChanges, updatedRun)
+      handleConsumableGains(result.stateChanges)
+
+      store.setAvailableActions(result.newActions.map((a) => ({
+        ...a,
+        type: a.type as GameAction['type'],
+      })))
+    } catch (err) {
+      store.setError(err instanceof Error ? err.message : 'Failed to use consumable')
+    } finally {
+      store.setLoading(false)
+    }
+  }
 }

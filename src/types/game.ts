@@ -1,5 +1,6 @@
 import type { Sector, SectorPreview } from './encounters'
 import type { Equipment } from './equipment'
+import type { Consumable } from './consumable'
 import type { FOArchetype, CaptainProfile } from './fo'
 
 /** Top-level game phases */
@@ -32,6 +33,7 @@ export interface Ship {
   morale: number     // 0-100
   equipment: ShipEquipment
   cargo: Equipment[] // unequipped items
+  consumables: Consumable[]
 }
 
 export interface ShipEquipment {
@@ -264,6 +266,7 @@ export function createShipFromClass(shipClass: ShipClass, startingCredits: numbe
       special: shipClass.startingEquipment.special ?? null,
     },
     cargo: [],
+    consumables: [],
   }
 }
 
@@ -284,5 +287,6 @@ export function createCustomShip(stats: CustomShipStats, startingCredits: number
       special: null,
     },
     cargo: [],
+    consumables: [],
   }
 }

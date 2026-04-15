@@ -80,6 +80,7 @@ function serializeRunState(state: RunState): string {
     `Scenario: ${state.scenario}`,
     `Ship — Hull: ${ship.hull}/${ship.maxHull}, Fuel: ${ship.fuel}/${ship.maxFuel}, Supplies: ${ship.supplies}/${ship.maxSupplies}, Credits: ${ship.credits}, Morale: ${ship.morale}`,
     `Equipment — Weapons: ${ship.equipment.weapons?.name ?? 'none'}, Shields: ${ship.equipment.shields?.name ?? 'none'}, Engine: ${ship.equipment.engine?.name ?? 'none'}, Special: ${ship.equipment.special?.name ?? 'none'}`,
+    `Consumables: ${(ship.consumables || []).length > 0 ? (ship.consumables || []).map(c => `${c.name} (${c.type})`).join(', ') : 'none'}`,
     `Story Arc — Stage: ${state.storyArc.stage}, Antagonist: ${state.storyArc.antagonist}${state.storyArc.motivation ? `, Motivation: ${state.storyArc.motivation}` : ''}`,
     `Encounter Depth: ${state.encounterDepth}`,
   ]

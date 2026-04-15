@@ -1,6 +1,7 @@
 import type { RunState } from '../types/game'
 import type { FOPersonality, FOCrossRunMemory, FamiliarityTier } from '../types/fo'
 import { buildFOPromptBlock } from './fo-personality'
+import { MAX_CONSUMABLES } from '../types/consumable'
 import { useGameStore } from '../storage/game-store'
 import { LANGUAGES } from '../i18n'
 
@@ -57,8 +58,17 @@ export function buildSystemPrompt(
     '- equipmentGained is an array of objects: [{ name, slot, rarity, origin, effect, flavor }]',
     '- slot MUST be one of: "weapons", "shields", "engine", "special"',
     '- rarity MUST be one of: "common", "uncommon", "rare", "legendary"',
-    '- Consumables like fuel and supplies are NOT equipment — use the numeric fields (fuel, supplies) for those.',
+    '- Fuel and supply purchases are NOT equipment — use the numeric fields (fuel, supplies) for those.',
     '- Information and intel are NOT equipment — describe them in narration only.',
+    '',
+    '# CONSUMABLES',
+    '- CONSUMABLES are single-use items separate from equipment. They go in stateChanges.consumablesGained.',
+    '- consumablesGained format: [{ name, type, effect, magnitude?, uses? }]',
+    '- type MUST be one of: "repair", "fuel", "shield", "decoy", "probe", "beacon", "data", "device", "diplomatic"',
+    '- Instant types (repair, fuel, shield, decoy) MUST include a magnitude number (how much they restore/boost).',
+    '- Triggered types (probe, beacon, data, device, diplomatic) have unpredictable context-dependent effects when activated.',
+    '- Do NOT put consumables in equipmentGained — they are a separate category.',
+    '- Consumables are found in derelicts, anomalies, as rewards, or sold by traders.',
     '',
     '# FIRST OFFICER',
     foBlock,
@@ -90,6 +100,7 @@ function serializeShipState(state: RunState): string {
     `  Shields: ${eq.shields ? `${eq.shields.name} (${eq.shields.effect})` : 'standard issue'}`,
     `  Engine: ${eq.engine ? `${eq.engine.name} (${eq.engine.effect})` : 'standard issue'}`,
     `  Special: ${eq.special ? `${eq.special.name} (${eq.special.effect})` : 'none'}`,
+    `Consumables (${(s.consumables || []).length}/${MAX_CONSUMABLES}):${(s.consumables || []).length > 0 ? '\n' + (s.consumables || []).map(c => `  - ${c.name} (${c.type}, ${c.resolution})${c.magnitude ? ` [str: ${c.magnitude}]` : ''} [uses: ${c.uses}]`).join('\n') : ' none'}`,
     `Sector: ${state.currentSectorNumber} of ${state.totalSectors}`,
     `Story Arc: stage ${state.storyArc.stage}, antagonist: ${state.storyArc.antagonist}`,
   ].join('\n')

@@ -127,6 +127,7 @@ function getEncounterInstructions(type: EncounterType): string {
         '  living ship (biological), mining platform, observatory station',
         '',
         'The derelict must tell a story — what happened to the crew?',
+        'Optionally include consumableLoot: { name, type, effect, magnitude?, uses? } alongside or instead of equipment loot.',
         'Hazards should be specific (not just "radiation"): escaped specimens, rogue AI,',
         '  temporal loops, hull breach with micro-debris, automated defense systems still active,',
         '  psychoactive atmosphere, gravitational anomalies within the hull.',
@@ -147,6 +148,7 @@ function getEncounterInstructions(type: EncounterType): string {
         '',
         'The visual should be evocative and specific — not just "glowing."',
         'The risk and reward should create a real dilemma.',
+        'Anomalies may yield consumable items as rewards — include them in the narration if appropriate.',
       ].join('\n')
 
     case 'pirate':
@@ -173,10 +175,14 @@ function getEncounterInstructions(type: EncounterType): string {
         '  slot must be: "weapons"|"shields"|"engine"|"special"',
         '  rarity must be: "common"|"uncommon"|"rare"|"legendary"',
         '- type "info": price, effect (the actual intel the player receives — make it specific and useful)',
+        '- type "consumable": consumable object required: { name, type, effect, magnitude?, uses? }',
+        '  type must be: "repair"|"fuel"|"shield"|"decoy"|"probe"|"beacon"|"data"|"device"|"diplomatic"',
+        '  Instant types (repair/fuel/shield/decoy) MUST include magnitude (amount restored).',
+        '  Triggered types (probe/beacon/data/device/diplomatic) have unpredictable effects.',
         '',
-        'Include 3-5 items. Always include at least one fuel and one supplies option.',
+        'Include 4-6 items. Always include at least one fuel, one supplies, and one consumable.',
         'The rumor should hint at the story arc — something the trader mentions casually.',
-        'Prices should feel fair: fuel/supplies 15-40cr, equipment 30-100cr, info 10-30cr.',
+        'Prices should feel fair: fuel/supplies 15-40cr, equipment 30-100cr, info 10-30cr, consumables 15-50cr.',
       ].join('\n')
 
     case 'quiet':

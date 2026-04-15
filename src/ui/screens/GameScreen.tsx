@@ -3,6 +3,7 @@ import { selectSector, performAction } from '../../engine/game-engine'
 import { ShipStatus } from '../components/ShipStatus'
 import { EquipmentPanel } from '../components/EquipmentPanel'
 import { CargoPanel } from '../components/CargoPanel'
+import { ConsumablesPanel } from '../components/ConsumablesPanel'
 import { TradePanel } from '../components/TradePanel'
 import { Narration } from '../components/Narration'
 import { ActionBar } from '../components/ActionBar'
@@ -41,6 +42,7 @@ export function GameScreen() {
         <ShipStatus ship={run.ship} />
         <EquipmentPanel equipment={run.ship.equipment} />
         <CargoPanel cargo={run.ship.cargo} equipment={run.ship.equipment} />
+        <ConsumablesPanel consumables={run.ship.consumables || []} />
 
         <div className="mt-auto">
           <CostIndicator />

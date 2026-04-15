@@ -2,6 +2,8 @@ import type { TraderItem } from '../../types/encounters'
 import type { Equipment } from '../../types/equipment'
 import type { Ship } from '../../types/game'
 import { RARITY_CONFIG } from '../../types/equipment'
+import type { Consumable } from '../../types/consumable'
+import { CONSUMABLE_SELL_VALUES, MAX_CONSUMABLES } from '../../types/consumable'
 import { useGameStore } from '../../storage/game-store'
 import { t } from '../../i18n'
 
@@ -14,6 +16,7 @@ export function TradePanel() {
   const buyItem = useGameStore((s) => s.buyItem)
   const sellFromCargo = useGameStore((s) => s.sellFromCargo)
   const equipFromCargo = useGameStore((s) => s.equipFromCargo)
+  const sellConsumable = useGameStore((s) => s.sellConsumable)
 
   if (!showTrade || !run) return null
 
@@ -68,7 +71,7 @@ export function TradePanel() {
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
               {t('cargo.title')} ({cargo.length})
             </h3>
-            {cargo.length === 0 ? (
+            {cargo.length === 0 && (ship.consumables || []).length === 0 ? (
               <p className="text-xs text-gray-600 italic">{t('trade.nothingInCargo')}</p>
             ) : (
               <div className="space-y-2">
@@ -79,6 +82,13 @@ export function TradePanel() {
                     equipment={ship.equipment}
                     onSell={() => sellFromCargo(item.id)}
                     onEquip={() => equipFromCargo(item.id)}
+                  />
+                ))}
+                {(ship.consumables || []).map((item) => (
+                  <ConsumableSellCard
+                    key={item.id}
+                    item={item}
+                    onSell={() => sellConsumable(item.id)}
                   />
                 ))}
               </div>
@@ -93,7 +103,8 @@ export function TradePanel() {
 function BuyItemCard({ item, ship, onBuy }: { item: TraderItem; ship: Ship; onBuy: () => void }) {
   const canAfford = ship.credits >= item.price
   const isFull = (item.type === 'fuel' && ship.fuel >= ship.maxFuel) ||
-                 (item.type === 'supplies' && ship.supplies >= ship.maxSupplies)
+                 (item.type === 'supplies' && ship.supplies >= ship.maxSupplies) ||
+                 (item.type === 'consumable' && (ship.consumables || []).length >= MAX_CONSUMABLES)
   const disabled = !canAfford || isFull
 
   // Build description
@@ -104,6 +115,8 @@ function BuyItemCard({ item, ship, onBuy }: { item: TraderItem; ship: Ship; onBu
     typeLabel = `${t('status.supplies')} +${item.amount ?? 20}`
   } else if (item.type === 'equipment') {
     typeLabel = t('trade.equipment')
+  } else if (item.type === 'consumable') {
+    typeLabel = 'Consumable'
   } else {
     typeLabel = t('trade.intel')
   }
@@ -173,6 +186,27 @@ function CargoItemCard({
           {t('trade.sellFor', { price: sellValue })}
         </button>
       </div>
+    </div>
+  )
+}
+
+function ConsumableSellCard({ item, onSell }: { item: Consumable; onSell: () => void }) {
+  const sellValue = CONSUMABLE_SELL_VALUES[item.resolution]
+  return (
+    <div className="bg-gray-800/50 border border-gray-700/50 rounded p-3 space-y-1">
+      <div className="flex items-start justify-between gap-2">
+        <span className="text-sm font-medium" style={{ color: item.resolution === 'instant' ? '#22d3ee' : '#fbbf24' }}>
+          {item.name}
+        </span>
+        <span className="text-xs text-gray-600">[{item.type}]</span>
+      </div>
+      <p className="text-xs text-gray-500">{item.effect}</p>
+      <button
+        onClick={onSell}
+        className="mt-1 px-2 py-0.5 text-[10px] rounded bg-green-900/40 border border-green-800/50 text-green-400 hover:bg-green-800/40 transition-colors"
+      >
+        {t('trade.sellFor', { price: sellValue })}
+      </button>
     </div>
   )
 }

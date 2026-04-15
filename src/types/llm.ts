@@ -74,6 +74,14 @@ export interface StateChanges {
     flavor: string
   }>
   equipmentLost?: string[]
+  consumablesGained?: Array<{
+    name: string
+    type: string
+    effect: string
+    magnitude?: number
+    uses?: number
+  }>
+  consumablesLost?: string[]
 }
 
 export interface SectorGenerationResult {

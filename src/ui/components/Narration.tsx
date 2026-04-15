@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 
 export function Narration({ entries }: { entries: string[] }) {
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -30,8 +30,8 @@ function stripThinking(text: string): string {
 }
 
 /** Render inline markdown: **bold**, *italic*, `code` */
-function renderInlineMarkdown(text: string): (string | JSX.Element)[] {
-  const result: (string | JSX.Element)[] = []
+function renderInlineMarkdown(text: string): (string | ReactNode)[] {
+  const result: (string | ReactNode)[] = []
   // Match **bold**, *italic*, `code`
   const regex = /(\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`)/g
   let lastIndex = 0

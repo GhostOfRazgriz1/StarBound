@@ -4,6 +4,8 @@ import type { Sector, SectorPreview, TraderItem } from '../types/encounters'
 import type { FOArchetype, FOCrossRunMemory } from '../types/fo'
 import type { Equipment } from '../types/equipment'
 import { RARITY_CONFIG } from '../types/equipment'
+import type { Consumable } from '../types/consumable'
+import { MAX_CONSUMABLES, CONSUMABLE_SELL_VALUES } from '../types/consumable'
 import type { LLMConfig } from '../types/llm'
 import { createShipFromClass, createCustomShip, SHIP_CLASSES } from '../types/game'
 import { FO_ARCHETYPES } from '../types/fo'
@@ -68,6 +70,12 @@ interface GameStore {
   closeTrade: () => void
   buyItem: (index: number) => void
   sellFromCargo: (itemId: string) => void
+
+  // Consumables
+  addConsumable: (consumable: Consumable) => boolean
+  removeConsumable: (consumableId: string) => void
+  useConsumable: (consumableId: string) => Consumable | null
+  sellConsumable: (consumableId: string) => void
 
   // Story arc
   advanceArc: () => void
@@ -351,6 +359,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
       } else {
         foComment = `New gear for the cargo hold. We can equip it whenever you're ready, Captain.`
       }
+    } else if (item.type === 'consumable' && item.consumable) {
+      const consumables = ship.consumables || []
+      if (consumables.length >= MAX_CONSUMABLES) {
+        ship.credits += item.price
+        narration = `Your consumable storage is full. ${traderName} puts the item back.`
+        foComment = `No room for more consumables, Captain. We'd have to use or drop something first.`
+        const sectorHistory = [...run.sectorHistory, `${narration}\n\nFO: "${foComment}"`]
+        set({ run: { ...run, ship, sectorHistory } })
+        return
+      }
+      const consumable: Consumable = {
+        id: crypto.randomUUID(),
+        name: item.consumable.name,
+        type: item.consumable.type,
+        effect: item.consumable.effect,
+        resolution: item.consumable.resolution,
+        magnitude: item.consumable.magnitude,
+        uses: item.consumable.uses,
+      }
+      ship.consumables = [...consumables, consumable]
+      narration = `You purchase ${consumable.name} from ${traderName} for ${item.price} credits.`
+      foComment = consumable.resolution === 'triggered'
+        ? `Interesting find. Hard to say what that'll do until we use it.`
+        : `Good to have on hand. ${consumable.effect}.`
     } else if (item.type === 'info') {
       narration = `You pay ${traderName} ${item.price} credits for information.\n\n"${item.effect}"`
       // Connect to any trader rumor for extra context
@@ -407,6 +439,54 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ]
 
     set({ run: { ...run, ship: { ...run.ship, cargo, credits }, sectorHistory } })
+  },
+
+  addConsumable: (consumable) => {
+    const run = get().run
+    if (!run) return false
+    const consumables = run.ship.consumables || []
+    if (consumables.length >= MAX_CONSUMABLES) return false
+    set({ run: { ...run, ship: { ...run.ship, consumables: [...consumables, consumable] } } })
+    return true
+  },
+
+  removeConsumable: (consumableId) => {
+    const run = get().run
+    if (!run) return
+    const consumables = (run.ship.consumables || []).filter((c) => c.id !== consumableId)
+    set({ run: { ...run, ship: { ...run.ship, consumables } } })
+  },
+
+  useConsumable: (consumableId) => {
+    const run = get().run
+    if (!run) return null
+    const consumables = run.ship.consumables || []
+    const item = consumables.find((c) => c.id === consumableId)
+    if (!item || item.uses <= 0) return null
+    const remaining = item.uses - 1
+    const newConsumables = remaining <= 0
+      ? consumables.filter((c) => c.id !== consumableId)
+      : consumables.map((c) => c.id === consumableId ? { ...c, uses: remaining } : c)
+    set({ run: { ...run, ship: { ...run.ship, consumables: newConsumables } } })
+    return item
+  },
+
+  sellConsumable: (consumableId) => {
+    const run = get().run
+    if (!run) return
+    const consumables = run.ship.consumables || []
+    const item = consumables.find((c) => c.id === consumableId)
+    if (!item) return
+    const sellValue = CONSUMABLE_SELL_VALUES[item.resolution]
+    const newConsumables = consumables.filter((c) => c.id !== consumableId)
+    const credits = run.ship.credits + sellValue
+    const foComment = item.resolution === 'triggered'
+      ? `We never did find out what that does. ${sellValue} credits is ${sellValue} credits.`
+      : `${sellValue} credits for ${item.name}. Reasonable.`
+    const sectorHistory = [...run.sectorHistory,
+      `You sell ${item.name} to the trader for ${sellValue} credits.\n\nFO: "${foComment}"`
+    ]
+    set({ run: { ...run, ship: { ...run.ship, consumables: newConsumables, credits }, sectorHistory } })
   },
 
   advanceArc: () => {

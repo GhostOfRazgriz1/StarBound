@@ -24,6 +24,39 @@ const coerceEquipmentGained = z.any().transform((val) => {
   return results
 })
 
+const CONSUMABLE_TYPE_ALIASES: Record<string, string> = {
+  repair: 'repair', 'repair kit': 'repair', 'repair_kit': 'repair', hull: 'repair',
+  fuel: 'fuel', 'fuel cell': 'fuel', 'fuel_cell': 'fuel', energy: 'fuel',
+  shield: 'shield', 'shield boost': 'shield', 'shield_booster': 'shield',
+  decoy: 'decoy', 'decoy drone': 'decoy', 'decoy_drone': 'decoy',
+  probe: 'probe', scanner: 'probe', sensor: 'probe',
+  beacon: 'beacon', signal: 'beacon', distress: 'beacon',
+  data: 'data', 'data chip': 'data', 'data_chip': 'data', chip: 'data', intel: 'data',
+  device: 'device', unknown: 'device', artifact: 'device',
+  diplomatic: 'diplomatic', 'diplomatic cache': 'diplomatic', cache: 'diplomatic',
+}
+
+export const consumableLootSchema = z.object({
+  name: z.string(),
+  type: z.string().transform((val) => CONSUMABLE_TYPE_ALIASES[val.toLowerCase()] ?? 'device'),
+  effect: z.string().default('unknown effect'),
+  magnitude: z.number().optional(),
+  uses: z.number().default(1),
+}).passthrough()
+
+/** Parse consumable array — individually resilient, drops items that fail */
+const coerceConsumablesGained = z.any().transform((val) => {
+  if (!Array.isArray(val)) return []
+  const results: z.infer<typeof consumableLootSchema>[] = []
+  for (const item of val) {
+    if (!item || typeof item !== 'object') continue
+    try {
+      results.push(consumableLootSchema.parse(item))
+    } catch { /* drop invalid items */ }
+  }
+  return results
+})
+
 /** Accept string or boolean and coerce to boolean */
 const coerceBool = z.any().transform((val) => {
   if (typeof val === 'boolean') return val
@@ -50,6 +83,8 @@ export const stateChangesSchema = z.any().transform((val) => {
   morale: z.number().optional(),
   equipmentGained: coerceEquipmentGained.optional(),
   equipmentLost: coerceArray(z.string()).optional(),
+  consumablesGained: coerceConsumablesGained.optional(),
+  consumablesLost: coerceArray(z.string()).optional(),
 }).passthrough())
 
 export const actionResultSchema = z.object({
