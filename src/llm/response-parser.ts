@@ -1,7 +1,8 @@
 import type { ZodSchema } from 'zod'
 
 export function parseJSONResponse<T>(raw: string, schema: ZodSchema<T>): T {
-  const jsonStr = extractJSON(raw)
+  const cleaned = stripThinkingTags(raw)
+  const jsonStr = extractJSON(cleaned)
   const parsed = JSON.parse(jsonStr)
 
   // Normalize common LLM quirks before schema validation
@@ -58,4 +59,14 @@ function normalizeKeys(obj: unknown): unknown {
 /** Convert snake_case or kebab-case to camelCase */
 function toCamelCase(str: string): string {
   return str.replace(/[-_]([a-z])/g, (_, c) => c.toUpperCase())
+}
+
+/** Strip thinking/reasoning tags from LLM output (DeepSeek, Claude, etc.) */
+function stripThinkingTags(text: string): string {
+  return text
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .replace(/<thinking>[\s\S]*?<\/thinking>/gi, '')
+    .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '')
+    .replace(/<reflection>[\s\S]*?<\/reflection>/gi, '')
+    .trim()
 }
