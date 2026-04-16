@@ -1,5 +1,6 @@
 import type { FOArchetype, FOCrossRunMemory } from '../types/fo'
-import type { ArtifactRecord } from '../types/equipment'
+import type { ArtifactRecord, Equipment } from '../types/equipment'
+import type { Consumable } from '../types/consumable'
 import type { LifetimeStats, RunEndSummary, ShipUpgrade } from '../types/game'
 import type { LLMConfig } from '../types/llm'
 import { createDefaultFOMemory } from '../types/fo'
@@ -15,6 +16,9 @@ const STORAGE_KEYS = {
   LANGUAGE: 'starbound_language',
   ACTIVE_RUN: 'starbound_active_run',
   ACTIVE_RUN_META: 'starbound_active_run_meta',
+  CREDIT_BANK: 'starbound_credit_bank',
+  EQUIPMENT_VAULT: 'starbound_equipment_vault',
+  CONSUMABLE_STASH: 'starbound_consumable_stash',
 } as const
 
 function load<T>(key: string, fallback: T): T {
@@ -145,4 +149,77 @@ export function loadActiveRun(): { run: unknown; foMemory: unknown; tokensUsed: 
 export function clearActiveRun(): void {
   localStorage.removeItem(STORAGE_KEYS.ACTIVE_RUN)
   localStorage.removeItem(STORAGE_KEYS.ACTIVE_RUN_META)
+}
+
+// Credit Bank
+export function loadCreditBank(): number {
+  return load<number>(STORAGE_KEYS.CREDIT_BANK, 0)
+}
+
+export function saveCreditBank(credits: number): void {
+  save(STORAGE_KEYS.CREDIT_BANK, Math.max(0, credits))
+}
+
+export function depositToBank(amount: number): void {
+  const current = loadCreditBank()
+  saveCreditBank(current + amount)
+}
+
+export function withdrawFromBank(amount: number): boolean {
+  const current = loadCreditBank()
+  if (amount > current) return false
+  saveCreditBank(current - amount)
+  return true
+}
+
+// Equipment Vault (max 12)
+export const VAULT_MAX = 12
+
+export function loadEquipmentVault(): Equipment[] {
+  return load<Equipment[]>(STORAGE_KEYS.EQUIPMENT_VAULT, [])
+}
+
+export function saveEquipmentVault(items: Equipment[]): void {
+  save(STORAGE_KEYS.EQUIPMENT_VAULT, items.slice(0, VAULT_MAX))
+}
+
+export function addToVault(item: Equipment): boolean {
+  const vault = loadEquipmentVault()
+  if (vault.length >= VAULT_MAX) return false
+  vault.push(item)
+  saveEquipmentVault(vault)
+  return true
+}
+
+export function removeFromVault(itemId: string): Equipment | null {
+  const vault = loadEquipmentVault()
+  const item = vault.find((i) => i.id === itemId)
+  if (!item) return null
+  saveEquipmentVault(vault.filter((i) => i.id !== itemId))
+  return item
+}
+
+// Consumable Stash (shares vault max)
+export function loadConsumableStash(): Consumable[] {
+  return load<Consumable[]>(STORAGE_KEYS.CONSUMABLE_STASH, [])
+}
+
+export function saveConsumableStash(items: Consumable[]): void {
+  save(STORAGE_KEYS.CONSUMABLE_STASH, items.slice(0, VAULT_MAX))
+}
+
+export function addToStash(item: Consumable): boolean {
+  const stash = loadConsumableStash()
+  if (stash.length >= VAULT_MAX) return false
+  stash.push(item)
+  saveConsumableStash(stash)
+  return true
+}
+
+export function removeFromStash(itemId: string): Consumable | null {
+  const stash = loadConsumableStash()
+  const item = stash.find((i) => i.id === itemId)
+  if (!item) return null
+  saveConsumableStash(stash.filter((i) => i.id !== itemId))
+  return item
 }

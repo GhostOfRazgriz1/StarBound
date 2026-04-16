@@ -6,7 +6,7 @@ import type { Consumable } from '../types/consumable'
 import { CONSUMABLE_RESOLUTION } from '../types/consumable'
 import type { FOArchetype } from '../types/fo'
 import { useGameStore } from '../storage/game-store'
-import { loadFOMemory, saveFOMemory, saveRunToLifetimeStats, saveStandingOrders, saveArtifact } from '../storage/cross-run'
+import { loadFOMemory, saveFOMemory, saveRunToLifetimeStats, saveStandingOrders, saveArtifact, depositToBank, addToVault, addToStash } from '../storage/cross-run'
 import { generateSectorPreviews, generateSector } from '../generation/sector'
 import { generateArrivalNarration } from '../generation/narration'
 import { resolveAction, resolveCombat } from '../generation/action-resolver'
@@ -419,6 +419,25 @@ async function finalizeRun(): Promise<void> {
 
   // Save standing orders
   saveStandingOrders(run.standingOrders)
+
+  // Meta-progression: deposit credits and save items to vault/stash
+  if (run.ship.hull > 0) {
+    // Only save if survived — dead captains lose their cargo
+    const creditDeposit = Math.floor(run.ship.credits * 0.5)
+    if (creditDeposit > 0) {
+      depositToBank(creditDeposit)
+    }
+
+    // Save cargo to vault
+    for (const item of run.ship.cargo) {
+      addToVault(item)
+    }
+
+    // Save consumables to stash
+    for (const item of (run.ship.consumables || [])) {
+      addToStash(item)
+    }
+  }
 
   store.setPhase('run_end')
 
