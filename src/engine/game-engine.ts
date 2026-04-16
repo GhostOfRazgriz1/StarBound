@@ -498,7 +498,20 @@ function handleEquipmentGains(stateChanges: Record<string, unknown> | object, ru
   const gained = (stateChanges as { equipmentGained?: Array<{ name: string; slot: string; rarity: string; origin: string; effect: string; flavor: string }> }).equipmentGained
 
   if (gained && Array.isArray(gained)) {
+    // Dedup: check what's already in cargo + equipment to avoid same-sector duplicates
+    const currentRun = store.run
+    const existingNames = new Set<string>()
+    if (currentRun) {
+      for (const item of currentRun.ship.cargo) existingNames.add(item.name.toLowerCase())
+      for (const slot of Object.values(currentRun.ship.equipment)) {
+        if (slot) existingNames.add(slot.name.toLowerCase())
+      }
+    }
+
     for (const eq of gained) {
+      if (existingNames.has(eq.name.toLowerCase())) continue // skip duplicate
+      existingNames.add(eq.name.toLowerCase())
+
       const equipment: Equipment = {
         id: crypto.randomUUID(),
         name: eq.name,

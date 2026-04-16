@@ -46,6 +46,8 @@ export function buildSystemPrompt(
     '',
     '# ANTI-REPETITION RULES',
     '- NEVER give the player the same item, information, or reward twice within a sector.',
+    '- If an item was already mentioned as found/acquired in the ACTIONS TAKEN section, do NOT include it in equipmentGained or consumablesGained again. The player already has it.',
+    '- An item that was narratively discovered in a previous action should NOT appear in stateChanges again — reference it in narration only ("the generator you secured earlier").',
     '- Check the "ACTIONS TAKEN THIS SECTOR" section below — if something was already given or revealed, do NOT repeat it.',
     '- If the player shares information with a civilization that the civilization already knows or that came FROM them, acknowledge it but do NOT give the same info/item back.',
     '- After 3-4 meaningful interactions in a sector, the encounter should wind down. Set encounterContinues to false and offer a "move on" action.',
