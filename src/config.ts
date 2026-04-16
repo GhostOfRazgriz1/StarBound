@@ -8,8 +8,8 @@ export const RETREAT_COSTS = {
 } as const
 
 export const TRAVEL_COSTS = {
-  fuelPerDistance: 8,      // fuel cost per distance unit
-  suppliesPerDistance: 3,  // crew sustenance per distance unit
+  fuelPerDistance: 4,      // fuel cost per distance unit
+  suppliesPerDistance: 2,  // crew sustenance per distance unit
 } as const
 
 export const SCENARIOS: Record<ScenarioId, Scenario> = {

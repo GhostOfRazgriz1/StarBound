@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { GamePhase, RunState, GameAction, SectorSummary, Scenario, ShipClassId } from '../types/game'
+import type { GamePhase, RunState, GameAction, SectorSummary, Scenario, ShipClassId, EquipmentSlot } from '../types/game'
 import type { Sector, SectorPreview, TraderItem } from '../types/encounters'
 import type { FOArchetype, FOCrossRunMemory } from '../types/fo'
 import type { Equipment } from '../types/equipment'
@@ -251,21 +251,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!run) return
 
     const equipment = { ...run.ship.equipment }
+    const cargo = [...run.ship.cargo]
     let targetSlot = item.slot
 
-    // For module items, find the first empty module slot
+    // Module queue: find first empty slot, or rotate (oldest out, new in at end)
     if (targetSlot === 'module_1' || targetSlot === 'module_2' || targetSlot === 'module_3') {
-      if (!equipment.module_1) targetSlot = 'module_1'
-      else if (!equipment.module_2) targetSlot = 'module_2'
-      else if (!equipment.module_3) targetSlot = 'module_3'
-      // else replace the specified slot
+      if (!equipment.module_1) {
+        targetSlot = 'module_1'
+      } else if (!equipment.module_2) {
+        targetSlot = 'module_2'
+      } else if (!equipment.module_3) {
+        targetSlot = 'module_3'
+      } else {
+        // All full — queue rotation: oldest (module_1) goes to cargo, shift down, new goes to module_3
+        if (equipment.module_1) cargo.push(equipment.module_1)
+        equipment.module_1 = equipment.module_2
+        equipment.module_2 = equipment.module_3
+        equipment.module_3 = { ...item, slot: 'module_3' as EquipmentSlot }
+
+        const note = `[Module queue full — oldest module removed, ${item.name} installed]`
+        const sectorHistory = [...run.sectorHistory, note]
+        set({ run: { ...run, ship: { ...run.ship, equipment, cargo }, sectorHistory } })
+        return
+      }
     }
 
     const oldItem = equipment[targetSlot]
     equipment[targetSlot] = { ...item, slot: targetSlot }
 
-    // Old item goes to cargo
-    const cargo = [...run.ship.cargo]
     if (oldItem) {
       cargo.push(oldItem)
     }
@@ -287,22 +300,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const item = run.ship.cargo.find((i) => i.id === itemId)
     if (!item) return
 
-    const equipment = { ...run.ship.equipment }
-    const oldItem = equipment[item.slot]
+    // Use equipItem which handles module queue rotation
+    // First remove from cargo, then equip
+    const cargo = run.ship.cargo.filter((i) => i.id !== itemId)
+    set({ run: { ...run, ship: { ...run.ship, cargo } } })
+    get().equipItem(item)
 
-    equipment[item.slot] = item
-    let cargo = run.ship.cargo.filter((i) => i.id !== itemId)
-    if (oldItem) {
-      cargo = [...cargo, oldItem]
+    const note = `[Equipped ${item.name} in ${item.slot} slot]`
+    const updatedRun = get().run
+    if (updatedRun) {
+      set({ run: { ...updatedRun, sectorHistory: [...updatedRun.sectorHistory, note] } })
     }
-
-    // Log to sector history so the LLM knows about the change
-    const note = oldItem
-      ? `[Equipped ${item.name} in ${item.slot} slot, replacing ${oldItem.name}]`
-      : `[Equipped ${item.name} in ${item.slot} slot]`
-    const sectorHistory = [...run.sectorHistory, note]
-
-    set({ run: { ...run, ship: { ...run.ship, equipment, cargo }, sectorHistory } })
   },
 
   dropFromCargo: (itemId) => {
