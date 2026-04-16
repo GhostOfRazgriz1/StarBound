@@ -188,7 +188,7 @@ export function GameScreen() {
           currentSectorNumber={run.currentSectorNumber}
           totalSectors={run.totalSectors}
           currentSectorName={run.currentSector?.name ?? null}
-          sectorOptions={run.sectorOptions}
+          sectorOptions={run.phase === 'sector_select' ? run.sectorOptions : []}
           onClose={() => setChartOpen(false)}
         />
       )}
