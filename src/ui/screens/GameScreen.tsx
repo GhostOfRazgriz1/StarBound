@@ -127,6 +127,7 @@ export function GameScreen() {
         {run.phase === 'sector_select' ? (
           <SectorSelect
             sectors={run.sectorOptions}
+            ship={run.ship}
             onSelect={handleSectorSelect}
             currentSector={run.currentSectorNumber}
             totalSectors={run.totalSectors}

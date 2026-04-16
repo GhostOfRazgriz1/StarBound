@@ -1,13 +1,19 @@
 import type { SectorPreview } from '../../types/encounters'
+import type { Ship } from '../../types/game'
+import { TRAVEL_COSTS } from '../../config'
 import { t } from '../../i18n'
 
 interface SectorSelectProps {
   sectors: SectorPreview[]
+  ship: Ship
   onSelect: (sector: SectorPreview) => void
   currentSector: number
   totalSectors: number
   disabled: boolean
 }
+
+const DISTANCE_LABELS = ['', 'Nearby', 'Moderate', 'Distant']
+const DISTANCE_COLORS = ['', 'text-green-500', 'text-yellow-500', 'text-orange-400']
 
 function RiskBar({ level }: { level: number }) {
   return (
@@ -26,7 +32,7 @@ function RiskBar({ level }: { level: number }) {
   )
 }
 
-export function SectorSelect({ sectors, onSelect, currentSector, totalSectors, disabled }: SectorSelectProps) {
+export function SectorSelect({ sectors, ship, onSelect, currentSector, totalSectors, disabled }: SectorSelectProps) {
   return (
     <div className="space-y-4">
       <div className="text-center space-y-1">
@@ -38,29 +44,56 @@ export function SectorSelect({ sectors, onSelect, currentSector, totalSectors, d
       </div>
 
       <div className="grid gap-3">
-        {sectors.map((sector) => (
-          <button
-            key={sector.id}
-            onClick={() => onSelect(sector)}
-            disabled={disabled}
-            className="bg-gray-900/50 border border-gray-800 hover:border-blue-500/50 rounded-lg p-4 text-left transition-colors disabled:opacity-50 disabled:cursor-not-allowed group"
-          >
-            <div className="flex items-start justify-between">
-              <h4 className="text-sm font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
-                {sector.name}
-              </h4>
-              <div className="flex items-center gap-3 text-xs text-gray-500">
-                <span className="flex items-center gap-1">
-                  {t('sector.risk')} <RiskBar level={sector.riskLevel} />
-                </span>
-                <span className="flex items-center gap-1">
-                  {t('sector.interest')} <RiskBar level={sector.interestLevel} />
-                </span>
+        {sectors.map((sector) => {
+          const fuelCost = sector.distance * TRAVEL_COSTS.fuelPerDistance
+          const suppliesCost = sector.distance * TRAVEL_COSTS.suppliesPerDistance
+          const canAfford = ship.fuel >= fuelCost && ship.supplies >= suppliesCost
+          const cantReach = !canAfford
+
+          return (
+            <button
+              key={sector.id}
+              onClick={() => onSelect(sector)}
+              disabled={disabled || cantReach}
+              className={`bg-gray-900/50 border rounded-lg p-4 text-left transition-colors group ${
+                cantReach
+                  ? 'border-red-900/30 opacity-50 cursor-not-allowed'
+                  : 'border-gray-800 hover:border-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-gray-200 group-hover:text-blue-400 transition-colors truncate">
+                      {sector.name}
+                    </h4>
+                    <span className={`text-[10px] shrink-0 ${DISTANCE_COLORS[sector.distance]}`}>
+                      {DISTANCE_LABELS[sector.distance]}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">{sector.description}</p>
+                </div>
+                <div className="flex flex-col items-end gap-1 shrink-0 text-xs text-gray-500">
+                  <span className="flex items-center gap-1">
+                    {t('sector.risk')} <RiskBar level={sector.riskLevel} />
+                  </span>
+                  <span className="flex items-center gap-1">
+                    {t('sector.interest')} <RiskBar level={sector.interestLevel} />
+                  </span>
+                </div>
               </div>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">{sector.description}</p>
-          </button>
-        ))}
+
+              {/* Travel cost */}
+              <div className="flex items-center gap-3 mt-2 text-[10px]">
+                <span className="text-amber-500">Fuel: -{fuelCost}</span>
+                <span className="text-emerald-500">Supplies: -{suppliesCost}</span>
+                {cantReach && (
+                  <span className="text-red-400">Not enough resources</span>
+                )}
+              </div>
+            </button>
+          )
+        })}
       </div>
     </div>
   )

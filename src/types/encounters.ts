@@ -16,6 +16,7 @@ export interface SectorPreview {
   description: string   // sensor readout
   riskLevel: number     // 1-5
   interestLevel: number // 1-5
+  distance: number      // 1-3, affects fuel/supply cost to reach
   encounterType: EncounterType  // hidden from player, used for generation
 }
 

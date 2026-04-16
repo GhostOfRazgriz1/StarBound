@@ -24,6 +24,10 @@ export const sectorPreviewSchema = z.object({
   description: z.string(),
   riskLevel: clampedNumber(1, 5),
   interestLevel: clampedNumber(1, 5),
+  distance: z.any().transform((val) => {
+    if (typeof val === 'number') return Math.max(1, Math.min(3, Math.round(val)))
+    return 1 // default to close
+  }),
   encounterType: encounterTypeSchema,
 }).passthrough()
 

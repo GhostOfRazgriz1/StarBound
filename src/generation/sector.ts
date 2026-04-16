@@ -26,6 +26,7 @@ export async function generateSectorPreviews(
     description: s.description,
     riskLevel: s.riskLevel,
     interestLevel: s.interestLevel,
+    distance: (s as { distance?: number }).distance ?? 1,
     encounterType: s.encounterType as EncounterType,
   }))
 

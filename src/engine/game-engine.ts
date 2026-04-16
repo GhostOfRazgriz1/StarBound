@@ -13,7 +13,7 @@ import { resolveAction, resolveCombat } from '../generation/action-resolver'
 import { compressSector } from '../generation/compressor'
 import { generateCaptainAnalysis } from '../generation/captain-profile'
 import { createLLMProvider } from '../llm/client'
-import { RETREAT_COSTS } from '../config'
+import { RETREAT_COSTS, TRAVEL_COSTS } from '../config'
 
 function getProvider(): LLMProvider {
   const config = useGameStore.getState().llmConfig
@@ -95,6 +95,11 @@ export async function selectSector(preview: SectorPreview): Promise<void> {
     const provider = getProvider()
     const foMemory = getFOMemory()
     if (!foMemory) throw new Error('No FO memory')
+
+    // Apply travel costs based on distance
+    const fuelCost = preview.distance * TRAVEL_COSTS.fuelPerDistance
+    const suppliesCost = preview.distance * TRAVEL_COSTS.suppliesPerDistance
+    store.applyStateChanges({ fuel: -fuelCost, supplies: -suppliesCost })
 
     // Generate full sector data
     const { sector, tokensUsed: genTokens } = await generateSector(provider, preview, run)
