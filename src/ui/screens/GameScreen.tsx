@@ -11,6 +11,7 @@ import { Narration } from '../components/Narration'
 import { ActionBar } from '../components/ActionBar'
 import { SectorSelect } from '../components/SectorSelect'
 import { CostIndicator } from '../components/CostIndicator'
+import { StarChart } from '../components/StarChart'
 import { FO_ARCHETYPES } from '../../types/fo'
 import type { SectorPreview } from '../../types/encounters'
 import { t } from '../../i18n'
@@ -20,6 +21,7 @@ export function GameScreen() {
   const loading = useGameStore((s) => s.loading)
   const error = useGameStore((s) => s.error)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [chartOpen, setChartOpen] = useState(false)
 
   const lastActionRef = useRef<(() => void) | null>(null)
 
@@ -104,6 +106,12 @@ export function GameScreen() {
           >
             Ship
           </button>
+          <button
+            onClick={() => setChartOpen(true)}
+            className="px-2 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-xs shrink-0"
+          >
+            Chart
+          </button>
 
           <div className="flex-1 min-w-0">
             <h2 className="text-base md:text-lg text-gray-200 truncate">
@@ -172,6 +180,18 @@ export function GameScreen() {
           </div>
         )}
       </div>
+
+      {/* Star Chart overlay */}
+      {chartOpen && (
+        <StarChart
+          sectorMap={run.sectorMap}
+          currentSectorNumber={run.currentSectorNumber}
+          totalSectors={run.totalSectors}
+          currentSectorName={run.currentSector?.name ?? null}
+          sectorOptions={run.sectorOptions}
+          onClose={() => setChartOpen(false)}
+        />
+      )}
 
       {/* Trade overlay */}
       <TradePanel />
