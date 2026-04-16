@@ -108,5 +108,5 @@ export const AVAILABLE_MODELS: Record<string, string[]> = {
   baichuan: ['Baichuan4', 'Baichuan3-Turbo'],
   minimax: ['MiniMax-Text-01', 'abab6.5s-chat'],
   moonshot: ['moonshot-v1-8k', 'moonshot-v1-32k', 'moonshot-v1-128k'],
-  stepfun: ['step-2-16k', 'step-1-8k', 'step-1-flash'],
+  doubao: ['doubao-1.5-pro-32k', 'doubao-1.5-lite-32k', 'doubao-pro-32k'],
 }

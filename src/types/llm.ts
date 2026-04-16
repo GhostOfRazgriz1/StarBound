@@ -1,4 +1,4 @@
-export type LLMProviderId = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'deepseek' | 'qwen' | 'zhipu' | 'baichuan' | 'minimax' | 'moonshot' | 'stepfun'
+export type LLMProviderId = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'deepseek' | 'qwen' | 'zhipu' | 'baichuan' | 'minimax' | 'moonshot' | 'doubao'
 
 export interface LLMConfig {
   provider: LLMProviderId
@@ -132,8 +132,8 @@ export const MODEL_PRICING: Record<string, { input: number; output: number }> = 
   'moonshot-v1-8k':    { input: 0.17,  output: 0.17 },
   'moonshot-v1-32k':   { input: 0.34,  output: 0.34 },
   'moonshot-v1-128k':  { input: 0.86,  output: 0.86 },
-  // StepFun (阶跃星辰)
-  'step-2-16k':        { input: 0.55,  output: 1.40 },
-  'step-1-8k':         { input: 0.17,  output: 0.55 },
-  'step-1-flash':      { input: 0.01,  output: 0.04 },
+  // Doubao (ByteDance/豆包)
+  'doubao-1.5-pro-32k':  { input: 0.11,  output: 0.27 },
+  'doubao-1.5-lite-32k': { input: 0.04,  output: 0.08 },
+  'doubao-pro-32k':      { input: 0.11,  output: 0.27 },
 }

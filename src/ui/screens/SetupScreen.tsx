@@ -94,7 +94,7 @@ export function SetupScreen() {
                 ['baichuan', 'Baichuan'],
                 ['minimax', 'MiniMax'],
                 ['moonshot', 'Moonshot'],
-                ['stepfun', 'StepFun'],
+                ['doubao', 'Doubao'],
                 ['openrouter', 'OpenRouter'],
               ] as const).map(([p, label]) => (
                 <button
