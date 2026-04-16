@@ -68,7 +68,11 @@ export function SetupScreen() {
             <label className="block text-sm text-gray-400 mb-2">Language</label>
             <select
               value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              onChange={(e) => {
+                setLanguage(e.target.value)
+                saveLanguage(e.target.value)
+                useGameStore.setState({ language: e.target.value })
+              }}
               className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm focus:outline-none focus:border-blue-500"
             >
               {Object.entries(LANGUAGES).map(([code, name]) => (

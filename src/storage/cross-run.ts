@@ -125,8 +125,24 @@ export function savePlayerName(name: string): void {
 }
 
 // Language
+const SUPPORTED_LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt']
+
+function detectBrowserLanguage(): string {
+  if (typeof navigator === 'undefined') return 'en'
+  const browserLang = navigator.language?.toLowerCase() ?? ''
+  // Exact match first (e.g., 'zh', 'ja')
+  const prefix = browserLang.split('-')[0]
+  if (SUPPORTED_LANGS.includes(prefix)) return prefix
+  return 'en'
+}
+
 export function loadLanguage(): string {
-  return load<string>(STORAGE_KEYS.LANGUAGE, 'en')
+  const saved = localStorage.getItem(STORAGE_KEYS.LANGUAGE)
+  if (saved) {
+    try { return JSON.parse(saved) } catch { /* fall through */ }
+  }
+  // First visit — detect from browser
+  return detectBrowserLanguage()
 }
 
 export function saveLanguage(language: string): void {
