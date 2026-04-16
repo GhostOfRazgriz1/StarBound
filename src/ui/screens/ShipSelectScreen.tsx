@@ -59,19 +59,13 @@ export function ShipSelectScreen() {
                   <StatBar label={t('status.supplies')} value={ship.stats.maxSupplies} max={statMax} color="#10b981" />
                 </div>
 
-                <div className="flex gap-4 text-xs">
-                  <div>
-                    <span className="text-green-500">+</span>
-                    {ship.strengths.map((s, i) => (
-                      <span key={i} className="text-gray-400">{i > 0 ? ', ' : ' '}{s}</span>
-                    ))}
-                  </div>
+                <div className="text-xs">
+                  <span className="text-green-500">+</span>
+                  <span className="text-gray-400"> {t(`ship.${id}.strengths` as TranslationKey)}</span>
                 </div>
                 <div className="text-xs mt-1">
                   <span className="text-red-500">-</span>
-                  {ship.weaknesses.map((w, i) => (
-                    <span key={i} className="text-gray-500">{i > 0 ? ', ' : ' '}{w}</span>
-                  ))}
+                  <span className="text-gray-500"> {t(`ship.${id}.weaknesses` as TranslationKey)}</span>
                 </div>
               </button>
             )
