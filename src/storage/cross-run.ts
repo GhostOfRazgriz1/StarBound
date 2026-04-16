@@ -13,6 +13,8 @@ const STORAGE_KEYS = {
   LLM_CONFIG: 'starbound_llm_config',
   PLAYER_NAME: 'starbound_player_name',
   LANGUAGE: 'starbound_language',
+  ACTIVE_RUN: 'starbound_active_run',
+  ACTIVE_RUN_META: 'starbound_active_run_meta',
 } as const
 
 function load<T>(key: string, fallback: T): T {
@@ -125,4 +127,22 @@ export function loadLanguage(): string {
 
 export function saveLanguage(language: string): void {
   save(STORAGE_KEYS.LANGUAGE, language)
+}
+
+// Active Run (auto-save)
+export function saveActiveRun(runState: unknown, foMemory: unknown, tokensUsed: unknown): void {
+  save(STORAGE_KEYS.ACTIVE_RUN, runState)
+  save(STORAGE_KEYS.ACTIVE_RUN_META, { foMemory, tokensUsed })
+}
+
+export function loadActiveRun(): { run: unknown; foMemory: unknown; tokensUsed: unknown } | null {
+  const run = load<unknown>(STORAGE_KEYS.ACTIVE_RUN, null)
+  const meta = load<{ foMemory: unknown; tokensUsed: unknown } | null>(STORAGE_KEYS.ACTIVE_RUN_META, null)
+  if (!run || !meta) return null
+  return { run, foMemory: meta.foMemory, tokensUsed: meta.tokensUsed }
+}
+
+export function clearActiveRun(): void {
+  localStorage.removeItem(STORAGE_KEYS.ACTIVE_RUN)
+  localStorage.removeItem(STORAGE_KEYS.ACTIVE_RUN_META)
 }

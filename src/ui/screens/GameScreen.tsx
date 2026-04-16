@@ -1,9 +1,11 @@
 import { useGameStore } from '../../storage/game-store'
-import { selectSector, performAction } from '../../engine/game-engine'
+import { useRef } from 'react'
+import { selectSector, performAction, generateAndSetSectorOptions } from '../../engine/game-engine'
 import { ShipStatus } from '../components/ShipStatus'
 import { EquipmentPanel } from '../components/EquipmentPanel'
 import { CargoPanel } from '../components/CargoPanel'
 import { ConsumablesPanel } from '../components/ConsumablesPanel'
+import { CaptainsLog } from '../components/CaptainsLog'
 import { TradePanel } from '../components/TradePanel'
 import { Narration } from '../components/Narration'
 import { ActionBar } from '../components/ActionBar'
@@ -18,16 +20,29 @@ export function GameScreen() {
   const loading = useGameStore((s) => s.loading)
   const error = useGameStore((s) => s.error)
 
+  const lastActionRef = useRef<(() => void) | null>(null)
+
   if (!run) return null
 
   const fo = FO_ARCHETYPES[run.foArchetype]
 
   function handleSectorSelect(sector: SectorPreview) {
+    lastActionRef.current = () => selectSector(sector)
     selectSector(sector)
   }
 
   function handleAction(actionId: string, actionLabel: string, freeText?: string) {
+    lastActionRef.current = () => performAction(actionId, actionLabel, freeText)
     performAction(actionId, actionLabel, freeText)
+  }
+
+  function handleRetry() {
+    useGameStore.getState().setError(null)
+    if (lastActionRef.current) {
+      lastActionRef.current()
+    } else if (run?.phase === 'sector_select' && run?.sectorOptions.length === 0) {
+      generateAndSetSectorOptions()
+    }
   }
 
   return (
@@ -43,6 +58,7 @@ export function GameScreen() {
         <EquipmentPanel equipment={run.ship.equipment} />
         <CargoPanel cargo={run.ship.cargo} equipment={run.ship.equipment} />
         <ConsumablesPanel consumables={run.ship.consumables || []} />
+        <CaptainsLog />
 
         <div className="mt-auto">
           <CostIndicator />
@@ -101,11 +117,17 @@ export function GameScreen() {
 
         {/* Error display */}
         {error && (
-          <div className="mt-3 text-sm text-red-400 bg-red-900/20 border border-red-800 rounded p-3">
-            {error}
+          <div className="mt-3 text-sm text-red-400 bg-red-900/20 border border-red-800 rounded p-3 flex items-center gap-3">
+            <span className="flex-1">{error}</span>
+            <button
+              onClick={handleRetry}
+              className="px-3 py-1 bg-red-800/50 hover:bg-red-700/50 text-red-300 rounded text-xs transition-colors"
+            >
+              Retry
+            </button>
             <button
               onClick={() => useGameStore.getState().setError(null)}
-              className="ml-2 text-red-500 hover:text-red-300 underline"
+              className="text-red-500 hover:text-red-300 text-xs underline"
             >
               {t('game.dismiss')}
             </button>

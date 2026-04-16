@@ -12,7 +12,7 @@ import { FO_ARCHETYPES } from '../types/fo'
 import { getCustomShipStats } from './session'
 import { createDefaultCaptainProfile } from '../types/fo'
 import { TOTAL_SECTORS } from '../config'
-import { loadStandingOrders, loadLanguage } from './cross-run'
+import { loadStandingOrders, loadLanguage, saveActiveRun, loadActiveRun, clearActiveRun } from './cross-run'
 
 interface GameStore {
   // Top-level state
@@ -88,6 +88,9 @@ interface GameStore {
 
   // Captain profile
   trackDecision: (traits: Partial<Record<'riskAppetite' | 'diplomatic' | 'followsFOAdvice' | 'crewPriority' | 'curiosity', boolean>>) => void
+
+  // Save/restore
+  restoreRun: () => boolean
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -539,4 +542,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ run: { ...run, captainProfile: profile } })
   },
+
+  restoreRun: () => {
+    const saved = loadActiveRun()
+    if (!saved || !saved.run) return false
+    set({
+      run: saved.run as GameStore['run'],
+      foMemory: saved.foMemory as GameStore['foMemory'],
+      totalTokensUsed: (saved.tokensUsed as GameStore['totalTokensUsed']) ?? { input: 0, output: 0 },
+      phase: 'run_active' as GamePhase,
+    })
+    return true
+  },
 }))
+
+// Auto-save: persist run state on every change
+useGameStore.subscribe((state) => {
+  if (state.run && state.phase === 'run_active') {
+    saveActiveRun(state.run, state.foMemory, state.totalTokensUsed)
+  } else if (state.phase === 'run_end' || state.phase === 'setup') {
+    clearActiveRun()
+  }
+})

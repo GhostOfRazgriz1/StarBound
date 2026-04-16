@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useGameStore } from '../../storage/game-store'
 import { FO_ARCHETYPES } from '../../types/fo'
 import { CostIndicator } from '../components/CostIndicator'
+import { evaluateBadges } from '../../engine/badges'
 import { t } from '../../i18n'
 
 export function RunEndScreen() {
@@ -147,6 +148,27 @@ export function RunEndScreen() {
             {t('end.analyzing')}
           </div>
         )}
+
+        {/* Badges */}
+        {(() => {
+          const badges = evaluateBadges(run)
+          if (badges.length === 0) return null
+          return (
+            <div className="flex flex-wrap justify-center gap-3">
+              {badges.map((badge) => (
+                <div
+                  key={badge.id}
+                  className="bg-gray-900/50 border border-yellow-700/50 rounded-lg px-4 py-3 text-center min-w-[100px]"
+                  title={badge.description}
+                >
+                  <p className="text-2xl">{badge.icon}</p>
+                  <p className="text-xs text-yellow-400 font-semibold mt-1">{badge.name}</p>
+                  <p className="text-[10px] text-gray-500">{badge.description}</p>
+                </div>
+              ))}
+            </div>
+          )
+        })()}
 
         {/* Mission stats */}
         <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">

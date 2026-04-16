@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { LLMProviderId, LLMConfig } from '../../types/llm'
 import { useGameStore } from '../../storage/game-store'
-import { saveLLMConfig, loadLLMConfig, loadPlayerName, savePlayerName, saveLanguage, loadLanguage } from '../../storage/cross-run'
+import { saveLLMConfig, loadLLMConfig, loadPlayerName, savePlayerName, saveLanguage, loadLanguage, loadActiveRun } from '../../storage/cross-run'
 import { AVAILABLE_MODELS } from '../../config'
 import { LANGUAGES, t } from '../../i18n'
 
@@ -147,6 +147,22 @@ export function SetupScreen() {
           >
             {t('setup.continue')}
           </button>
+
+          {loadActiveRun() && (
+            <button
+              onClick={() => {
+                const saved = loadLLMConfig()
+                if (saved) {
+                  setLLMConfig(saved)
+                  useGameStore.setState({ playerName: loadPlayerName() || 'Captain', language: loadLanguage() })
+                }
+                useGameStore.getState().restoreRun()
+              }}
+              className="w-full bg-green-700 hover:bg-green-600 text-white py-3 rounded font-medium transition-colors"
+            >
+              Resume Mission
+            </button>
+          )}
         </div>
 
         <p className="text-center text-xs text-gray-600">

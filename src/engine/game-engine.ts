@@ -260,10 +260,25 @@ export async function performAction(
       }
     }
 
-    // Check for ship destruction
-    const updatedShip = useGameStore.getState().run?.ship
-    if (updatedShip && updatedShip.hull <= 0) {
-      store.endRun()
+    // Check for ship destruction or critical depletion
+    const updatedRun2 = useGameStore.getState().run
+    if (updatedRun2) {
+      const s = updatedRun2.ship
+      if (s.hull <= 0) {
+        store.endRun()
+      } else if (s.fuel <= 0) {
+        store.appendNarration('**Your fuel tanks are empty. The ship drifts powerless through the void. The crew watches the stars in silence.**')
+        store.applyStateChanges({ morale: -20 })
+      } else if (s.supplies <= 0) {
+        store.appendNarration('**Supplies are gone. Hunger and cold creep through the corridors. Morale plummets.**')
+        store.applyStateChanges({ morale: -15, hull: -5 })
+      }
+      // Morale collapse ends the run
+      const finalMorale = useGameStore.getState().run?.ship.morale ?? 100
+      if (finalMorale <= 0) {
+        store.appendNarration('**The crew mutinies. Your command is over.**')
+        store.endRun()
+      }
     }
   } catch (err) {
     store.setError(err instanceof Error ? err.message : 'Failed to resolve action')
