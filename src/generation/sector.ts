@@ -4,6 +4,7 @@ import type { Sector, SectorPreview, EncounterType } from '../types/encounters'
 import { buildGenerationContext } from '../llm/context-builder'
 import { buildSectorPreviewPrompt, buildSectorGenerationPrompt } from '../prompts/sector-gen'
 import { parseJSONResponse } from '../llm/response-parser'
+import { chatJSONWithStreaming } from '../llm/streaming'
 import { sectorPreviewsSchema, sectorGenerationSchema } from '../schemas/sector.schema'
 
 export async function generateSectorPreviews(
@@ -13,7 +14,8 @@ export async function generateSectorPreviews(
   const prompt = buildSectorPreviewPrompt(runState)
   const messages = buildGenerationContext(runState, prompt)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     messages,
     (raw) => parseJSONResponse(raw, sectorPreviewsSchema),
   )
@@ -38,7 +40,8 @@ export async function generateSector(
   const prompt = buildSectorGenerationPrompt(preview.encounterType, preview.name, runState)
   const messages = buildGenerationContext(runState, prompt)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     messages,
     (raw) => parseJSONResponse(raw, sectorGenerationSchema),
   )

@@ -79,7 +79,7 @@ function serializeRunState(state: RunState): string {
     `Sector: ${state.currentSectorNumber} of ${state.totalSectors}`,
     `Scenario: ${state.scenario}`,
     `Ship — Hull: ${ship.hull}/${ship.maxHull}, Fuel: ${ship.fuel}/${ship.maxFuel}, Supplies: ${ship.supplies}/${ship.maxSupplies}, Credits: ${ship.credits}, Morale: ${ship.morale}`,
-    `Equipment — Weapons: ${ship.equipment.weapons?.name ?? 'none'}, Shields: ${ship.equipment.shields?.name ?? 'none'}, Engine: ${ship.equipment.engine?.name ?? 'none'}, Special: ${ship.equipment.special?.name ?? 'none'}`,
+    `Equipment — Weapons: ${ship.equipment.weapons?.name ?? 'none'}, Shields: ${ship.equipment.shields?.name ?? 'none'}, Engine: ${ship.equipment.engine?.name ?? 'none'}, Mod1: ${ship.equipment.module_1?.name ?? 'none'}, Mod2: ${ship.equipment.module_2?.name ?? 'none'}, Mod3: ${ship.equipment.module_3?.name ?? 'none'}`,
     `Consumables: ${(ship.consumables || []).length > 0 ? (ship.consumables || []).map(c => `${c.name} (${c.type})`).join(', ') : 'none'}`,
     `Story Arc — Stage: ${state.storyArc.stage}, Antagonist: ${state.storyArc.antagonist}${state.storyArc.motivation ? `, Motivation: ${state.storyArc.motivation}` : ''}`,
     `Encounter Depth: ${state.encounterDepth}`,

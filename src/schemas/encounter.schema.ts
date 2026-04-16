@@ -7,7 +7,8 @@ const SLOT_ALIASES: Record<string, string> = {
   weapons: 'weapons', weapon: 'weapons', guns: 'weapons', armament: 'weapons',
   shields: 'shields', shield: 'shields', defense: 'shields', armor: 'shields',
   engine: 'engine', engines: 'engine', propulsion: 'engine', drive: 'engine',
-  special: 'special', utility: 'special', misc: 'special', module: 'special',
+  special: 'module_1', utility: 'module_1', misc: 'module_1', module: 'module_1',
+  module_1: 'module_1', module_2: 'module_2', module_3: 'module_3',
 }
 
 const RARITY_ALIASES: Record<string, string> = {

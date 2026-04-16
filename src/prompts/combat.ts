@@ -68,8 +68,8 @@ function buildEquipmentContext(state: RunState): string {
     lines.push(`  Engine: ${eq.engine.name} — ${eq.engine.effect}`)
   }
 
-  if (eq.special) {
-    lines.push(`  Special: ${eq.special.name} — ${eq.special.effect}`)
+  for (const mod of [eq.module_1, eq.module_2, eq.module_3]) {
+    if (mod) lines.push(`  Module: ${mod.name} — ${mod.effect}`)
   }
 
   return lines.join('\n')

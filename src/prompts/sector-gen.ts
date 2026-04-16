@@ -172,7 +172,7 @@ function getEncounterInstructions(type: EncounterType): string {
         '- type "fuel": amount (number, 10-40, how much fuel it restores), price, effect (flavor description)',
         '- type "supplies": amount (number, 10-40, how much it restores), price, effect (flavor description)',
         '- type "equipment": equipment object required: { name, slot, rarity, origin, effect, flavor }',
-        '  slot must be: "weapons"|"shields"|"engine"|"special"',
+        '  slot must be: "weapons"|"shields"|"engine"|"module_1"|"module_2"|"module_3"',
         '  rarity must be: "common"|"uncommon"|"rare"|"legendary"',
         '- type "info": price, effect (the actual intel the player receives — make it specific and useful)',
         '- type "consumable": consumable object required: { name, type, effect, magnitude?, uses? }',

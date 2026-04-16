@@ -251,8 +251,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!run) return
 
     const equipment = { ...run.ship.equipment }
-    const oldItem = equipment[item.slot]
-    equipment[item.slot] = item
+    let targetSlot = item.slot
+
+    // For module items, find the first empty module slot
+    if (targetSlot === 'module_1' || targetSlot === 'module_2' || targetSlot === 'module_3') {
+      if (!equipment.module_1) targetSlot = 'module_1'
+      else if (!equipment.module_2) targetSlot = 'module_2'
+      else if (!equipment.module_3) targetSlot = 'module_3'
+      // else replace the specified slot
+    }
+
+    const oldItem = equipment[targetSlot]
+    equipment[targetSlot] = { ...item, slot: targetSlot }
 
     // Old item goes to cargo
     const cargo = [...run.ship.cargo]

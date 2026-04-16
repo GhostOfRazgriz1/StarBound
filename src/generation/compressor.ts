@@ -2,6 +2,7 @@ import type { LLMProvider } from '../llm/providers/base'
 import type { RunState } from '../types/game'
 import { buildGenerationContext } from '../llm/context-builder'
 import { parseJSONResponse } from '../llm/response-parser'
+import { chatJSONWithStreaming } from '../llm/streaming'
 import { compressionResultSchema } from '../schemas/action-result.schema'
 
 export async function compressSector(
@@ -47,7 +48,8 @@ export async function compressSector(
 
   const messages = buildGenerationContext(runState, prompt)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     messages,
     (raw) => parseJSONResponse(raw, compressionResultSchema),
   )

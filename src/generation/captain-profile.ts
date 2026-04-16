@@ -2,6 +2,9 @@ import type { LLMProvider } from '../llm/providers/base'
 import type { RunState } from '../types/game'
 import type { CaptainProfile } from '../types/fo'
 import { parseJSONResponse } from '../llm/response-parser'
+import { chatJSONWithStreaming } from '../llm/streaming'
+import { useGameStore } from '../storage/game-store'
+import { LANGUAGES } from '../i18n'
 import { z } from 'zod'
 
 const captainAnalysisSchema = z.object({
@@ -27,9 +30,10 @@ export async function generateCaptainAnalysis(
 
   const prompt = buildProfilePrompt(profile, sectorSummaries, runState)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     [
-      { role: 'system', content: 'You generate personality analyses for a space exploration game. Respond with JSON only.' },
+      { role: 'system', content: getProfileSystemPrompt() },
       { role: 'user', content: prompt },
     ],
     (raw) => parseJSONResponse(raw, captainAnalysisSchema),
@@ -75,6 +79,15 @@ function buildProfilePrompt(profile: CaptainProfile, sectorSummaries: string, ru
     '',
     'Make it feel personal and specific to THIS run, not generic. Reference actual events from the sector log.',
   ].join('\n')
+}
+
+function getProfileSystemPrompt(): string {
+  const lang = useGameStore.getState().language
+  const langName = LANGUAGES[lang] ?? 'English'
+  const langInstruction = lang !== 'en'
+    ? ` All text values in your JSON response MUST be in ${langName}.`
+    : ''
+  return `You generate personality analyses for a space exploration game. Respond with JSON only.${langInstruction}`
 }
 
 function describeAxis(value: number, low: string, high: string): string {

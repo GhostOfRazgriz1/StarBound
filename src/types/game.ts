@@ -40,7 +40,9 @@ export interface ShipEquipment {
   weapons: Equipment | null
   shields: Equipment | null
   engine: Equipment | null
-  special: Equipment | null
+  module_1: Equipment | null
+  module_2: Equipment | null
+  module_3: Equipment | null
 }
 
 export type EquipmentSlot = keyof ShipEquipment
@@ -221,10 +223,10 @@ export const SHIP_CLASSES: Record<Exclude<ShipClassId, 'custom'>, ShipClass> = {
     description: 'A converted cargo hauler with massive supply bays and extra fuel tanks. Slow and lightly armed, but you can carry everything you find.',
     stats: { hull: 80, maxHull: 80, fuel: 110, maxFuel: 110, supplies: 110, maxSupplies: 110, morale: 70 },
     startingEquipment: {
-      special: {
-        id: 'starting_special_freighter',
+      module_1: {
+        id: 'starting_module_freighter',
         name: 'Expanded Cargo Module',
-        slot: 'special',
+        slot: 'module_1',
         rarity: 'common',
         origin: 'Aftermarket modification',
         effect: 'Trade prices are more favorable; can carry extra salvage',
@@ -263,7 +265,9 @@ export function createShipFromClass(shipClass: ShipClass, startingCredits: numbe
       weapons: shipClass.startingEquipment.weapons ?? null,
       shields: shipClass.startingEquipment.shields ?? null,
       engine: shipClass.startingEquipment.engine ?? null,
-      special: shipClass.startingEquipment.special ?? null,
+      module_1: shipClass.startingEquipment.module_1 ?? null,
+      module_2: shipClass.startingEquipment.module_2 ?? null,
+      module_3: shipClass.startingEquipment.module_3 ?? null,
     },
     cargo: [],
     consumables: [],
@@ -284,7 +288,9 @@ export function createCustomShip(stats: CustomShipStats, startingCredits: number
       weapons: null,
       shields: null,
       engine: null,
-      special: null,
+      module_1: null,
+      module_2: null,
+      module_3: null,
     },
     cargo: [],
     consumables: [],
