@@ -150,14 +150,7 @@ export function SetupScreen() {
 
           {loadActiveRun() && (
             <button
-              onClick={() => {
-                const saved = loadLLMConfig()
-                if (saved) {
-                  setLLMConfig(saved)
-                  useGameStore.setState({ playerName: loadPlayerName() || 'Captain', language: loadLanguage() })
-                }
-                useGameStore.getState().restoreRun()
-              }}
+              onClick={() => useGameStore.getState().restoreRun()}
               className="w-full bg-green-700 hover:bg-green-600 text-white py-3 rounded font-medium transition-colors"
             >
               {t('setup.resumeMission' as Parameters<typeof t>[0])}

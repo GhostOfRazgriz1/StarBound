@@ -574,10 +574,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
   restoreRun: () => {
     const saved = loadActiveRun()
     if (!saved || !saved.run) return false
+
+    // Restore LLM config from localStorage
+    const llmConfig = ((): GameStore['llmConfig'] => {
+      try {
+        const raw = localStorage.getItem('starbound_llm_config')
+        return raw ? JSON.parse(raw) : null
+      } catch { return null }
+    })()
+
+    // Restore player name
+    const playerName = (() => {
+      try {
+        const raw = localStorage.getItem('starbound_player_name')
+        return raw ? JSON.parse(raw) : ''
+      } catch { return '' }
+    })()
+
     set({
       run: saved.run as GameStore['run'],
       foMemory: saved.foMemory as GameStore['foMemory'],
       totalTokensUsed: (saved.tokensUsed as GameStore['totalTokensUsed']) ?? { input: 0, output: 0 },
+      llmConfig,
+      playerName,
+      language: loadLanguage(),
       phase: 'run_active' as GamePhase,
     })
     return true
@@ -586,6 +606,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
 // Auto-save: debounced to avoid excessive writes during streaming
 let autoSaveTimer: ReturnType<typeof setTimeout> | null = null
+
+function flushSave() {
+  if (autoSaveTimer) clearTimeout(autoSaveTimer)
+  autoSaveTimer = null
+  const s = useGameStore.getState()
+  if (s.run && s.phase === 'run_active') {
+    saveActiveRun(s.run, s.foMemory, s.totalTokensUsed)
+  }
+}
+
 useGameStore.subscribe((state) => {
   if (state.phase === 'run_end' || state.phase === 'setup') {
     if (autoSaveTimer) clearTimeout(autoSaveTimer)
@@ -594,11 +624,11 @@ useGameStore.subscribe((state) => {
   }
   if (state.run && state.phase === 'run_active') {
     if (autoSaveTimer) clearTimeout(autoSaveTimer)
-    autoSaveTimer = setTimeout(() => {
-      const s = useGameStore.getState()
-      if (s.run && s.phase === 'run_active') {
-        saveActiveRun(s.run, s.foMemory, s.totalTokensUsed)
-      }
-    }, 2000)
+    autoSaveTimer = setTimeout(flushSave, 2000)
   }
 })
+
+// Flush save immediately when tab is closing
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeunload', flushSave)
+}
