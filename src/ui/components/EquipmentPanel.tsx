@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { ShipEquipment, EquipmentSlot } from '../../types/game'
 import { RARITY_CONFIG } from '../../types/equipment'
 import { t } from '../../i18n'
@@ -13,7 +14,7 @@ const SLOT_LABELS: Record<EquipmentSlot, string> = {
 
 const SLOT_ORDER: EquipmentSlot[] = ['weapons', 'shields', 'engine', 'module_1', 'module_2', 'module_3']
 
-export function EquipmentPanel({ equipment }: { equipment: ShipEquipment }) {
+export const EquipmentPanel = memo(function EquipmentPanel({ equipment }: { equipment: ShipEquipment }) {
   return (
     <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4 space-y-2">
       <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('equip.title')}</h3>
@@ -39,4 +40,4 @@ export function EquipmentPanel({ equipment }: { equipment: ShipEquipment }) {
       })}
     </div>
   )
-}
+})

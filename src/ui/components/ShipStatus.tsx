@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { Ship } from '../../types/game'
 import { t } from '../../i18n'
 
@@ -19,7 +20,7 @@ function StatusBar({ label, value, max, color }: { label: string; value: number;
   )
 }
 
-export function ShipStatus({ ship }: { ship: Ship }) {
+export const ShipStatus = memo(function ShipStatus({ ship }: { ship: Ship }) {
   return (
     <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4 space-y-3">
       <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('status.shipStatus')}</h3>
@@ -33,4 +34,4 @@ export function ShipStatus({ ship }: { ship: Ship }) {
       </div>
     </div>
   )
-}
+})

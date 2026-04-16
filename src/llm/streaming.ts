@@ -3,6 +3,7 @@ import type { LLMProvider } from './providers/base'
 import { useGameStore } from '../storage/game-store'
 
 const MAX_RETRIES = 1
+const STREAM_THROTTLE_MS = 100 // ~10fps
 
 /**
  * Stream-aware chatJSON with auto-retry on parse failure.
@@ -14,7 +15,6 @@ export async function chatJSONWithStreaming<T>(
   messages: ChatMessage[],
   parse: (raw: string) => T,
 ): Promise<{ data: T; tokensUsed: LLMResponse['tokensUsed'] }> {
-  const store = useGameStore.getState()
   let lastError: unknown = null
   let lastRawContent = ''
   let totalTokens = { input: 0, output: 0 }
@@ -34,11 +34,26 @@ export async function chatJSONWithStreaming<T>(
 
       if (provider.chatStream && attempt === 0) {
         // Stream only on first attempt
-        store.setStreamingText('')
+        useGameStore.getState().setStreamingText('')
+        let streamBuffer = ''
+        let lastFlush = 0
         const response = await provider.chatStream(currentMessages, (chunk) => {
-          store.appendStreamingText(chunk)
+          streamBuffer += chunk
+          const now = Date.now()
+          if (now - lastFlush >= STREAM_THROTTLE_MS) {
+            useGameStore.getState().setStreamingText(
+              useGameStore.getState().streamingText + streamBuffer
+            )
+            streamBuffer = ''
+            lastFlush = now
+          }
         })
-        store.setStreamingText('')
+        if (streamBuffer) {
+          useGameStore.getState().setStreamingText(
+            useGameStore.getState().streamingText + streamBuffer
+          )
+        }
+        useGameStore.getState().setStreamingText('')
         rawContent = response.content
         tokensUsed = response.tokensUsed
       } else {

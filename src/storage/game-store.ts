@@ -574,11 +574,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 }))
 
-// Auto-save: persist run state on every change
+// Auto-save: debounced to avoid excessive writes during streaming
+let autoSaveTimer: ReturnType<typeof setTimeout> | null = null
 useGameStore.subscribe((state) => {
-  if (state.run && state.phase === 'run_active') {
-    saveActiveRun(state.run, state.foMemory, state.totalTokensUsed)
-  } else if (state.phase === 'run_end' || state.phase === 'setup') {
+  if (state.phase === 'run_end' || state.phase === 'setup') {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer)
     clearActiveRun()
+    return
+  }
+  if (state.run && state.phase === 'run_active') {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer)
+    autoSaveTimer = setTimeout(() => {
+      const s = useGameStore.getState()
+      if (s.run && s.phase === 'run_active') {
+        saveActiveRun(s.run, s.foMemory, s.totalTokensUsed)
+      }
+    }, 2000)
   }
 })

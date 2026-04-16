@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import { useGameStore } from '../../storage/game-store'
 import { estimateCostUSD, formatCost } from '../../llm/token-estimator'
 import { t } from '../../i18n'
 
-export function CostIndicator() {
+export const CostIndicator = memo(function CostIndicator() {
   const tokens = useGameStore((s) => s.totalTokensUsed)
   const model = useGameStore((s) => s.llmConfig?.model ?? '')
 
@@ -14,4 +15,4 @@ export function CostIndicator() {
       <span>{t('cost.estCost', { cost: formatCost(cost) })}</span>
     </div>
   )
-}
+})

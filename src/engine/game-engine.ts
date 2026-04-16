@@ -7,8 +7,7 @@ import { CONSUMABLE_RESOLUTION } from '../types/consumable'
 import type { FOArchetype } from '../types/fo'
 import { useGameStore } from '../storage/game-store'
 import { loadFOMemory, saveFOMemory, saveRunToLifetimeStats, saveStandingOrders, saveArtifact, depositToBank, addToVault, addToStash } from '../storage/cross-run'
-import { generateSectorPreviews, generateSector } from '../generation/sector'
-import { generateArrivalNarration } from '../generation/narration'
+import { generateSectorPreviews, generateSectorWithNarration } from '../generation/sector'
 import { resolveAction, resolveCombat } from '../generation/action-resolver'
 import { compressSector } from '../generation/compressor'
 import { generateCaptainAnalysis } from '../generation/captain-profile'
@@ -101,19 +100,15 @@ export async function selectSector(preview: SectorPreview): Promise<void> {
     const suppliesCost = preview.distance * TRAVEL_COSTS.suppliesPerDistance
     store.applyStateChanges({ fuel: -fuelCost, supplies: -suppliesCost })
 
-    // Generate full sector data
-    const { sector, tokensUsed: genTokens } = await generateSector(provider, preview, run)
-    store.addTokensUsed(genTokens)
-    store.enterSector(sector)
-
-    // Generate arrival narration
-    const updatedRun = useGameStore.getState().run!
-    const { narration, foComment, actions, tokensUsed: narrTokens } = await generateArrivalNarration(
+    // Generate sector data + arrival narration in one call
+    const { sector, narration, foComment, actions, tokensUsed: genTokens } = await generateSectorWithNarration(
       provider,
-      updatedRun,
+      preview,
+      run,
       foMemory,
     )
-    store.addTokensUsed(narrTokens)
+    store.addTokensUsed(genTokens)
+    store.enterSector(sector)
 
     store.appendNarration(`${narration}\n\nFO: "${foComment}"`)
     store.setAvailableActions(actions.map((a) => ({

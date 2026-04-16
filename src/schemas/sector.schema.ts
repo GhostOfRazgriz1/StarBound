@@ -43,3 +43,16 @@ export const sectorGenerationSchema = z.object({
   name: z.string(),
   encounter: encounterSchema,
 }).passthrough()
+
+export const sectorWithNarrationSchema = z.object({
+  name: z.string(),
+  encounter: encounterSchema,
+  narration: z.string(),
+  foComment: z.string(),
+  actions: z.array(z.object({
+    id: z.string(),
+    label: z.string(),
+    description: z.string().default(''),
+    type: z.string().default('special'),
+  }).passthrough()),
+}).passthrough()
