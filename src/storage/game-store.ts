@@ -296,14 +296,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       cargo = [...cargo, oldItem]
     }
 
-    set({ run: { ...run, ship: { ...run.ship, equipment, cargo } } })
+    // Log to sector history so the LLM knows about the change
+    const note = oldItem
+      ? `[Equipped ${item.name} in ${item.slot} slot, replacing ${oldItem.name}]`
+      : `[Equipped ${item.name} in ${item.slot} slot]`
+    const sectorHistory = [...run.sectorHistory, note]
+
+    set({ run: { ...run, ship: { ...run.ship, equipment, cargo }, sectorHistory } })
   },
 
   dropFromCargo: (itemId) => {
     const run = get().run
     if (!run) return
+    const item = run.ship.cargo.find((i) => i.id === itemId)
     const cargo = run.ship.cargo.filter((i) => i.id !== itemId)
-    set({ run: { ...run, ship: { ...run.ship, cargo } } })
+    const sectorHistory = item
+      ? [...run.sectorHistory, `[Dropped ${item.name} from cargo]`]
+      : run.sectorHistory
+    set({ run: { ...run, ship: { ...run.ship, cargo }, sectorHistory } })
   },
 
   openTrade: (traderName, stock) => {

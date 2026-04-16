@@ -1,6 +1,7 @@
 import type { ChatMessage, LLMResponse } from '../types/llm'
 import type { LLMProvider } from './providers/base'
 import { useGameStore } from '../storage/game-store'
+import { estimateTokens } from './token-estimator'
 
 const MAX_RETRIES = 1
 const STREAM_THROTTLE_MS = 100 // ~10fps
@@ -63,8 +64,11 @@ export async function chatJSONWithStreaming<T>(
         tokensUsed = response.tokensUsed
       }
 
-      totalTokens.input += tokensUsed.input
-      totalTokens.output += tokensUsed.output
+      // Use reported tokens, or estimate if provider returned 0 (streaming)
+      const inputEst = tokensUsed.input || estimateTokens(currentMessages.map(m => m.content).join(''))
+      const outputEst = tokensUsed.output || estimateTokens(rawContent)
+      totalTokens.input += inputEst
+      totalTokens.output += outputEst
       lastRawContent = rawContent
 
       const data = parse(rawContent)
