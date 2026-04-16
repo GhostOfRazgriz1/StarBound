@@ -54,7 +54,8 @@ export async function chatJSONWithStreaming<T>(
             useGameStore.getState().streamingText + streamBuffer
           )
         }
-        useGameStore.getState().setStreamingText('')
+        // Don't clear streaming text here — setLoading(false) handles it
+        // This prevents the text vanishing gap during JSON parsing
         rawContent = response.content
         tokensUsed = response.tokensUsed
       } else {
