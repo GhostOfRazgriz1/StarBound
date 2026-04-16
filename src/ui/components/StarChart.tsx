@@ -12,9 +12,10 @@ const ENCOUNTER_COLORS: Record<string, string> = {
 }
 
 const NODE_RADIUS = 20
-const NODE_SPACING_X = 160
-const NODE_SPACING_Y = 80
+const NODE_SPACING_Y = 100  // vertical spacing between sectors
+const NODE_SPACING_X = 120  // horizontal spread for option branches
 const PADDING = 50
+const CENTER_X = 300        // center column X position
 
 interface StarChartProps {
   sectorMap: SectorSummary[]
@@ -46,12 +47,21 @@ export function StarChart({
 
   const edges: Array<{ x1: number; y1: number; x2: number; y2: number; dimmed: boolean }> = []
 
-  // Visited sectors
+  // Total rows needed for layout (visited + current + options + future)
+  const totalRows = sectorMap.length + (currentSectorName ? 1 : 0) + (sectorOptions.length > 0 ? 1 : 0) + Math.min(3, totalSectors - currentSectorNumber)
+  const chartHeight = PADDING * 2 + totalRows * NODE_SPACING_Y
+
+  // Helper: Y position for a given row index (0 = bottom, higher = up)
+  function rowY(row: number): number {
+    return chartHeight - PADDING - row * NODE_SPACING_Y
+  }
+
+  // Visited sectors (bottom to top)
   for (let i = 0; i < sectorMap.length; i++) {
     const s = sectorMap[i]
     nodes.push({
-      x: PADDING + i * NODE_SPACING_X,
-      y: PADDING + 80,
+      x: CENTER_X,
+      y: rowY(i),
       label: s.summary.split('.')[0].slice(0, 30),
       type: s.type,
       status: 'visited',
@@ -59,26 +69,21 @@ export function StarChart({
       sectorNum: s.sectorNumber,
     })
 
-    // Edge to previous
     if (i > 0) {
       edges.push({
-        x1: PADDING + (i - 1) * NODE_SPACING_X,
-        y1: PADDING + 80,
-        x2: PADDING + i * NODE_SPACING_X,
-        y2: PADDING + 80,
+        x1: CENTER_X, y1: rowY(i - 1),
+        x2: CENTER_X, y2: rowY(i),
         dimmed: false,
       })
     }
   }
 
   // Current sector
-  const currentX = PADDING + sectorMap.length * NODE_SPACING_X
-  const currentY = PADDING + 80
-
+  const currentRow = sectorMap.length
   if (currentSectorName) {
     nodes.push({
-      x: currentX,
-      y: currentY,
+      x: CENTER_X,
+      y: rowY(currentRow),
       label: currentSectorName,
       type: 'unknown',
       status: 'current',
@@ -88,30 +93,25 @@ export function StarChart({
 
     if (sectorMap.length > 0) {
       edges.push({
-        x1: PADDING + (sectorMap.length - 1) * NODE_SPACING_X,
-        y1: PADDING + 80,
-        x2: currentX,
-        y2: currentY,
+        x1: CENTER_X, y1: rowY(currentRow - 1),
+        x2: CENTER_X, y2: rowY(currentRow),
         dimmed: false,
       })
     }
   }
 
-  // Sector options (branch forward)
-  const optionBaseX = currentSectorName
-    ? currentX + NODE_SPACING_X
-    : PADDING + sectorMap.length * NODE_SPACING_X
+  // Sector options (branch left/right from the top of the path)
+  const optionRow = currentSectorName ? currentRow + 1 : currentRow
+  const fromRow = currentSectorName ? currentRow : Math.max(0, currentRow - 1)
 
-  const optionStartY = PADDING + 80 - ((sectorOptions.length - 1) * NODE_SPACING_Y) / 2
-
+  const optionStartX = CENTER_X - ((sectorOptions.length - 1) * NODE_SPACING_X) / 2
   for (let i = 0; i < sectorOptions.length; i++) {
     const opt = sectorOptions[i]
-    const optX = optionBaseX
-    const optY = optionStartY + i * NODE_SPACING_Y
+    const optX = optionStartX + i * NODE_SPACING_X
 
     nodes.push({
       x: optX,
-      y: optY,
+      y: rowY(optionRow),
       label: opt.name,
       type: opt.encounterType,
       status: 'option',
@@ -119,38 +119,40 @@ export function StarChart({
       sectorNum: currentSectorNumber + (currentSectorName ? 1 : 0),
     })
 
-    const fromX = currentSectorName ? currentX : (sectorMap.length > 0 ? PADDING + (sectorMap.length - 1) * NODE_SPACING_X : PADDING)
-    const fromY = PADDING + 80
-
     edges.push({
-      x1: fromX,
-      y1: fromY,
-      x2: optX,
-      y2: optY,
+      x1: CENTER_X, y1: rowY(fromRow),
+      x2: optX, y2: rowY(optionRow),
       dimmed: true,
     })
   }
 
   // Future placeholder nodes
-  const lastNodeX = Math.max(optionBaseX, currentX)
+  const futureStartRow = sectorOptions.length > 0 ? optionRow + 1 : optionRow
   const remainingSectors = totalSectors - currentSectorNumber - (currentSectorName ? 0 : -1)
-  for (let i = 1; i <= Math.min(remainingSectors, 3); i++) {
+  for (let i = 0; i < Math.min(remainingSectors, 3); i++) {
     nodes.push({
-      x: lastNodeX + i * NODE_SPACING_X,
-      y: PADDING + 80,
+      x: CENTER_X,
+      y: rowY(futureStartRow + i),
       label: '???',
       type: 'unknown',
       status: 'future',
       retreated: false,
-      sectorNum: currentSectorNumber + i,
+      sectorNum: currentSectorNumber + i + 1,
     })
   }
 
   // Calculate SVG dimensions
-  const maxX = Math.max(...nodes.map((n) => n.x)) + PADDING + NODE_RADIUS
-  const maxY = Math.max(...nodes.map((n) => n.y)) + PADDING + NODE_RADIUS + 30
-  const svgWidth = Math.max(maxX, 400)
-  const svgHeight = Math.max(maxY, 200)
+  const maxX = Math.max(...nodes.map((n) => n.x)) + PADDING + NODE_RADIUS + 80
+  const minX = Math.min(...nodes.map((n) => n.x)) - PADDING - NODE_RADIUS - 80
+  const svgWidth = Math.max(maxX - Math.min(minX, 0), 500)
+  const svgHeight = Math.max(chartHeight, 300)
+
+  // Shift all nodes if any are off-screen left
+  const shiftX = minX < 0 ? -minX : 0
+  if (shiftX > 0) {
+    for (const n of nodes) n.x += shiftX
+    for (const e of edges) { e.x1 += shiftX; e.x2 += shiftX }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8" onClick={onClose}>
@@ -293,7 +295,7 @@ export function StarChart({
           })}
 
           {/* Legend */}
-          <g transform={`translate(${PADDING}, ${svgHeight - 25})`}>
+          <g transform={`translate(${PADDING + shiftX}, 20)`}>
             {Object.entries(ENCOUNTER_COLORS).filter(([k]) => k !== 'unknown').map(([type, color], i) => (
               <g key={type} transform={`translate(${i * 90}, 0)`}>
                 <circle cx={6} cy={0} r={4} fill={color} />
