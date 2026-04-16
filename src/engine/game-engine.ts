@@ -164,8 +164,14 @@ export async function performAction(
     return
   }
 
-  // Handle trade — open UI instead of calling LLM
-  if (actionId === 'trade' || actionId === 'open_trade' || actionId === 'browse_wares' || actionLabel.toLowerCase().includes('trade') || actionLabel.toLowerCase().includes('browse')) {
+  // Handle trade — open UI instead of calling LLM (only for explicit buy/sell actions)
+  const tradeIds = ['trade', 'open_trade', 'browse_wares', 'buy', 'sell', 'shop', 'barter']
+  const lower = actionLabel.toLowerCase()
+  const isTradeAction = tradeIds.includes(actionId) ||
+    lower.includes('browse') || lower.includes('buy') || lower.includes('shop') ||
+    lower.includes('wares') || lower.includes('barter') ||
+    (lower.includes('trade') && !lower.includes('talk') && !lower.includes('ask') && !lower.includes('speak') && !lower.includes('chat'))
+  if (isTradeAction) {
     const encounter = run.currentSector?.encounter
     if (encounter?.type === 'trader') {
       store.openTrade(encounter.name, encounter.stock)
