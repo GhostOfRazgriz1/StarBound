@@ -153,24 +153,34 @@ export function StarChart({
   const svgHeight = Math.max(maxY, 200)
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex flex-col" onClick={onClose}>
-      <div className="flex items-center justify-between p-4 shrink-0">
-        <h2 className="text-lg font-semibold text-gray-200">Star Chart</h2>
-        <button
-          onClick={onClose}
-          className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-sm transition-colors"
-        >
-          Close
-        </button>
-      </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8" onClick={onClose}>
+      {/* Dim backdrop */}
+      <div className="absolute inset-0 bg-black/60" />
 
-      <div className="flex-1 overflow-auto p-4" onClick={(e) => e.stopPropagation()}>
-        <svg
-          width={svgWidth}
-          height={svgHeight}
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          className="min-w-full"
-        >
+      {/* Chart window */}
+      <div
+        className="relative bg-[#0c0e14] border border-gray-700 rounded-lg shadow-2xl flex flex-col w-full max-w-4xl max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Title bar */}
+        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 shrink-0">
+          <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Star Chart</h2>
+          <button
+            onClick={onClose}
+            className="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-xs transition-colors"
+          >
+            Close
+          </button>
+        </div>
+
+        {/* Scrollable chart area */}
+        <div className="flex-1 overflow-auto p-4">
+          <svg
+            width={svgWidth}
+            height={svgHeight}
+            viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+            className="min-w-full"
+          >
           {/* Starfield background dots */}
           {Array.from({ length: 40 }, (_, i) => (
             <circle
@@ -293,7 +303,8 @@ export function StarChart({
               </g>
             ))}
           </g>
-        </svg>
+          </svg>
+        </div>
       </div>
     </div>
   )
