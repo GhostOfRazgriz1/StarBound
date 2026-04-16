@@ -100,15 +100,33 @@ export async function selectSector(preview: SectorPreview): Promise<void> {
     const suppliesCost = preview.distance * TRAVEL_COSTS.suppliesPerDistance
     store.applyStateChanges({ fuel: -fuelCost, supplies: -suppliesCost })
 
-    // Generate sector data + arrival narration in one call
+    // Enter sector immediately with placeholder so player sees the game screen
+    const placeholderSector = {
+      id: preview.id,
+      name: preview.name,
+      encounterType: preview.encounterType,
+      encounter: { type: preview.encounterType } as import('../types/encounters').Sector['encounter'],
+      visited: true,
+      summary: null,
+    }
+    store.enterSector(placeholderSector)
+
+    // Now generate the full sector data + narration (streams into view)
     const { sector, narration, foComment, actions, tokensUsed: genTokens } = await generateSectorWithNarration(
       provider,
       preview,
-      run,
+      useGameStore.getState().run!,
       foMemory,
     )
     store.addTokensUsed(genTokens)
-    store.enterSector(sector)
+
+    // Update sector with full encounter data
+    const currentRun = useGameStore.getState().run
+    if (currentRun) {
+      useGameStore.setState({
+        run: { ...currentRun, currentSector: sector },
+      })
+    }
 
     store.appendNarration(`${narration}\n\nFO: "${foComment}"`)
     store.setAvailableActions(actions.map((a) => ({
