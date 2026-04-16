@@ -3,6 +3,7 @@ import type { RunState } from '../types/game'
 import type { FOCrossRunMemory } from '../types/fo'
 import { buildNarrationContext } from '../llm/context-builder'
 import { parseJSONResponse } from '../llm/response-parser'
+import { chatJSONWithStreaming } from '../llm/streaming'
 import { narrationResultSchema } from '../schemas/action-result.schema'
 
 export async function generateArrivalNarration(
@@ -37,7 +38,8 @@ export async function generateArrivalNarration(
 
   const messages = buildNarrationContext(runState, foMemory, prompt)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     messages,
     (raw) => parseJSONResponse(raw, narrationResultSchema),
   )

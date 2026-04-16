@@ -89,6 +89,62 @@ export class AnthropicProvider implements LLMProvider {
     return { data, tokensUsed }
   }
 
+  async chatStream(messages: ChatMessage[], onChunk: (text: string) => void): Promise<LLMResponse> {
+    const { system, turns } = this.splitMessages(messages)
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': this.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: this.model,
+        max_tokens: 2048,
+        system,
+        messages: turns,
+        stream: true,
+      }),
+    })
+
+    if (!res.ok) {
+      const err = await res.text()
+      throw new Error(`Anthropic API error (${res.status}): ${err}`)
+    }
+
+    const reader = res.body?.getReader()
+    if (!reader) throw new Error('No response body')
+
+    const decoder = new TextDecoder()
+    let fullContent = ''
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      const chunk = decoder.decode(value, { stream: true })
+      const lines = chunk.split('\n').filter((l) => l.startsWith('data: '))
+
+      for (const line of lines) {
+        const data = line.slice(6).trim()
+        try {
+          const parsed = JSON.parse(data)
+          if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+            fullContent += parsed.delta.text
+            onChunk(parsed.delta.text)
+          }
+        } catch { /* skip */ }
+      }
+    }
+
+    return {
+      content: fullContent,
+      tokensUsed: { input: 0, output: 0 },
+    }
+  }
+
   private splitMessages(messages: ChatMessage[]): {
     system: string
     turns: Array<{ role: 'user' | 'assistant'; content: string }>

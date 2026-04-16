@@ -1,11 +1,14 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { useGameStore } from '../../storage/game-store'
 
 export function Narration({ entries }: { entries: string[] }) {
   const bottomRef = useRef<HTMLDivElement>(null)
+  const streamingText = useGameStore((s) => s.streamingText)
+  const loading = useGameStore((s) => s.loading)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [entries.length])
+  }, [entries.length, streamingText])
 
   return (
     <div className="flex-1 overflow-y-auto space-y-4 pr-2">
@@ -14,9 +17,28 @@ export function Narration({ entries }: { entries: string[] }) {
           {formatNarration(stripThinking(entry))}
         </div>
       ))}
+      {loading && streamingText && (
+        <div className="text-sm leading-relaxed text-gray-400 animate-pulse">
+          {extractNarrationFromStream(stripThinking(streamingText))}
+          <span className="inline-block w-1.5 h-4 bg-blue-400/60 ml-0.5 animate-pulse" />
+        </div>
+      )}
       <div ref={bottomRef} />
     </div>
   )
+}
+
+/** Try to extract the narration field from a partial JSON stream */
+function extractNarrationFromStream(text: string): string {
+  // Try to extract "narration": "..." from partial JSON
+  const match = text.match(/"narration"\s*:\s*"([\s\S]*?)(?:"|$)/)
+  if (match) {
+    // Unescape JSON string escapes
+    return match[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+  }
+  // If no JSON structure, show raw text (for non-JSON streaming)
+  if (!text.includes('{')) return text
+  return ''
 }
 
 /** Strip thinking/reasoning tags that some models emit */

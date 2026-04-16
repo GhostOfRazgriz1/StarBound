@@ -33,6 +33,11 @@ interface GameStore {
   tradeStock: TraderItem[]
   traderName: string
 
+  // Streaming narration
+  streamingText: string
+  setStreamingText: (text: string) => void
+  appendStreamingText: (chunk: string) => void
+
   // Captain analysis (generated at run end)
   captainAnalysis: Record<string, unknown> | null
   setCaptainAnalysis: (analysis: Record<string, unknown>) => void
@@ -106,13 +111,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
   showTrade: false,
   tradeStock: [],
   traderName: '',
+  streamingText: '',
   captainAnalysis: null,
 
+  setStreamingText: (text) => set({ streamingText: text }),
+  appendStreamingText: (chunk) => set((state) => ({ streamingText: state.streamingText + chunk })),
   setCaptainAnalysis: (analysis) => set({ captainAnalysis: analysis }),
 
   setPhase: (phase) => set({ phase }),
   setLLMConfig: (config) => set({ llmConfig: config }),
-  setLoading: (loading) => set({ loading }),
+  setLoading: (loading) => set({ loading, ...(loading ? {} : { streamingText: '' }) }),
   setError: (error) => set({ error }),
   setFOMemory: (memory) => set({ foMemory: memory }),
 

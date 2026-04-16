@@ -6,6 +6,7 @@ import type { PirateEncounter } from '../types/encounters'
 import { buildNarrationContext } from '../llm/context-builder'
 import { buildCombatPrompt } from '../prompts/combat'
 import { parseJSONResponse } from '../llm/response-parser'
+import { chatJSONWithStreaming } from '../llm/streaming'
 import { actionResultSchema, combatResultSchema } from '../schemas/action-result.schema'
 
 export async function resolveAction(
@@ -43,7 +44,8 @@ export async function resolveAction(
 
   const messages = buildNarrationContext(runState, foMemory, prompt)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     messages,
     (raw) => parseJSONResponse(raw, actionResultSchema),
   )
@@ -63,7 +65,8 @@ export async function resolveCombat(
   const combatPrompt = buildCombatPrompt(runState, enemy, playerAction)
   const messages = buildNarrationContext(runState, foMemory, combatPrompt)
 
-  const { data, tokensUsed } = await provider.chatJSON(
+  const { data, tokensUsed } = await chatJSONWithStreaming(
+    provider,
     messages,
     (raw) => parseJSONResponse(raw, combatResultSchema),
   )
