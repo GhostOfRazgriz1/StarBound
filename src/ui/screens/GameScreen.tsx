@@ -110,7 +110,7 @@ export function GameScreen() {
             onClick={() => setChartOpen(true)}
             className="px-2 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-xs shrink-0"
           >
-            Chart
+            {t('chart.title' as Parameters<typeof t>[0])}
           </button>
 
           <div className="flex-1 min-w-0">

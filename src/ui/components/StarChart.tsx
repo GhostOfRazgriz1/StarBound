@@ -1,5 +1,8 @@
 import type { SectorSummary } from '../../types/game'
 import type { SectorPreview } from '../../types/encounters'
+import { t } from '../../i18n'
+
+const tt = (key: string) => t(key as Parameters<typeof t>[0])
 
 const ENCOUNTER_COLORS: Record<string, string> = {
   civilization: '#3b82f6',
@@ -133,7 +136,7 @@ export function StarChart({
     nodes.push({
       x: CENTER_X,
       y: rowY(futureStartRow + i),
-      label: '???',
+      label: tt('chart.unknown'),
       type: 'unknown',
       status: 'future',
       retreated: false,
@@ -165,12 +168,12 @@ export function StarChart({
       >
         {/* Title bar */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 shrink-0">
-          <h2 className="text-base font-semibold text-gray-300 uppercase tracking-wider">Star Chart</h2>
+          <h2 className="text-base font-semibold text-gray-300 uppercase tracking-wider">{tt('chart.title')}</h2>
           <button
             onClick={onClose}
             className="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-xs transition-colors"
           >
-            Close
+            {tt('chart.close')}
           </button>
         </div>
 
@@ -299,7 +302,7 @@ export function StarChart({
               <g key={type} transform={`translate(${i * 90}, 0)`}>
                 <circle cx={6} cy={0} r={4} fill={color} />
                 <text x={14} y={3} fill="#6b7280" fontSize={11} fontFamily="sans-serif">
-                  {type}
+                  {tt(`chart.${type}`)}
                 </text>
               </g>
             ))}

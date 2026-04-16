@@ -208,6 +208,17 @@ export type TranslationKey =
   | 'sector.suppliesCost'
   | 'sector.cantReach'
 
+  // Star Chart
+  | 'chart.title'
+  | 'chart.close'
+  | 'chart.unknown'
+  | 'chart.civilization'
+  | 'chart.derelict'
+  | 'chart.anomaly'
+  | 'chart.pirate'
+  | 'chart.trader'
+  | 'chart.quiet'
+
   // Module slots
   | 'equip.module1'
   | 'equip.module2'
@@ -491,6 +502,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': 'Fuel: -{cost}',
     'sector.suppliesCost': 'Supplies: -{cost}',
     'sector.cantReach': 'Not enough resources',
+    'chart.title': 'Star Chart',
+    'chart.close': 'Close',
+    'chart.unknown': '???',
+    'chart.civilization': 'Civilization',
+    'chart.derelict': 'Derelict',
+    'chart.anomaly': 'Anomaly',
+    'chart.pirate': 'Pirate',
+    'chart.trader': 'Trader',
+    'chart.quiet': 'Quiet',
 
     // Module slots
     'equip.module1': 'Module 1',
@@ -773,6 +793,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': '燃料：-{cost}',
     'sector.suppliesCost': '补给：-{cost}',
     'sector.cantReach': '资源不足',
+    'chart.title': '星图',
+    'chart.close': '关闭',
+    'chart.unknown': '???',
+    'chart.civilization': '文明',
+    'chart.derelict': '废弃船',
+    'chart.anomaly': '异常',
+    'chart.pirate': '海盗',
+    'chart.trader': '商人',
+    'chart.quiet': '宁静',
 
     // Module slots
     'equip.module1': '模块 1',
@@ -1055,6 +1084,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': '燃料：-{cost}',
     'sector.suppliesCost': '物資：-{cost}',
     'sector.cantReach': 'リソース不足',
+    'chart.title': '星図',
+    'chart.close': '閉じる',
+    'chart.unknown': '???',
+    'chart.civilization': '文明',
+    'chart.derelict': '漂流船',
+    'chart.anomaly': '異常',
+    'chart.pirate': '海賊',
+    'chart.trader': '商人',
+    'chart.quiet': '静寂',
 
     // Module slots
     'equip.module1': 'モジュール 1',
@@ -1337,6 +1375,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': '연료: -{cost}',
     'sector.suppliesCost': '보급품: -{cost}',
     'sector.cantReach': '자원 부족',
+    'chart.title': '성도',
+    'chart.close': '닫기',
+    'chart.unknown': '???',
+    'chart.civilization': '문명',
+    'chart.derelict': '잔해',
+    'chart.anomaly': '이상 현상',
+    'chart.pirate': '해적',
+    'chart.trader': '상인',
+    'chart.quiet': '고요',
 
     // Module slots
     'equip.module1': '모듈 1',
@@ -1619,6 +1666,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': 'Combustible: -{cost}',
     'sector.suppliesCost': 'Suministros: -{cost}',
     'sector.cantReach': 'Recursos insuficientes',
+    'chart.title': 'Carta Estelar',
+    'chart.close': 'Cerrar',
+    'chart.unknown': '???',
+    'chart.civilization': 'Civilización',
+    'chart.derelict': 'Nave Abandonada',
+    'chart.anomaly': 'Anomalía',
+    'chart.pirate': 'Pirata',
+    'chart.trader': 'Comerciante',
+    'chart.quiet': 'Tranquilo',
 
     // Module slots
     'equip.module1': 'Módulo 1',
@@ -1901,6 +1957,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': 'Carburant : -{cost}',
     'sector.suppliesCost': 'Provisions : -{cost}',
     'sector.cantReach': 'Ressources insuffisantes',
+    'chart.title': 'Carte Stellaire',
+    'chart.close': 'Fermer',
+    'chart.unknown': '???',
+    'chart.civilization': 'Civilisation',
+    'chart.derelict': 'Épave',
+    'chart.anomaly': 'Anomalie',
+    'chart.pirate': 'Pirate',
+    'chart.trader': 'Marchand',
+    'chart.quiet': 'Calme',
 
     // Module slots
     'equip.module1': 'Module 1',
@@ -2183,6 +2248,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': 'Treibstoff: -{cost}',
     'sector.suppliesCost': 'Vorräte: -{cost}',
     'sector.cantReach': 'Nicht genug Ressourcen',
+    'chart.title': 'Sternenkarte',
+    'chart.close': 'Schließen',
+    'chart.unknown': '???',
+    'chart.civilization': 'Zivilisation',
+    'chart.derelict': 'Wrack',
+    'chart.anomaly': 'Anomalie',
+    'chart.pirate': 'Pirat',
+    'chart.trader': 'Händler',
+    'chart.quiet': 'Ruhig',
 
     // Module slots
     'equip.module1': 'Modul 1',
@@ -2465,6 +2539,15 @@ export const translations: Record<string, Translations> = {
     'sector.fuelCost': 'Combustível: -{cost}',
     'sector.suppliesCost': 'Suprimentos: -{cost}',
     'sector.cantReach': 'Recursos insuficientes',
+    'chart.title': 'Carta Estelar',
+    'chart.close': 'Fechar',
+    'chart.unknown': '???',
+    'chart.civilization': 'Civilização',
+    'chart.derelict': 'Destroços',
+    'chart.anomaly': 'Anomalia',
+    'chart.pirate': 'Pirata',
+    'chart.trader': 'Comerciante',
+    'chart.quiet': 'Tranquilo',
 
     // Module slots
     'equip.module1': 'Módulo 1',
