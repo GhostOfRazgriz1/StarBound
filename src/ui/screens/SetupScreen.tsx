@@ -86,6 +86,11 @@ export function SetupScreen() {
                 ['google', 'Google AI'],
                 ['deepseek', 'DeepSeek'],
                 ['qwen', 'Qwen'],
+                ['zhipu', 'Zhipu (GLM)'],
+                ['baichuan', 'Baichuan'],
+                ['minimax', 'MiniMax'],
+                ['moonshot', 'Moonshot'],
+                ['stepfun', 'StepFun'],
                 ['openrouter', 'OpenRouter'],
               ] as const).map(([p, label]) => (
                 <button
@@ -110,12 +115,10 @@ export function SetupScreen() {
               value={apiKey}
               onChange={(e) => { setApiKey(e.target.value); setError(null) }}
               placeholder={
-                provider === 'openai' ? 'sk-...' :
                 provider === 'anthropic' ? 'sk-ant-...' :
                 provider === 'google' ? 'AIza...' :
-                provider === 'deepseek' ? 'sk-...' :
-                provider === 'qwen' ? 'sk-...' :
-                'sk-or-...'
+                provider === 'openrouter' ? 'sk-or-...' :
+                'sk-...'
               }
               className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-200 text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500"
             />

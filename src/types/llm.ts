@@ -1,4 +1,4 @@
-export type LLMProviderId = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'deepseek' | 'qwen'
+export type LLMProviderId = 'openai' | 'anthropic' | 'google' | 'openrouter' | 'deepseek' | 'qwen' | 'zhipu' | 'baichuan' | 'minimax' | 'moonshot' | 'stepfun'
 
 export interface LLMConfig {
   provider: LLMProviderId
@@ -118,4 +118,22 @@ export const MODEL_PRICING: Record<string, { input: number; output: number }> = 
   'qwen-plus':         { input: 0.80,  output: 2.00 },
   'qwen-turbo':        { input: 0.30,  output: 0.60 },
   'qwen-max':          { input: 2.40,  output: 9.60 },
+  // Zhipu (GLM)
+  'glm-4-plus':        { input: 0.70,  output: 0.70 },
+  'glm-4-flash':       { input: 0.01,  output: 0.01 },
+  'glm-4':             { input: 1.40,  output: 1.40 },
+  // Baichuan
+  'Baichuan4':         { input: 1.40,  output: 1.40 },
+  'Baichuan3-Turbo':   { input: 0.17,  output: 0.17 },
+  // MiniMax
+  'MiniMax-Text-01':   { input: 0.15,  output: 0.55 },
+  'abab6.5s-chat':     { input: 0.14,  output: 0.14 },
+  // Moonshot (Kimi)
+  'moonshot-v1-8k':    { input: 0.17,  output: 0.17 },
+  'moonshot-v1-32k':   { input: 0.34,  output: 0.34 },
+  'moonshot-v1-128k':  { input: 0.86,  output: 0.86 },
+  // StepFun (阶跃星辰)
+  'step-2-16k':        { input: 0.55,  output: 1.40 },
+  'step-1-8k':         { input: 0.17,  output: 0.55 },
+  'step-1-flash':      { input: 0.01,  output: 0.04 },
 }
