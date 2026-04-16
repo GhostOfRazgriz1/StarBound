@@ -120,7 +120,11 @@ export const traderItemSchema = z.object({
     if (['consumable', 'item', 'usable', 'single-use', 'one-time'].includes(lower)) return 'consumable'
     return 'info'
   }) as z.ZodType<'equipment' | 'fuel' | 'supplies' | 'info' | 'consumable'>,
-  price: z.number(),
+  price: z.any().transform((val) => {
+    if (typeof val === 'number') return val
+    if (typeof val === 'string') { const n = parseFloat(val); if (!isNaN(n)) return n }
+    return 20 // default price
+  }),
   effect: coerceString('standard'),
   amount: z.any().transform((val) => {
     if (typeof val === 'number' && val > 0) return Math.round(val)
