@@ -11,10 +11,10 @@ const ENCOUNTER_COLORS: Record<string, string> = {
   unknown: '#4b5563',
 }
 
-const NODE_RADIUS = 14
-const NODE_SPACING_X = 120
-const NODE_SPACING_Y = 60
-const PADDING = 40
+const NODE_RADIUS = 20
+const NODE_SPACING_X = 160
+const NODE_SPACING_Y = 80
+const PADDING = 50
 
 interface StarChartProps {
   sectorMap: SectorSummary[]
@@ -164,7 +164,7 @@ export function StarChart({
       >
         {/* Title bar */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 shrink-0">
-          <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Star Chart</h2>
+          <h2 className="text-base font-semibold text-gray-300 uppercase tracking-wider">Star Chart</h2>
           <button
             onClick={onClose}
             className="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded text-xs transition-colors"
@@ -256,8 +256,8 @@ export function StarChart({
                 {/* Retreat X mark */}
                 {node.retreated && (
                   <>
-                    <line x1={node.x - 5} y1={node.y - 5} x2={node.x + 5} y2={node.y + 5} stroke="#ef4444" strokeWidth={2} />
-                    <line x1={node.x + 5} y1={node.y - 5} x2={node.x - 5} y2={node.y + 5} stroke="#ef4444" strokeWidth={2} />
+                    <line x1={node.x - 7} y1={node.y - 7} x2={node.x + 7} y2={node.y + 7} stroke="#ef4444" strokeWidth={2.5} />
+                    <line x1={node.x + 7} y1={node.y - 7} x2={node.x - 7} y2={node.y + 7} stroke="#ef4444" strokeWidth={2.5} />
                   </>
                 )}
 
@@ -269,7 +269,7 @@ export function StarChart({
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill={isOption ? color : '#fff'}
-                    fontSize={10}
+                    fontSize={13}
                     fontWeight="bold"
                     fontFamily="monospace"
                   >
@@ -280,10 +280,10 @@ export function StarChart({
                 {/* Label */}
                 <text
                   x={node.x}
-                  y={node.y + NODE_RADIUS + 14}
+                  y={node.y + NODE_RADIUS + 18}
                   textAnchor="middle"
                   fill={isFuture ? '#4b5563' : isOption ? '#6b7280' : '#9ca3af'}
-                  fontSize={9}
+                  fontSize={12}
                   fontFamily="sans-serif"
                 >
                   {node.label.length > 18 ? node.label.slice(0, 16) + '...' : node.label}
@@ -297,7 +297,7 @@ export function StarChart({
             {Object.entries(ENCOUNTER_COLORS).filter(([k]) => k !== 'unknown').map(([type, color], i) => (
               <g key={type} transform={`translate(${i * 90}, 0)`}>
                 <circle cx={6} cy={0} r={4} fill={color} />
-                <text x={14} y={3} fill="#6b7280" fontSize={8} fontFamily="sans-serif">
+                <text x={14} y={3} fill="#6b7280" fontSize={11} fontFamily="sans-serif">
                   {type}
                 </text>
               </g>
