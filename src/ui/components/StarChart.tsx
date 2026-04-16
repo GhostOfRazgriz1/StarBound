@@ -141,18 +141,17 @@ export function StarChart({
     })
   }
 
-  // Calculate SVG dimensions
-  const maxX = Math.max(...nodes.map((n) => n.x)) + PADDING + NODE_RADIUS + 80
-  const minX = Math.min(...nodes.map((n) => n.x)) - PADDING - NODE_RADIUS - 80
-  const svgWidth = Math.max(maxX - Math.min(minX, 0), 500)
+  // Center all nodes: find bounds, then shift so content is centered
+  const rawMinX = Math.min(...nodes.map((n) => n.x))
+  const rawMaxX = Math.max(...nodes.map((n) => n.x))
+  const contentWidth = rawMaxX - rawMinX + NODE_RADIUS * 2 + 160 // extra for labels
+  const svgWidth = Math.max(contentWidth + PADDING * 2, 500)
   const svgHeight = Math.max(chartHeight, 300)
 
-  // Shift all nodes if any are off-screen left
-  const shiftX = minX < 0 ? -minX : 0
-  if (shiftX > 0) {
-    for (const n of nodes) n.x += shiftX
-    for (const e of edges) { e.x1 += shiftX; e.x2 += shiftX }
-  }
+  // Shift everything so it's centered in the SVG
+  const centerShift = (svgWidth / 2) - ((rawMinX + rawMaxX) / 2)
+  for (const n of nodes) n.x += centerShift
+  for (const e of edges) { e.x1 += centerShift; e.x2 += centerShift }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8" onClick={onClose}>
@@ -295,7 +294,7 @@ export function StarChart({
           })}
 
           {/* Legend */}
-          <g transform={`translate(${PADDING + shiftX}, 20)`}>
+          <g transform={`translate(${svgWidth / 2 - 250}, 20)`}>
             {Object.entries(ENCOUNTER_COLORS).filter(([k]) => k !== 'unknown').map(([type, color], i) => (
               <g key={type} transform={`translate(${i * 90}, 0)`}>
                 <circle cx={6} cy={0} r={4} fill={color} />
