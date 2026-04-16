@@ -12,7 +12,7 @@ interface SectorSelectProps {
   disabled: boolean
 }
 
-const DISTANCE_LABELS = ['', 'Nearby', 'Moderate', 'Distant']
+const DISTANCE_KEYS = ['', 'sector.nearby', 'sector.moderate', 'sector.distant'] as const
 const DISTANCE_COLORS = ['', 'text-green-500', 'text-yellow-500', 'text-orange-400']
 
 function RiskBar({ level }: { level: number }) {
@@ -68,7 +68,7 @@ export function SectorSelect({ sectors, ship, onSelect, currentSector, totalSect
                       {sector.name}
                     </h4>
                     <span className={`text-[10px] shrink-0 ${DISTANCE_COLORS[sector.distance]}`}>
-                      {DISTANCE_LABELS[sector.distance]}
+                      {t(DISTANCE_KEYS[sector.distance] as Parameters<typeof t>[0])}
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">{sector.description}</p>
@@ -85,10 +85,10 @@ export function SectorSelect({ sectors, ship, onSelect, currentSector, totalSect
 
               {/* Travel cost */}
               <div className="flex items-center gap-3 mt-2 text-[10px]">
-                <span className="text-amber-500">Fuel: -{fuelCost}</span>
-                <span className="text-emerald-500">Supplies: -{suppliesCost}</span>
+                <span className="text-amber-500">{t('status.fuel')}: -{fuelCost}</span>
+                <span className="text-emerald-500">{t('status.supplies')}: -{suppliesCost}</span>
                 {cantReach && (
-                  <span className="text-red-400">Not enough resources</span>
+                  <span className="text-red-400">{t('sector.cantReach' as Parameters<typeof t>[0])}</span>
                 )}
               </div>
             </button>

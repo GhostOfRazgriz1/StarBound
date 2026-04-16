@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useGameStore } from '../../storage/game-store'
+import { t } from '../../i18n'
 
 export function CaptainsLog() {
   const [open, setOpen] = useState(false)
@@ -17,7 +18,7 @@ export function CaptainsLog() {
         className="w-full p-3 flex items-center justify-between text-left hover:bg-gray-800/30 transition-colors rounded-lg"
       >
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Captain's Log
+          {t('log.title' as Parameters<typeof t>[0])}
         </h3>
         <span className="text-xs text-gray-600">{open ? '\u25B2' : '\u25BC'}</span>
       </button>
@@ -32,7 +33,7 @@ export function CaptainsLog() {
                 tab === 'log' ? 'bg-gray-700 text-gray-200' : 'text-gray-500 hover:text-gray-400'
               }`}
             >
-              Mission Notes
+              {t('log.missionNotes' as Parameters<typeof t>[0])}
             </button>
             <button
               onClick={() => setTab('orders')}
@@ -40,7 +41,7 @@ export function CaptainsLog() {
                 tab === 'orders' ? 'bg-gray-700 text-gray-200' : 'text-gray-500 hover:text-gray-400'
               }`}
             >
-              Standing Orders
+              {t('log.standingOrders' as Parameters<typeof t>[0])}
             </button>
           </div>
 
@@ -49,20 +50,20 @@ export function CaptainsLog() {
               <textarea
                 value={run.captainsLog}
                 onChange={(e) => updateCaptainsLog(e.target.value)}
-                placeholder="Record observations, clues, plans... The FO reads this."
+                placeholder={t('log.notesPlaceholder' as Parameters<typeof t>[0])}
                 className="w-full h-24 bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-xs text-gray-300 placeholder-gray-600 resize-y focus:outline-none focus:border-blue-500"
               />
-              <p className="text-[10px] text-gray-600 mt-1">Per-run notes. The FO uses these for context.</p>
+              <p className="text-[10px] text-gray-600 mt-1">{t('log.notesHint' as Parameters<typeof t>[0])}</p>
             </div>
           ) : (
             <div>
               <textarea
                 value={run.standingOrders}
                 onChange={(e) => updateStandingOrders(e.target.value)}
-                placeholder="Always investigate derelicts. Never trade fuel below 40%..."
+                placeholder={t('log.ordersPlaceholder' as Parameters<typeof t>[0])}
                 className="w-full h-24 bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-xs text-gray-300 placeholder-gray-600 resize-y focus:outline-none focus:border-blue-500"
               />
-              <p className="text-[10px] text-gray-600 mt-1">Persists across runs. Teach your FO your preferences.</p>
+              <p className="text-[10px] text-gray-600 mt-1">{t('log.ordersHint' as Parameters<typeof t>[0])}</p>
             </div>
           )}
         </div>

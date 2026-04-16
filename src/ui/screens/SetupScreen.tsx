@@ -160,7 +160,7 @@ export function SetupScreen() {
               }}
               className="w-full bg-green-700 hover:bg-green-600 text-white py-3 rounded font-medium transition-colors"
             >
-              Resume Mission
+              {t('setup.resumeMission' as Parameters<typeof t>[0])}
             </button>
           )}
         </div>

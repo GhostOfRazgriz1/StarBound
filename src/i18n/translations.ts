@@ -200,6 +200,85 @@ export type TranslationKey =
   | 'trade.fuelPlus'
   | 'trade.suppliesPlus'
 
+  // Sector select extras
+  | 'sector.nearby'
+  | 'sector.moderate'
+  | 'sector.distant'
+  | 'sector.fuelCost'
+  | 'sector.suppliesCost'
+  | 'sector.cantReach'
+
+  // Module slots
+  | 'equip.module1'
+  | 'equip.module2'
+  | 'equip.module3'
+  | 'equip.empty'
+
+  // Consumables panel
+  | 'consumable.title'
+  | 'consumable.empty'
+  | 'consumable.use'
+  | 'consumable.instant'
+  | 'consumable.triggered'
+  | 'consumable.strength'
+  | 'consumable.usesLeft'
+
+  // Captain's Log
+  | 'log.title'
+  | 'log.missionNotes'
+  | 'log.standingOrders'
+  | 'log.notesPlaceholder'
+  | 'log.notesHint'
+  | 'log.ordersPlaceholder'
+  | 'log.ordersHint'
+
+  // Provisioning loadout
+  | 'provision.provisions'
+  | 'provision.loadout'
+  | 'provision.creditBank'
+  | 'provision.available'
+  | 'provision.withdraw'
+  | 'provision.bringingOnMission'
+  | 'provision.return'
+  | 'provision.equipmentVault'
+  | 'provision.consumableStash'
+  | 'provision.take'
+  | 'provision.sell'
+  | 'provision.vaultEmpty'
+  | 'provision.stashEmpty'
+
+  // Badges
+  | 'badge.pacifist'
+  | 'badge.pacifist.desc'
+  | 'badge.noRetreat'
+  | 'badge.noRetreat.desc'
+  | 'badge.speedrun'
+  | 'badge.speedrun.desc'
+  | 'badge.completionist'
+  | 'badge.completionist.desc'
+  | 'badge.foFriend'
+  | 'badge.foFriend.desc'
+  | 'badge.loneWolf'
+  | 'badge.loneWolf.desc'
+  | 'badge.diplomat'
+  | 'badge.diplomat.desc'
+  | 'badge.survivor'
+  | 'badge.survivor.desc'
+  | 'badge.hoarder'
+  | 'badge.hoarder.desc'
+  | 'badge.pennyPincher'
+  | 'badge.pennyPincher.desc'
+  | 'badge.riskTaker'
+  | 'badge.riskTaker.desc'
+  | 'badge.curious'
+  | 'badge.curious.desc'
+
+  // Misc
+  | 'setup.resumeMission'
+  | 'game.retry'
+  | 'trade.consumable'
+  | 'end.bankDeposit'
+
 export type Translations = Record<TranslationKey, string>
 
 export const translations: Record<string, Translations> = {
@@ -404,6 +483,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': 'Cargo',
     'trade.fuelPlus': 'Fuel +{amount}',
     'trade.suppliesPlus': 'Supplies +{amount}',
+
+    // Sector select extras
+    'sector.nearby': 'Nearby',
+    'sector.moderate': 'Moderate',
+    'sector.distant': 'Distant',
+    'sector.fuelCost': 'Fuel: -{cost}',
+    'sector.suppliesCost': 'Supplies: -{cost}',
+    'sector.cantReach': 'Not enough resources',
+
+    // Module slots
+    'equip.module1': 'Module 1',
+    'equip.module2': 'Module 2',
+    'equip.module3': 'Module 3',
+    'equip.empty': 'empty',
+
+    // Consumables panel
+    'consumable.title': 'Consumables',
+    'consumable.empty': 'No consumables',
+    'consumable.use': 'Use',
+    'consumable.instant': 'Instant',
+    'consumable.triggered': 'Unknown Effect',
+    'consumable.strength': 'Strength: {value}',
+    'consumable.usesLeft': '{count} uses remaining',
+
+    // Captain's Log
+    'log.title': "Captain's Log",
+    'log.missionNotes': 'Mission Notes',
+    'log.standingOrders': 'Standing Orders',
+    'log.notesPlaceholder': 'Record observations, clues, plans... The FO reads this.',
+    'log.notesHint': 'Per-run notes. The FO uses these for context.',
+    'log.ordersPlaceholder': 'Always investigate derelicts. Never trade fuel below 40%...',
+    'log.ordersHint': 'Persists across runs. Teach your FO your preferences.',
+
+    // Provisioning loadout
+    'provision.provisions': 'Provisions',
+    'provision.loadout': 'Loadout',
+    'provision.creditBank': 'Credit Bank',
+    'provision.available': '{amount}cr available',
+    'provision.withdraw': 'Withdraw:',
+    'provision.bringingOnMission': 'Bringing on mission',
+    'provision.return': 'Return',
+    'provision.equipmentVault': 'Equipment Vault',
+    'provision.consumableStash': 'Consumable Stash',
+    'provision.take': 'Take',
+    'provision.sell': 'Sell',
+    'provision.vaultEmpty': 'Empty — equipment from completed runs appears here',
+    'provision.stashEmpty': 'Empty — unused consumables from completed runs appear here',
+
+    // Badges
+    'badge.pacifist': 'Pacifist',
+    'badge.pacifist.desc': 'Completed the mission without entering combat',
+    'badge.noRetreat': 'No Retreat',
+    'badge.noRetreat.desc': 'Never fled from an encounter',
+    'badge.speedrun': 'Speedrunner',
+    'badge.speedrun.desc': 'Completed all sectors in under 30 turns',
+    'badge.completionist': 'Completionist',
+    'badge.completionist.desc': 'Visited every sector',
+    'badge.foFriend': "FO's Friend",
+    'badge.foFriend.desc': 'Followed FO advice 80%+ of the time',
+    'badge.loneWolf': 'Lone Wolf',
+    'badge.loneWolf.desc': 'Overrode FO advice 80%+ of the time',
+    'badge.diplomat': 'Diplomat',
+    'badge.diplomat.desc': 'Contacted 3+ civilizations peacefully',
+    'badge.survivor': 'Survivor',
+    'badge.survivor.desc': 'Finished with hull below 20%',
+    'badge.hoarder': 'Hoarder',
+    'badge.hoarder.desc': 'Ended the mission with 4+ cargo items',
+    'badge.pennyPincher': 'Penny Pincher',
+    'badge.pennyPincher.desc': 'Ended with more credits than you started with',
+    'badge.riskTaker': 'Risk Taker',
+    'badge.riskTaker.desc': 'Risk appetite above 80%',
+    'badge.curious': 'Insatiably Curious',
+    'badge.curious.desc': 'Curiosity score above 80%',
+
+    // Misc
+    'setup.resumeMission': 'Resume Mission',
+    'game.retry': 'Retry',
+    'trade.consumable': 'Consumable',
+    'end.bankDeposit': '+{amount} to bank',
   },
 
   zh: {
@@ -607,6 +765,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': '货物',
     'trade.fuelPlus': '燃料 +{amount}',
     'trade.suppliesPlus': '补给 +{amount}',
+
+    // Sector select extras
+    'sector.nearby': '近距离',
+    'sector.moderate': '中距离',
+    'sector.distant': '远距离',
+    'sector.fuelCost': '燃料：-{cost}',
+    'sector.suppliesCost': '补给：-{cost}',
+    'sector.cantReach': '资源不足',
+
+    // Module slots
+    'equip.module1': '模块 1',
+    'equip.module2': '模块 2',
+    'equip.module3': '模块 3',
+    'equip.empty': '空',
+
+    // Consumables panel
+    'consumable.title': '消耗品',
+    'consumable.empty': '无消耗品',
+    'consumable.use': '使用',
+    'consumable.instant': '即时',
+    'consumable.triggered': '未知效果',
+    'consumable.strength': '强度：{value}',
+    'consumable.usesLeft': '剩余{count}次使用',
+
+    // Captain's Log
+    'log.title': '舰长日志',
+    'log.missionNotes': '任务笔记',
+    'log.standingOrders': '常备命令',
+    'log.notesPlaceholder': '记录观察、线索、计划……副官会阅读此内容。',
+    'log.notesHint': '每次任务的笔记。副官会参考这些内容。',
+    'log.ordersPlaceholder': '始终调查废弃船只。燃料低于40%时不进行交易……',
+    'log.ordersHint': '跨任务保留。教会副官你的偏好。',
+
+    // Provisioning loadout
+    'provision.provisions': '补给品',
+    'provision.loadout': '装备配置',
+    'provision.creditBank': '信用银行',
+    'provision.available': '{amount}cr 可用',
+    'provision.withdraw': '提取：',
+    'provision.bringingOnMission': '携带执行任务',
+    'provision.return': '归还',
+    'provision.equipmentVault': '装备库',
+    'provision.consumableStash': '消耗品储藏',
+    'provision.take': '取用',
+    'provision.sell': '出售',
+    'provision.vaultEmpty': '空 — 完成任务后的装备会出现在此处',
+    'provision.stashEmpty': '空 — 未使用的消耗品会在任务结束后出现在此处',
+
+    // Badges
+    'badge.pacifist': '和平主义者',
+    'badge.pacifist.desc': '未进入战斗即完成任务',
+    'badge.noRetreat': '绝不退缩',
+    'badge.noRetreat.desc': '从未逃离遭遇战',
+    'badge.speedrun': '速通者',
+    'badge.speedrun.desc': '在30回合内完成所有星区',
+    'badge.completionist': '完美主义者',
+    'badge.completionist.desc': '访问了每个星区',
+    'badge.foFriend': '副官之友',
+    'badge.foFriend.desc': '80%以上时间听从副官建议',
+    'badge.loneWolf': '独狼',
+    'badge.loneWolf.desc': '80%以上时间否决副官建议',
+    'badge.diplomat': '外交官',
+    'badge.diplomat.desc': '与3个以上文明和平接触',
+    'badge.survivor': '幸存者',
+    'badge.survivor.desc': '以低于20%船体完成任务',
+    'badge.hoarder': '囤积者',
+    'badge.hoarder.desc': '任务结束时持有4件以上货物',
+    'badge.pennyPincher': '守财奴',
+    'badge.pennyPincher.desc': '结束时信用点多于起始时',
+    'badge.riskTaker': '冒险家',
+    'badge.riskTaker.desc': '风险偏好超过80%',
+    'badge.curious': '好奇心无止境',
+    'badge.curious.desc': '好奇心分数超过80%',
+
+    // Misc
+    'setup.resumeMission': '继续任务',
+    'game.retry': '重试',
+    'trade.consumable': '消耗品',
+    'end.bankDeposit': '+{amount} 存入银行',
   },
 
   ja: {
@@ -810,6 +1047,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': '貨物',
     'trade.fuelPlus': '燃料 +{amount}',
     'trade.suppliesPlus': '物資 +{amount}',
+
+    // Sector select extras
+    'sector.nearby': '近距離',
+    'sector.moderate': '中距離',
+    'sector.distant': '遠距離',
+    'sector.fuelCost': '燃料：-{cost}',
+    'sector.suppliesCost': '物資：-{cost}',
+    'sector.cantReach': 'リソース不足',
+
+    // Module slots
+    'equip.module1': 'モジュール 1',
+    'equip.module2': 'モジュール 2',
+    'equip.module3': 'モジュール 3',
+    'equip.empty': '空',
+
+    // Consumables panel
+    'consumable.title': '消耗品',
+    'consumable.empty': '消耗品なし',
+    'consumable.use': '使用',
+    'consumable.instant': '即時',
+    'consumable.triggered': '効果不明',
+    'consumable.strength': '強度：{value}',
+    'consumable.usesLeft': '残り{count}回使用可能',
+
+    // Captain's Log
+    'log.title': '艦長日誌',
+    'log.missionNotes': 'ミッションノート',
+    'log.standingOrders': '常備命令',
+    'log.notesPlaceholder': '観察、手がかり、計画を記録…副官が読みます。',
+    'log.notesHint': 'ラン毎のメモ。副官がコンテキストとして使用します。',
+    'log.ordersPlaceholder': '常に遺棄船を調査する。燃料40%以下で取引しない…',
+    'log.ordersHint': 'ラン間で保持されます。副官にあなたの方針を教えましょう。',
+
+    // Provisioning loadout
+    'provision.provisions': '補給品',
+    'provision.loadout': 'ロードアウト',
+    'provision.creditBank': 'クレジットバンク',
+    'provision.available': '{amount}cr 利用可能',
+    'provision.withdraw': '引き出し：',
+    'provision.bringingOnMission': 'ミッションに持参',
+    'provision.return': '返却',
+    'provision.equipmentVault': '装備保管庫',
+    'provision.consumableStash': '消耗品ストック',
+    'provision.take': '取得',
+    'provision.sell': '売却',
+    'provision.vaultEmpty': '空 — 完了したランの装備がここに表示されます',
+    'provision.stashEmpty': '空 — 未使用の消耗品がラン終了後にここに表示されます',
+
+    // Badges
+    'badge.pacifist': '平和主義者',
+    'badge.pacifist.desc': '戦闘に入らずにミッションを完了',
+    'badge.noRetreat': '不退転',
+    'badge.noRetreat.desc': '遭遇から一度も逃げなかった',
+    'badge.speedrun': 'スピードランナー',
+    'badge.speedrun.desc': '30ターン以内に全セクターを完了',
+    'badge.completionist': 'コンプリーティスト',
+    'badge.completionist.desc': '全セクターを訪問',
+    'badge.foFriend': '副官の友',
+    'badge.foFriend.desc': '80%以上の割合で副官の助言に従った',
+    'badge.loneWolf': '一匹狼',
+    'badge.loneWolf.desc': '80%以上の割合で副官の助言を却下した',
+    'badge.diplomat': '外交官',
+    'badge.diplomat.desc': '3つ以上の文明と平和的に接触',
+    'badge.survivor': 'サバイバー',
+    'badge.survivor.desc': '船体20%未満でフィニッシュ',
+    'badge.hoarder': '収集家',
+    'badge.hoarder.desc': '4個以上の貨物を持ってミッション終了',
+    'badge.pennyPincher': '倹約家',
+    'badge.pennyPincher.desc': '開始時より多くのクレジットで終了',
+    'badge.riskTaker': 'リスクテイカー',
+    'badge.riskTaker.desc': 'リスク志向が80%以上',
+    'badge.curious': '飽くなき好奇心',
+    'badge.curious.desc': '好奇心スコアが80%以上',
+
+    // Misc
+    'setup.resumeMission': 'ミッション再開',
+    'game.retry': 'リトライ',
+    'trade.consumable': '消耗品',
+    'end.bankDeposit': '+{amount} バンクへ',
   },
 
   ko: {
@@ -1013,6 +1329,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': '화물',
     'trade.fuelPlus': '연료 +{amount}',
     'trade.suppliesPlus': '보급품 +{amount}',
+
+    // Sector select extras
+    'sector.nearby': '근거리',
+    'sector.moderate': '중거리',
+    'sector.distant': '원거리',
+    'sector.fuelCost': '연료: -{cost}',
+    'sector.suppliesCost': '보급품: -{cost}',
+    'sector.cantReach': '자원 부족',
+
+    // Module slots
+    'equip.module1': '모듈 1',
+    'equip.module2': '모듈 2',
+    'equip.module3': '모듈 3',
+    'equip.empty': '비어 있음',
+
+    // Consumables panel
+    'consumable.title': '소모품',
+    'consumable.empty': '소모품 없음',
+    'consumable.use': '사용',
+    'consumable.instant': '즉시',
+    'consumable.triggered': '미지의 효과',
+    'consumable.strength': '강도: {value}',
+    'consumable.usesLeft': '{count}회 사용 남음',
+
+    // Captain's Log
+    'log.title': '함장 일지',
+    'log.missionNotes': '임무 노트',
+    'log.standingOrders': '상비 명령',
+    'log.notesPlaceholder': '관찰, 단서, 계획을 기록하세요... 부관이 읽습니다.',
+    'log.notesHint': '런별 메모. 부관이 맥락으로 사용합니다.',
+    'log.ordersPlaceholder': '항상 유기선을 조사할 것. 연료 40% 이하로 거래하지 말 것...',
+    'log.ordersHint': '런 간에 유지됩니다. 부관에게 당신의 선호를 가르치세요.',
+
+    // Provisioning loadout
+    'provision.provisions': '보급품',
+    'provision.loadout': '장비 구성',
+    'provision.creditBank': '크레딧 은행',
+    'provision.available': '{amount}cr 사용 가능',
+    'provision.withdraw': '인출:',
+    'provision.bringingOnMission': '임무에 가져감',
+    'provision.return': '반납',
+    'provision.equipmentVault': '장비 보관소',
+    'provision.consumableStash': '소모품 보관함',
+    'provision.take': '가져가기',
+    'provision.sell': '판매',
+    'provision.vaultEmpty': '비어 있음 — 완료된 런의 장비가 여기에 표시됩니다',
+    'provision.stashEmpty': '비어 있음 — 미사용 소모품이 런 종료 후 여기에 표시됩니다',
+
+    // Badges
+    'badge.pacifist': '평화주의자',
+    'badge.pacifist.desc': '전투 없이 임무를 완료',
+    'badge.noRetreat': '불퇴전',
+    'badge.noRetreat.desc': '조우에서 한 번도 도주하지 않음',
+    'badge.speedrun': '스피드러너',
+    'badge.speedrun.desc': '30턴 이내에 모든 섹터 완료',
+    'badge.completionist': '완벽주의자',
+    'badge.completionist.desc': '모든 섹터를 방문',
+    'badge.foFriend': '부관의 친구',
+    'badge.foFriend.desc': '80% 이상 부관의 조언을 따름',
+    'badge.loneWolf': '외로운 늑대',
+    'badge.loneWolf.desc': '80% 이상 부관의 조언을 무시',
+    'badge.diplomat': '외교관',
+    'badge.diplomat.desc': '3개 이상의 문명과 평화적 접촉',
+    'badge.survivor': '생존자',
+    'badge.survivor.desc': '선체 20% 미만으로 완료',
+    'badge.hoarder': '수집광',
+    'badge.hoarder.desc': '4개 이상의 화물을 가지고 임무 종료',
+    'badge.pennyPincher': '구두쇠',
+    'badge.pennyPincher.desc': '시작보다 많은 크레딧으로 종료',
+    'badge.riskTaker': '모험가',
+    'badge.riskTaker.desc': '위험 선호도 80% 이상',
+    'badge.curious': '끝없는 호기심',
+    'badge.curious.desc': '호기심 점수 80% 이상',
+
+    // Misc
+    'setup.resumeMission': '임무 재개',
+    'game.retry': '재시도',
+    'trade.consumable': '소모품',
+    'end.bankDeposit': '+{amount} 은행에 입금',
   },
 
   es: {
@@ -1216,6 +1611,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': 'Carga',
     'trade.fuelPlus': 'Combustible +{amount}',
     'trade.suppliesPlus': 'Suministros +{amount}',
+
+    // Sector select extras
+    'sector.nearby': 'Cercano',
+    'sector.moderate': 'Moderado',
+    'sector.distant': 'Distante',
+    'sector.fuelCost': 'Combustible: -{cost}',
+    'sector.suppliesCost': 'Suministros: -{cost}',
+    'sector.cantReach': 'Recursos insuficientes',
+
+    // Module slots
+    'equip.module1': 'Módulo 1',
+    'equip.module2': 'Módulo 2',
+    'equip.module3': 'Módulo 3',
+    'equip.empty': 'vacío',
+
+    // Consumables panel
+    'consumable.title': 'Consumibles',
+    'consumable.empty': 'Sin consumibles',
+    'consumable.use': 'Usar',
+    'consumable.instant': 'Instantáneo',
+    'consumable.triggered': 'Efecto desconocido',
+    'consumable.strength': 'Potencia: {value}',
+    'consumable.usesLeft': '{count} usos restantes',
+
+    // Captain's Log
+    'log.title': 'Diario del capitán',
+    'log.missionNotes': 'Notas de misión',
+    'log.standingOrders': 'Órdenes permanentes',
+    'log.notesPlaceholder': 'Registra observaciones, pistas, planes... Tu oficial las lee.',
+    'log.notesHint': 'Notas por partida. Tu oficial las usa como contexto.',
+    'log.ordersPlaceholder': 'Siempre investigar naves abandonadas. Nunca comerciar combustible por debajo del 40%...',
+    'log.ordersHint': 'Persisten entre partidas. Enseña a tu oficial tus preferencias.',
+
+    // Provisioning loadout
+    'provision.provisions': 'Provisiones',
+    'provision.loadout': 'Equipamiento',
+    'provision.creditBank': 'Banco de créditos',
+    'provision.available': '{amount}cr disponibles',
+    'provision.withdraw': 'Retirar:',
+    'provision.bringingOnMission': 'Llevar a la misión',
+    'provision.return': 'Devolver',
+    'provision.equipmentVault': 'Bóveda de equipo',
+    'provision.consumableStash': 'Reserva de consumibles',
+    'provision.take': 'Tomar',
+    'provision.sell': 'Vender',
+    'provision.vaultEmpty': 'Vacío — el equipo de misiones completadas aparece aquí',
+    'provision.stashEmpty': 'Vacío — los consumibles no usados aparecen aquí tras las misiones',
+
+    // Badges
+    'badge.pacifist': 'Pacifista',
+    'badge.pacifist.desc': 'Completó la misión sin entrar en combate',
+    'badge.noRetreat': 'Sin retirada',
+    'badge.noRetreat.desc': 'Nunca huyó de un encuentro',
+    'badge.speedrun': 'Velocista',
+    'badge.speedrun.desc': 'Completó todos los sectores en menos de 30 turnos',
+    'badge.completionist': 'Completista',
+    'badge.completionist.desc': 'Visitó todos los sectores',
+    'badge.foFriend': 'Amigo del oficial',
+    'badge.foFriend.desc': 'Siguió el consejo del oficial más del 80% del tiempo',
+    'badge.loneWolf': 'Lobo solitario',
+    'badge.loneWolf.desc': 'Ignoró el consejo del oficial más del 80% del tiempo',
+    'badge.diplomat': 'Diplomático',
+    'badge.diplomat.desc': 'Contactó pacíficamente con 3+ civilizaciones',
+    'badge.survivor': 'Superviviente',
+    'badge.survivor.desc': 'Terminó con el casco por debajo del 20%',
+    'badge.hoarder': 'Acumulador',
+    'badge.hoarder.desc': 'Terminó la misión con 4+ objetos de carga',
+    'badge.pennyPincher': 'Tacaño',
+    'badge.pennyPincher.desc': 'Terminó con más créditos de los que empezó',
+    'badge.riskTaker': 'Temerario',
+    'badge.riskTaker.desc': 'Apetito de riesgo superior al 80%',
+    'badge.curious': 'Curiosidad insaciable',
+    'badge.curious.desc': 'Puntuación de curiosidad superior al 80%',
+
+    // Misc
+    'setup.resumeMission': 'Reanudar misión',
+    'game.retry': 'Reintentar',
+    'trade.consumable': 'Consumible',
+    'end.bankDeposit': '+{amount} al banco',
   },
 
   fr: {
@@ -1419,6 +1893,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': 'Cargaison',
     'trade.fuelPlus': 'Carburant +{amount}',
     'trade.suppliesPlus': 'Provisions +{amount}',
+
+    // Sector select extras
+    'sector.nearby': 'Proche',
+    'sector.moderate': 'Modéré',
+    'sector.distant': 'Lointain',
+    'sector.fuelCost': 'Carburant : -{cost}',
+    'sector.suppliesCost': 'Provisions : -{cost}',
+    'sector.cantReach': 'Ressources insuffisantes',
+
+    // Module slots
+    'equip.module1': 'Module 1',
+    'equip.module2': 'Module 2',
+    'equip.module3': 'Module 3',
+    'equip.empty': 'vide',
+
+    // Consumables panel
+    'consumable.title': 'Consommables',
+    'consumable.empty': 'Aucun consommable',
+    'consumable.use': 'Utiliser',
+    'consumable.instant': 'Instantané',
+    'consumable.triggered': 'Effet inconnu',
+    'consumable.strength': 'Puissance : {value}',
+    'consumable.usesLeft': '{count} utilisations restantes',
+
+    // Captain's Log
+    'log.title': 'Journal du capitaine',
+    'log.missionNotes': 'Notes de mission',
+    'log.standingOrders': 'Ordres permanents',
+    'log.notesPlaceholder': 'Notez observations, indices, plans... Votre second les lit.',
+    'log.notesHint': 'Notes par partie. Votre second les utilise comme contexte.',
+    'log.ordersPlaceholder': 'Toujours enquêter sur les épaves. Ne jamais échanger du carburant en dessous de 40%...',
+    'log.ordersHint': 'Persistent entre les parties. Enseignez vos préférences à votre second.',
+
+    // Provisioning loadout
+    'provision.provisions': 'Provisions',
+    'provision.loadout': 'Équipement',
+    'provision.creditBank': 'Banque de crédits',
+    'provision.available': '{amount}cr disponibles',
+    'provision.withdraw': 'Retirer :',
+    'provision.bringingOnMission': 'Emporter en mission',
+    'provision.return': 'Rendre',
+    'provision.equipmentVault': 'Coffre d\'équipement',
+    'provision.consumableStash': 'Réserve de consommables',
+    'provision.take': 'Prendre',
+    'provision.sell': 'Vendre',
+    'provision.vaultEmpty': 'Vide — l\'équipement des missions terminées apparaît ici',
+    'provision.stashEmpty': 'Vide — les consommables non utilisés apparaissent ici après les missions',
+
+    // Badges
+    'badge.pacifist': 'Pacifiste',
+    'badge.pacifist.desc': 'A terminé la mission sans entrer en combat',
+    'badge.noRetreat': 'Sans retraite',
+    'badge.noRetreat.desc': 'N\'a jamais fui une rencontre',
+    'badge.speedrun': 'Sprinteur',
+    'badge.speedrun.desc': 'A complété tous les secteurs en moins de 30 tours',
+    'badge.completionist': 'Perfectionniste',
+    'badge.completionist.desc': 'A visité chaque secteur',
+    'badge.foFriend': 'Ami du second',
+    'badge.foFriend.desc': 'A suivi les conseils du second plus de 80% du temps',
+    'badge.loneWolf': 'Loup solitaire',
+    'badge.loneWolf.desc': 'A ignoré les conseils du second plus de 80% du temps',
+    'badge.diplomat': 'Diplomate',
+    'badge.diplomat.desc': 'A contacté pacifiquement 3+ civilisations',
+    'badge.survivor': 'Survivant',
+    'badge.survivor.desc': 'A terminé avec la coque en dessous de 20%',
+    'badge.hoarder': 'Accumulateur',
+    'badge.hoarder.desc': 'A terminé la mission avec 4+ objets en cargaison',
+    'badge.pennyPincher': 'Grippe-sou',
+    'badge.pennyPincher.desc': 'A terminé avec plus de crédits qu\'au départ',
+    'badge.riskTaker': 'Casse-cou',
+    'badge.riskTaker.desc': 'Appétit pour le risque supérieur à 80%',
+    'badge.curious': 'Curiosité insatiable',
+    'badge.curious.desc': 'Score de curiosité supérieur à 80%',
+
+    // Misc
+    'setup.resumeMission': 'Reprendre la mission',
+    'game.retry': 'Réessayer',
+    'trade.consumable': 'Consommable',
+    'end.bankDeposit': '+{amount} en banque',
   },
 
   de: {
@@ -1622,6 +2175,85 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': 'Fracht',
     'trade.fuelPlus': 'Treibstoff +{amount}',
     'trade.suppliesPlus': 'Vorräte +{amount}',
+
+    // Sector select extras
+    'sector.nearby': 'Nah',
+    'sector.moderate': 'Mittel',
+    'sector.distant': 'Fern',
+    'sector.fuelCost': 'Treibstoff: -{cost}',
+    'sector.suppliesCost': 'Vorräte: -{cost}',
+    'sector.cantReach': 'Nicht genug Ressourcen',
+
+    // Module slots
+    'equip.module1': 'Modul 1',
+    'equip.module2': 'Modul 2',
+    'equip.module3': 'Modul 3',
+    'equip.empty': 'leer',
+
+    // Consumables panel
+    'consumable.title': 'Verbrauchsgüter',
+    'consumable.empty': 'Keine Verbrauchsgüter',
+    'consumable.use': 'Benutzen',
+    'consumable.instant': 'Sofort',
+    'consumable.triggered': 'Unbekannter Effekt',
+    'consumable.strength': 'Stärke: {value}',
+    'consumable.usesLeft': '{count} Anwendungen übrig',
+
+    // Captain's Log
+    'log.title': 'Logbuch des Kapitäns',
+    'log.missionNotes': 'Missionsnotizen',
+    'log.standingOrders': 'Stehende Befehle',
+    'log.notesPlaceholder': 'Beobachtungen, Hinweise, Pläne notieren… Der Erste Offizier liest dies.',
+    'log.notesHint': 'Notizen pro Durchlauf. Der Erste Offizier nutzt sie als Kontext.',
+    'log.ordersPlaceholder': 'Immer Wracks untersuchen. Nie Treibstoff unter 40% handeln…',
+    'log.ordersHint': 'Bleiben über Durchläufe erhalten. Bringe deinem Offizier deine Präferenzen bei.',
+
+    // Provisioning loadout
+    'provision.provisions': 'Versorgung',
+    'provision.loadout': 'Ausrüstung',
+    'provision.creditBank': 'Kreditbank',
+    'provision.available': '{amount}cr verfügbar',
+    'provision.withdraw': 'Abheben:',
+    'provision.bringingOnMission': 'Für die Mission mitnehmen',
+    'provision.return': 'Zurückgeben',
+    'provision.equipmentVault': 'Ausrüstungstresor',
+    'provision.consumableStash': 'Verbrauchsgüterlager',
+    'provision.take': 'Nehmen',
+    'provision.sell': 'Verkaufen',
+    'provision.vaultEmpty': 'Leer — Ausrüstung aus abgeschlossenen Durchläufen erscheint hier',
+    'provision.stashEmpty': 'Leer — unbenutzte Verbrauchsgüter erscheinen hier nach Durchläufen',
+
+    // Badges
+    'badge.pacifist': 'Pazifist',
+    'badge.pacifist.desc': 'Mission ohne Kampf abgeschlossen',
+    'badge.noRetreat': 'Kein Rückzug',
+    'badge.noRetreat.desc': 'Nie vor einer Begegnung geflohen',
+    'badge.speedrun': 'Speedrunner',
+    'badge.speedrun.desc': 'Alle Sektoren in unter 30 Zügen abgeschlossen',
+    'badge.completionist': 'Perfektionist',
+    'badge.completionist.desc': 'Jeden Sektor besucht',
+    'badge.foFriend': 'Freund des Offiziers',
+    'badge.foFriend.desc': 'Dem Rat des Offiziers zu 80%+ gefolgt',
+    'badge.loneWolf': 'Einsamer Wolf',
+    'badge.loneWolf.desc': 'Den Rat des Offiziers zu 80%+ überstimmt',
+    'badge.diplomat': 'Diplomat',
+    'badge.diplomat.desc': '3+ Zivilisationen friedlich kontaktiert',
+    'badge.survivor': 'Überlebender',
+    'badge.survivor.desc': 'Mit Hülle unter 20% abgeschlossen',
+    'badge.hoarder': 'Hamsterer',
+    'badge.hoarder.desc': 'Mission mit 4+ Frachtgegenständen beendet',
+    'badge.pennyPincher': 'Pfennigfuchser',
+    'badge.pennyPincher.desc': 'Mit mehr Credits beendet als gestartet',
+    'badge.riskTaker': 'Risikofreund',
+    'badge.riskTaker.desc': 'Risikobereitschaft über 80%',
+    'badge.curious': 'Unstillbare Neugier',
+    'badge.curious.desc': 'Neugier-Wert über 80%',
+
+    // Misc
+    'setup.resumeMission': 'Mission fortsetzen',
+    'game.retry': 'Erneut versuchen',
+    'trade.consumable': 'Verbrauchsgut',
+    'end.bankDeposit': '+{amount} zur Bank',
   },
 
   pt: {
@@ -1825,5 +2457,84 @@ export const translations: Record<string, Translations> = {
     'trade.cargo': 'Carga',
     'trade.fuelPlus': 'Combustível +{amount}',
     'trade.suppliesPlus': 'Suprimentos +{amount}',
+
+    // Sector select extras
+    'sector.nearby': 'Próximo',
+    'sector.moderate': 'Moderado',
+    'sector.distant': 'Distante',
+    'sector.fuelCost': 'Combustível: -{cost}',
+    'sector.suppliesCost': 'Suprimentos: -{cost}',
+    'sector.cantReach': 'Recursos insuficientes',
+
+    // Module slots
+    'equip.module1': 'Módulo 1',
+    'equip.module2': 'Módulo 2',
+    'equip.module3': 'Módulo 3',
+    'equip.empty': 'vazio',
+
+    // Consumables panel
+    'consumable.title': 'Consumíveis',
+    'consumable.empty': 'Sem consumíveis',
+    'consumable.use': 'Usar',
+    'consumable.instant': 'Instantâneo',
+    'consumable.triggered': 'Efeito desconhecido',
+    'consumable.strength': 'Potência: {value}',
+    'consumable.usesLeft': '{count} usos restantes',
+
+    // Captain's Log
+    'log.title': 'Diário do capitão',
+    'log.missionNotes': 'Notas de missão',
+    'log.standingOrders': 'Ordens permanentes',
+    'log.notesPlaceholder': 'Registre observações, pistas, planos... O imediato lê isto.',
+    'log.notesHint': 'Notas por partida. O imediato usa como contexto.',
+    'log.ordersPlaceholder': 'Sempre investigar destroços. Nunca negociar combustível abaixo de 40%...',
+    'log.ordersHint': 'Persistem entre partidas. Ensine suas preferências ao imediato.',
+
+    // Provisioning loadout
+    'provision.provisions': 'Provisões',
+    'provision.loadout': 'Equipamento',
+    'provision.creditBank': 'Banco de créditos',
+    'provision.available': '{amount}cr disponíveis',
+    'provision.withdraw': 'Sacar:',
+    'provision.bringingOnMission': 'Levar na missão',
+    'provision.return': 'Devolver',
+    'provision.equipmentVault': 'Cofre de equipamentos',
+    'provision.consumableStash': 'Estoque de consumíveis',
+    'provision.take': 'Pegar',
+    'provision.sell': 'Vender',
+    'provision.vaultEmpty': 'Vazio — equipamentos de missões concluídas aparecem aqui',
+    'provision.stashEmpty': 'Vazio — consumíveis não usados aparecem aqui após as missões',
+
+    // Badges
+    'badge.pacifist': 'Pacifista',
+    'badge.pacifist.desc': 'Completou a missão sem entrar em combate',
+    'badge.noRetreat': 'Sem recuo',
+    'badge.noRetreat.desc': 'Nunca fugiu de um encontro',
+    'badge.speedrun': 'Velocista',
+    'badge.speedrun.desc': 'Completou todos os setores em menos de 30 turnos',
+    'badge.completionist': 'Completista',
+    'badge.completionist.desc': 'Visitou todos os setores',
+    'badge.foFriend': 'Amigo do imediato',
+    'badge.foFriend.desc': 'Seguiu o conselho do imediato mais de 80% das vezes',
+    'badge.loneWolf': 'Lobo solitário',
+    'badge.loneWolf.desc': 'Ignorou o conselho do imediato mais de 80% das vezes',
+    'badge.diplomat': 'Diplomata',
+    'badge.diplomat.desc': 'Contatou pacificamente 3+ civilizações',
+    'badge.survivor': 'Sobrevivente',
+    'badge.survivor.desc': 'Terminou com casco abaixo de 20%',
+    'badge.hoarder': 'Acumulador',
+    'badge.hoarder.desc': 'Terminou a missão com 4+ itens de carga',
+    'badge.pennyPincher': 'Mão de vaca',
+    'badge.pennyPincher.desc': 'Terminou com mais créditos do que começou',
+    'badge.riskTaker': 'Aventureiro',
+    'badge.riskTaker.desc': 'Apetite por risco acima de 80%',
+    'badge.curious': 'Curiosidade insaciável',
+    'badge.curious.desc': 'Pontuação de curiosidade acima de 80%',
+
+    // Misc
+    'setup.resumeMission': 'Retomar missão',
+    'game.retry': 'Tentar novamente',
+    'trade.consumable': 'Consumível',
+    'end.bankDeposit': '+{amount} para o banco',
   },
 }

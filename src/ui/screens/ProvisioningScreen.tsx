@@ -11,6 +11,9 @@ import { CONSUMABLE_SELL_VALUES } from '../../types/consumable'
 import { loadCreditBank, withdrawFromBank, loadEquipmentVault, removeFromVault, loadConsumableStash, removeFromStash, depositToBank, addToVault, addToStash } from '../../storage/cross-run'
 import { t } from '../../i18n'
 
+// Helper for keys not yet in TranslationKey union (added by translations agent)
+const tt = (key: string, params?: Record<string, string | number>) => t(key as Parameters<typeof t>[0], params)
+
 export function ProvisioningScreen() {
   const error = useGameStore((s) => s.error)
   const [starting, setStarting] = useState(false)
@@ -172,7 +175,7 @@ export function ProvisioningScreen() {
                 tab === 'provisions' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              Provisions
+              {tt('provision.provisions')}
             </button>
             <button
               onClick={() => setTab('loadout')}
@@ -180,7 +183,7 @@ export function ProvisioningScreen() {
                 tab === 'loadout' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
-              Loadout ({selectedEquipment.length + selectedConsumables.length})
+              {tt('provision.loadout')} ({selectedEquipment.length + selectedConsumables.length})
             </button>
           </div>
         )}
@@ -211,11 +214,11 @@ export function ProvisioningScreen() {
             {bankBalance > 0 && (
               <div className="bg-gray-900/50 border border-yellow-800/30 rounded-lg p-4 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-yellow-400">Credit Bank</span>
-                  <span className="text-sm text-gray-400 font-mono">{bankBalance}cr available</span>
+                  <span className="text-sm text-yellow-400">{tt('provision.creditBank')}</span>
+                  <span className="text-sm text-gray-400 font-mono">{tt('provision.available', { amount: bankBalance })}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">Withdraw:</span>
+                  <span className="text-xs text-gray-500">{tt('provision.withdraw')}</span>
                   <input
                     type="range"
                     min={0}
@@ -247,18 +250,18 @@ export function ProvisioningScreen() {
               {/* Selected items to bring */}
               {(selectedEquipment.length > 0 || selectedConsumables.length > 0) && (
                 <div className="bg-gray-900/50 border border-green-800/30 rounded-lg p-4">
-                  <h4 className="text-xs text-green-400 uppercase tracking-wider mb-2">Bringing on mission</h4>
+                  <h4 className="text-xs text-green-400 uppercase tracking-wider mb-2">{tt('provision.bringingOnMission')}</h4>
                   <div className="space-y-1">
                     {selectedEquipment.map((item) => (
                       <div key={item.id} className="flex items-center justify-between text-xs">
                         <span style={{ color: RARITY_CONFIG[item.rarity]?.color }}>{item.name}</span>
-                        <button onClick={() => returnToVault(item.id)} className="text-gray-500 hover:text-red-400">Return</button>
+                        <button onClick={() => returnToVault(item.id)} className="text-gray-500 hover:text-red-400">{tt('provision.return')}</button>
                       </div>
                     ))}
                     {selectedConsumables.map((item) => (
                       <div key={item.id} className="flex items-center justify-between text-xs">
                         <span className="text-cyan-400">{item.name}</span>
-                        <button onClick={() => returnToStash(item.id)} className="text-gray-500 hover:text-red-400">Return</button>
+                        <button onClick={() => returnToStash(item.id)} className="text-gray-500 hover:text-red-400">{tt('provision.return')}</button>
                       </div>
                     ))}
                   </div>
@@ -267,9 +270,9 @@ export function ProvisioningScreen() {
 
               {/* Equipment vault */}
               <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
-                <h4 className="text-xs text-gray-500 uppercase tracking-wider mb-2">Equipment Vault ({vault.length})</h4>
+                <h4 className="text-xs text-gray-500 uppercase tracking-wider mb-2">{tt('provision.equipmentVault')} ({vault.length})</h4>
                 {vault.length === 0 ? (
-                  <p className="text-xs text-gray-700 italic">Empty — equipment from completed runs appears here</p>
+                  <p className="text-xs text-gray-700 italic">{tt('provision.vaultEmpty')}</p>
                 ) : (
                   <div className="space-y-2">
                     {vault.map((item) => (
@@ -280,8 +283,8 @@ export function ProvisioningScreen() {
                           <p className="text-gray-600 truncate">{item.effect}</p>
                         </div>
                         <div className="flex gap-1 shrink-0">
-                          <button onClick={() => takeFromVault(item.id)} className="px-2 py-0.5 rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors">Take</button>
-                          <button onClick={() => sellVaultItem(item.id)} className="px-2 py-0.5 rounded bg-green-900/40 border border-green-800/50 text-green-400 hover:bg-green-800/40 transition-colors">Sell</button>
+                          <button onClick={() => takeFromVault(item.id)} className="px-2 py-0.5 rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors">{tt('provision.take')}</button>
+                          <button onClick={() => sellVaultItem(item.id)} className="px-2 py-0.5 rounded bg-green-900/40 border border-green-800/50 text-green-400 hover:bg-green-800/40 transition-colors">{tt('provision.sell')}</button>
                         </div>
                       </div>
                     ))}
@@ -291,9 +294,9 @@ export function ProvisioningScreen() {
 
               {/* Consumable stash */}
               <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
-                <h4 className="text-xs text-gray-500 uppercase tracking-wider mb-2">Consumable Stash ({stash.length})</h4>
+                <h4 className="text-xs text-gray-500 uppercase tracking-wider mb-2">{tt('provision.consumableStash')} ({stash.length})</h4>
                 {stash.length === 0 ? (
-                  <p className="text-xs text-gray-700 italic">Empty — unused consumables from completed runs appear here</p>
+                  <p className="text-xs text-gray-700 italic">{tt('provision.stashEmpty')}</p>
                 ) : (
                   <div className="space-y-2">
                     {stash.map((item) => (
@@ -303,8 +306,8 @@ export function ProvisioningScreen() {
                           <span className="text-gray-600 ml-1">[{item.type}]</span>
                         </div>
                         <div className="flex gap-1 shrink-0">
-                          <button onClick={() => takeFromStash(item.id)} className="px-2 py-0.5 rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors">Take</button>
-                          <button onClick={() => sellStashItem(item.id)} className="px-2 py-0.5 rounded bg-green-900/40 border border-green-800/50 text-green-400 hover:bg-green-800/40 transition-colors">Sell</button>
+                          <button onClick={() => takeFromStash(item.id)} className="px-2 py-0.5 rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors">{tt('provision.take')}</button>
+                          <button onClick={() => sellStashItem(item.id)} className="px-2 py-0.5 rounded bg-green-900/40 border border-green-800/50 text-green-400 hover:bg-green-800/40 transition-colors">{tt('provision.sell')}</button>
                         </div>
                       </div>
                     ))}

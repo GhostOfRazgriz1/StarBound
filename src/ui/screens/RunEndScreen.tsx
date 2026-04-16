@@ -191,7 +191,7 @@ export function RunEndScreen() {
               <span className="text-gray-500">{t('end.creditsRemaining')}</span>
               <p className="text-gray-200 text-lg">{run.ship.credits}</p>
               {survived && run.ship.credits > 0 && (
-                <p className="text-xs text-yellow-400">+{Math.floor(run.ship.credits * 0.5)} to bank</p>
+                <p className="text-xs text-yellow-400">{t('end.bankDeposit' as Parameters<typeof t>[0], { amount: Math.floor(run.ship.credits * 0.5) })}</p>
               )}
             </div>
             <div>

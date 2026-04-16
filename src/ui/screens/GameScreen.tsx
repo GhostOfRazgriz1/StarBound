@@ -161,7 +161,7 @@ export function GameScreen() {
               onClick={handleRetry}
               className="px-3 py-1 bg-red-800/50 hover:bg-red-700/50 text-red-300 rounded text-xs transition-colors"
             >
-              Retry
+              {t('game.retry' as Parameters<typeof t>[0])}
             </button>
             <button
               onClick={() => useGameStore.getState().setError(null)}

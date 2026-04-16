@@ -21,7 +21,7 @@ export function ConsumablesPanel({ consumables }: { consumables: Consumable[] })
         className="w-full p-3 flex items-center justify-between text-left hover:bg-gray-800/30 transition-colors rounded-lg"
       >
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Consumables ({consumables.length}/{MAX_CONSUMABLES})
+          {t('consumable.title' as Parameters<typeof t>[0])} ({consumables.length}/{MAX_CONSUMABLES})
         </h3>
         <span className="text-xs text-gray-600">{open ? '\u25B2' : '\u25BC'}</span>
       </button>
@@ -29,7 +29,7 @@ export function ConsumablesPanel({ consumables }: { consumables: Consumable[] })
       {open && (
         <div className="px-3 pb-3 space-y-2">
           {consumables.length === 0 ? (
-            <p className="text-xs text-gray-700 italic">No consumables</p>
+            <p className="text-xs text-gray-700 italic">{t('consumable.empty' as Parameters<typeof t>[0])}</p>
           ) : (
             consumables.map((item) => (
               <div
@@ -53,16 +53,16 @@ export function ConsumablesPanel({ consumables }: { consumables: Consumable[] })
                       backgroundColor: (RESOLUTION_COLORS[item.resolution] ?? '#9ca3af') + '15',
                     }}
                   >
-                    {item.resolution === 'instant' ? 'Instant' : 'Unknown'}
+                    {item.resolution === 'instant' ? t('consumable.instant' as Parameters<typeof t>[0]) : t('consumable.triggered' as Parameters<typeof t>[0])}
                   </span>
                 </div>
 
                 <p className="text-xs text-gray-500">{item.effect}</p>
                 {item.magnitude && item.resolution === 'instant' && (
-                  <p className="text-[10px] text-gray-600">Strength: {item.magnitude}</p>
+                  <p className="text-[10px] text-gray-600">{t('consumable.strength' as Parameters<typeof t>[0], { value: item.magnitude })}</p>
                 )}
                 {item.uses > 1 && (
-                  <p className="text-[10px] text-gray-600">{item.uses} uses remaining</p>
+                  <p className="text-[10px] text-gray-600">{t('consumable.usesLeft' as Parameters<typeof t>[0], { count: item.uses })}</p>
                 )}
 
                 <div className="flex gap-1 pt-1">
@@ -71,7 +71,7 @@ export function ConsumablesPanel({ consumables }: { consumables: Consumable[] })
                     disabled={loading}
                     className="px-2 py-0.5 text-[10px] rounded bg-blue-900/40 border border-blue-800/50 text-blue-400 hover:bg-blue-800/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    {t('cargo.equip').replace('Equip', 'Use') || 'Use'}
+                    {t('consumable.use' as Parameters<typeof t>[0])}
                   </button>
                 </div>
               </div>
