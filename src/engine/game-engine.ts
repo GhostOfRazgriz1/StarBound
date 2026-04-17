@@ -6,7 +6,7 @@ import type { Consumable } from '../types/consumable'
 import { CONSUMABLE_RESOLUTION } from '../types/consumable'
 import type { FOArchetype } from '../types/fo'
 import { useGameStore } from '../storage/game-store'
-import { loadFOMemory, saveFOMemory, saveRunToLifetimeStats, saveStandingOrders, saveArtifact, depositToBank, addToVault, addToStash } from '../storage/cross-run'
+import { loadFOMemory, saveFOMemory, saveRunToLifetimeStats, saveStandingOrders, saveArtifact, depositToBank, depositResearch, addToVault, addToStash } from '../storage/cross-run'
 import { generateSectorPreviews, generateSectorWithNarration } from '../generation/sector'
 import { resolveAction, resolveCombat } from '../generation/action-resolver'
 import { compressSector } from '../generation/compressor'
@@ -75,6 +75,14 @@ export async function generateAndSetSectorOptions(): Promise<void> {
     const { previews, tokensUsed } = await generateSectorPreviews(provider, run)
     store.addTokensUsed(tokensUsed)
     store.setSectorOptions(previews)
+
+    // Clear beacon hint after it's been consumed
+    if (run.beaconHint) {
+      const currentRun = useGameStore.getState().run
+      if (currentRun) {
+        useGameStore.setState({ run: { ...currentRun, beaconHint: null } })
+      }
+    }
   } catch (err) {
     store.setError(err instanceof Error ? err.message : 'Failed to generate sector options')
   } finally {
@@ -458,6 +466,11 @@ async function finalizeRun(): Promise<void> {
       depositToBank(creditDeposit)
     }
 
+    // Deposit all research points earned this run
+    if (run.ship.research > 0) {
+      depositResearch(run.ship.research)
+    }
+
     // Save cargo to vault
     for (const item of run.ship.cargo) {
       addToVault(item)
@@ -605,6 +618,22 @@ export async function useConsumableItem(consumableId: string): Promise<void> {
         narration = `You deploy the ${consumable.name}. A holographic duplicate of your ship splits off on an evasive vector. **+10 morale.**`
         foComment = `Anyone tracking us just got confused. Smart move.`
         break
+      case 'data':
+        stateChange = { research: mag }
+        narration = `You load the ${consumable.name} into the analysis array. The data streams across your screens — stellar cartography, anomaly readings, encrypted transmissions. **+${mag} research.**`
+        foComment = `Fascinating. That data will be invaluable for our research archives.`
+        break
+      case 'beacon': {
+        const beaconHint = consumable.effect || 'a faint signal from a nearby sector'
+        const currentRun = useGameStore.getState().run
+        if (currentRun) {
+          useGameStore.setState({ run: { ...currentRun, beaconHint } })
+        }
+        stateChange = {}
+        narration = `You deploy the ${consumable.name}. It pulses outward, scanning the surrounding void. After a moment, your nav console lights up with a new reading: **${beaconHint}.** A new destination will be available when you choose your next sector.`
+        foComment = `Interesting. That beacon picked up something worth investigating. We'll have an extra option at the next jump.`
+        break
+      }
     }
 
     store.applyStateChanges(stateChange)

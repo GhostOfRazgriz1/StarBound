@@ -107,7 +107,7 @@ function serializeRunState(state: RunState): string {
   const lines = [
     `Sector: ${state.currentSectorNumber} of ${state.totalSectors}`,
     `Scenario: ${state.scenario}`,
-    `Ship — Hull: ${ship.hull}/${ship.maxHull}, Fuel: ${ship.fuel}/${ship.maxFuel}, Supplies: ${ship.supplies}/${ship.maxSupplies}, Credits: ${ship.credits}, Morale: ${ship.morale}`,
+    `Ship — Hull: ${ship.hull}/${ship.maxHull}, Fuel: ${ship.fuel}/${ship.maxFuel}, Supplies: ${ship.supplies}/${ship.maxSupplies}, Credits: ${ship.credits}, Morale: ${ship.morale}, Research: ${ship.research}`,
     `Equipment — Weapons: ${ship.equipment.weapons?.name ?? 'none'}, Shields: ${ship.equipment.shields?.name ?? 'none'}, Engine: ${ship.equipment.engine?.name ?? 'none'}, Modules: ${[ship.equipment.module_1, ship.equipment.module_2, ship.equipment.module_3].filter(Boolean).map(m => m!.name).join(', ') || 'none'}`,
     `Consumables: ${(ship.consumables || []).length > 0 ? (ship.consumables || []).map(c => `${c.name} (${c.type})`).join(', ') : 'none'}`,
     `Story Arc — Stage: ${state.storyArc.stage}, Antagonist: ${state.storyArc.antagonist}${state.storyArc.motivation ? `, Motivation: ${state.storyArc.motivation}` : ''}`,

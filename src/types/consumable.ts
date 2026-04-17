@@ -17,8 +17,8 @@ export interface Consumable {
 export const MAX_CONSUMABLES = 8
 
 export const CONSUMABLE_RESOLUTION: Record<ConsumableType, ConsumableResolution> = {
-  repair: 'instant', fuel: 'instant', shield: 'instant', decoy: 'instant',
-  probe: 'triggered', beacon: 'triggered', data: 'triggered', device: 'triggered', diplomatic: 'triggered',
+  repair: 'instant', fuel: 'instant', shield: 'instant', decoy: 'instant', data: 'instant', beacon: 'instant',
+  probe: 'triggered', device: 'triggered', diplomatic: 'triggered',
 }
 
 export const CONSUMABLE_SELL_VALUES: Record<ConsumableResolution, number> = {

@@ -31,6 +31,7 @@ export interface Ship {
   maxSupplies: number
   credits: number
   morale: number     // 0-100
+  research: number   // research points earned this run
   equipment: ShipEquipment
   cargo: Equipment[] // unequipped items
   consumables: Consumable[]
@@ -83,6 +84,7 @@ export interface RunState {
   standingOrders: string      // persists across runs
   sectorHistory: string[]     // narration entries for current sector
   sectorTurns: SectorTurn[]   // structured prompt/response pairs for multi-turn context
+  beaconHint: string | null    // if set, next sector preview includes a bonus option matching this hint
   availableActions: GameAction[]
   phase: RunPhase
   encounterDepth: 'standard' | 'deep'
@@ -267,6 +269,7 @@ export function createShipFromClass(shipClass: ShipClass, startingCredits: numbe
   return {
     ...shipClass.stats,
     credits: startingCredits,
+    research: 0,
     equipment: {
       weapons: shipClass.startingEquipment.weapons ?? null,
       shields: shipClass.startingEquipment.shields ?? null,
@@ -290,6 +293,7 @@ export function createCustomShip(stats: CustomShipStats, startingCredits: number
     maxSupplies: stats.maxSupplies,
     credits: startingCredits,
     morale: 75,
+    research: 0,
     equipment: {
       weapons: null,
       shields: null,

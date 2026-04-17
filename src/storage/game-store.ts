@@ -152,6 +152,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       standingOrders: loadStandingOrders(),
       sectorHistory: [],
       sectorTurns: [],
+      beaconHint: null,
       availableActions: [],
       phase: 'sector_select',
       encounterDepth,
@@ -252,6 +253,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (changes.supplies !== undefined) ship.supplies = Math.max(0, Math.min(ship.maxSupplies, ship.supplies + changes.supplies))
     if (changes.credits !== undefined) ship.credits = Math.max(0, ship.credits + changes.credits)
     if (changes.morale !== undefined) ship.morale = Math.max(0, Math.min(100, ship.morale + changes.morale))
+    if (changes.research !== undefined) ship.research = Math.max(0, ship.research + changes.research)
 
     set({ run: { ...run, ship } })
   },

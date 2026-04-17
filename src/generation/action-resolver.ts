@@ -21,8 +21,10 @@ export async function resolveAction(
     ? `The Captain types: "${freeTextInput}"`
     : `The Captain chooses: "${actionLabel}"`
 
+  const turnNumber = runState.sectorTurns.length + 1
   const prompt = [
     `PLAYER ACTION: ${playerAction}`,
+    `(Turn ${turnNumber} in this sector)`,
     '',
     'Resolve this action in the current sector encounter.',
     '',
@@ -30,16 +32,17 @@ export async function resolveAction(
     runState.encounterDepth === 'standard'
       ? 'Resolve completely — describe the full outcome of this action.'
       : 'Resolve the immediate result only — present new options for the next decision.',
+    turnNumber >= 4 ? 'NOTE: This encounter has gone on long enough. Set encounterContinues to false and wrap up.' : '',
     '',
     'Respond with JSON:',
     '{ "narration": string, "foComment": string,',
-    '  "stateChanges": { hull?, fuel?, supplies?, credits?, morale?, equipmentGained?, equipmentLost? },',
+    '  "stateChanges": { hull?, fuel?, supplies?, credits?, morale?, research?, equipmentGained?, equipmentLost? },',
     '  "newActions": [{ id, label, description, type }],',
     '  "encounterContinues": boolean,',
     '  "combatTriggered": boolean }',
     '',
     'Include a "move_on" action if the encounter can be left.',
-    'stateChanges values are deltas (e.g., fuel: -5 means lose 5 fuel).',
+    'stateChanges values are deltas (e.g., fuel: -5 means lose 5 fuel, research: 3 means gain 3 RP).',
   ].join('\n')
 
   // Use multi-turn context: prior turns are real message pairs, system prompt omits inline history

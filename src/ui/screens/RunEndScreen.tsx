@@ -195,6 +195,13 @@ export function RunEndScreen() {
               )}
             </div>
             <div>
+              <span className="text-gray-500">Research</span>
+              <p className="text-gray-200 text-lg">{run.ship.research}</p>
+              {survived && run.ship.research > 0 && (
+                <p className="text-xs text-cyan-400">+{run.ship.research} RP banked</p>
+              )}
+            </div>
+            <div>
               <span className="text-gray-500">{t('end.firstOfficer')}</span>
               <p className="text-gray-200">{fo.fullName}</p>
             </div>

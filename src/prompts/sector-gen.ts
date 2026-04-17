@@ -5,8 +5,10 @@ import { getArcInjection } from './arc-injection'
 export function buildSectorPreviewPrompt(runState: RunState): string {
   const arc = getArcInjection(runState.storyArc.stage)
 
-  return [
-    'Generate 2-3 sector preview options for the player to choose from.',
+  const lines = [
+    runState.beaconHint
+      ? 'Generate 3-4 sector preview options for the player to choose from.'
+      : 'Generate 2-3 sector preview options for the player to choose from.',
     '',
     `The player is at sector ${runState.currentSectorNumber} of ${runState.totalSectors}.`,
     `Story arc stage: ${runState.storyArc.stage} — ${arc.description}`,
@@ -27,9 +29,24 @@ export function buildSectorPreviewPrompt(runState: RunState): string {
     '- Further sectors should generally have higher interest/reward',
     '- Risk and interest should generally correlate (higher risk = higher reward)',
     arc.instruction,
+  ]
+
+  if (runState.beaconHint) {
+    lines.push(
+      '',
+      'BEACON SIGNAL: The captain deployed a beacon that detected the following:',
+      `"${runState.beaconHint}"`,
+      'Include ONE additional sector option that matches this beacon reading. Mark its description with "[BEACON]" at the start.',
+      'This beacon sector should have high interest (4-5) and can be any distance.',
+    )
+  }
+
+  lines.push(
     '',
     'Respond with JSON: { "sectors": [ { name, description, riskLevel, interestLevel, distance, encounterType }, ... ] }',
-  ].join('\n')
+  )
+
+  return lines.join('\n')
 }
 
 export function buildSectorGenerationPrompt(

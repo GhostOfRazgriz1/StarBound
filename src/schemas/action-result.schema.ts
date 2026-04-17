@@ -81,6 +81,7 @@ export const stateChangesSchema = z.any().transform((val) => {
   supplies: z.number().optional(),
   credits: z.number().optional(),
   morale: z.number().optional(),
+  research: z.number().optional(),
   equipmentGained: coerceEquipmentGained.optional(),
   equipmentLost: coerceArray(z.string()).optional(),
   consumablesGained: coerceConsumablesGained.optional(),

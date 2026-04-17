@@ -17,6 +17,7 @@ const STORAGE_KEYS = {
   ACTIVE_RUN: 'starbound_active_run',
   ACTIVE_RUN_META: 'starbound_active_run_meta',
   CREDIT_BANK: 'starbound_credit_bank',
+  RESEARCH_BANK: 'starbound_research_bank',
   EQUIPMENT_VAULT: 'starbound_equipment_vault',
   CONSUMABLE_STASH: 'starbound_consumable_stash',
 } as const
@@ -185,6 +186,27 @@ export function withdrawFromBank(amount: number): boolean {
   const current = loadCreditBank()
   if (amount > current) return false
   saveCreditBank(current - amount)
+  return true
+}
+
+// Research Bank
+export function loadResearchBank(): number {
+  return load<number>(STORAGE_KEYS.RESEARCH_BANK, 0)
+}
+
+export function saveResearchBank(rp: number): void {
+  save(STORAGE_KEYS.RESEARCH_BANK, Math.max(0, rp))
+}
+
+export function depositResearch(amount: number): void {
+  const current = loadResearchBank()
+  saveResearchBank(current + amount)
+}
+
+export function withdrawResearch(amount: number): boolean {
+  const current = loadResearchBank()
+  if (amount > current) return false
+  saveResearchBank(current - amount)
   return true
 }
 

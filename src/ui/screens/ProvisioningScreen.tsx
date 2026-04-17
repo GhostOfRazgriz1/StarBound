@@ -8,7 +8,9 @@ import type { Equipment } from '../../types/equipment'
 import type { Consumable } from '../../types/consumable'
 import { RARITY_CONFIG } from '../../types/equipment'
 import { CONSUMABLE_SELL_VALUES } from '../../types/consumable'
-import { loadCreditBank, withdrawFromBank, loadEquipmentVault, removeFromVault, loadConsumableStash, removeFromStash, depositToBank, addToVault, addToStash } from '../../storage/cross-run'
+import { loadCreditBank, withdrawFromBank, loadEquipmentVault, removeFromVault, loadConsumableStash, removeFromStash, depositToBank, addToVault, addToStash, loadResearchBank, withdrawResearch } from '../../storage/cross-run'
+import { createLLMProvider } from '../../llm/client'
+import { rollEquipmentFromResearch, RESEARCH_TIERS } from '../../generation/research-roll'
 import { t } from '../../i18n'
 
 // Helper for keys not yet in TranslationKey union (added by translations agent)
@@ -16,8 +18,11 @@ const tt = (key: string, params?: Record<string, string | number>) => t(key as P
 
 export function ProvisioningScreen() {
   const error = useGameStore((s) => s.error)
+  const llmConfig = useGameStore((s) => s.llmConfig)
   const [starting, setStarting] = useState(false)
-  const [tab, setTab] = useState<'provisions' | 'loadout'>('provisions')
+  const [tab, setTab] = useState<'provisions' | 'loadout' | 'research'>('provisions')
+  const [rolling, setRolling] = useState(false)
+  const [rollResult, setRollResult] = useState<Equipment | null>(null)
 
   // Resolve selections
   const shipClassId = getSelectedShip()
@@ -56,6 +61,7 @@ export function ProvisioningScreen() {
   const [selectedConsumables, setSelectedConsumables] = useState<Consumable[]>([])
 
   const bankBalance = loadCreditBank()
+  const [researchBalance, setResearchBalance] = useState(loadResearchBank)
   const vault = loadEquipmentVault()
   const stash = loadConsumableStash()
 
@@ -154,7 +160,25 @@ export function ProvisioningScreen() {
     }
   }
 
-  const hasMetaProgress = bankBalance > 0 || vault.length > 0 || stash.length > 0
+  async function handleResearchRoll(rpCost: number) {
+    if (!llmConfig || researchBalance < rpCost) return
+    setRolling(true)
+    setRollResult(null)
+    try {
+      const provider = createLLMProvider(llmConfig)
+      const { equipment } = await rollEquipmentFromResearch(provider, rpCost)
+      withdrawResearch(rpCost)
+      setResearchBalance(loadResearchBank())
+      setRollResult(equipment)
+      setSelectedEquipment([...selectedEquipment, equipment])
+    } catch {
+      // silently fail — user keeps their RP
+    } finally {
+      setRolling(false)
+    }
+  }
+
+  const hasMetaProgress = bankBalance > 0 || vault.length > 0 || stash.length > 0 || researchBalance > 0
 
   return (
     <div className="flex flex-col items-center justify-center min-h-svh p-4 md:p-8">
@@ -185,6 +209,16 @@ export function ProvisioningScreen() {
             >
               {tt('provision.loadout')} ({selectedEquipment.length + selectedConsumables.length})
             </button>
+            {researchBalance > 0 && (
+              <button
+                onClick={() => setTab('research')}
+                className={`px-4 py-2 rounded text-sm transition-colors ${
+                  tab === 'research' ? 'bg-cyan-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                }`}
+              >
+                Research Lab ({researchBalance} RP)
+              </button>
+            )}
           </div>
         )}
 
@@ -243,7 +277,7 @@ export function ProvisioningScreen() {
               <p>{t('provision.baseAllocation', { fuel: baseFuel, supplies: baseSupplies })}</p>
             </div>
           </>
-        ) : (
+        ) : tab === 'loadout' ? (
           <>
             {/* Loadout: Vault + Stash */}
             <div className="space-y-4">
@@ -316,7 +350,60 @@ export function ProvisioningScreen() {
               </div>
             </div>
           </>
-        )}
+        ) : tab === 'research' ? (
+          <>
+            <div className="space-y-4">
+              <div className="bg-gray-900/50 border border-cyan-800/30 rounded-lg p-4 text-center">
+                <p className="text-sm text-cyan-400">Research Bank</p>
+                <p className="text-3xl font-bold text-cyan-300 font-mono">{researchBalance} RP</p>
+                <p className="text-xs text-gray-500 mt-1">Spend RP to develop prototype equipment for this mission</p>
+              </div>
+
+              <div className="grid gap-3">
+                {RESEARCH_TIERS.map((tier) => {
+                  const canAfford = researchBalance >= tier.cost
+                  return (
+                    <button
+                      key={tier.cost}
+                      onClick={() => handleResearchRoll(tier.cost)}
+                      disabled={!canAfford || rolling || !llmConfig}
+                      className={`bg-gray-900/50 border rounded-lg p-4 text-left transition-colors ${
+                        canAfford && !rolling
+                          ? 'border-cyan-800/50 hover:border-cyan-500/50'
+                          : 'border-gray-800 opacity-40 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="text-sm font-semibold text-gray-200">{tier.label}</h4>
+                          <p className="text-xs text-gray-500">{tier.description}</p>
+                          <p className="text-xs text-gray-600 mt-1">Rarity: {tier.rarityPool}</p>
+                        </div>
+                        <span className="text-cyan-400 font-mono font-bold shrink-0 ml-3">{tier.cost} RP</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {rolling && (
+                <p className="text-sm text-cyan-400 text-center animate-pulse">Developing prototype...</p>
+              )}
+
+              {rollResult && !rolling && (
+                <div className="bg-gray-900/50 border border-cyan-700/50 rounded-lg p-4 space-y-2">
+                  <p className="text-xs text-cyan-400 uppercase tracking-wider">Prototype Developed</p>
+                  <p className="text-sm font-semibold" style={{ color: RARITY_CONFIG[rollResult.rarity]?.color }}>
+                    {rollResult.name}
+                  </p>
+                  <p className="text-xs text-gray-500">[{rollResult.slot}] — {rollResult.effect}</p>
+                  <p className="text-xs text-gray-600 italic">{rollResult.flavor}</p>
+                  <p className="text-xs text-green-400">Added to mission loadout</p>
+                </div>
+              )}
+            </div>
+          </>
+        ) : null}
 
         {overBudget && (
           <p className="text-red-400 text-sm text-center">{t('provision.overBudget')}</p>

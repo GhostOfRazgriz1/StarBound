@@ -33,9 +33,9 @@ export const sectorPreviewSchema = z.object({
 
 export const sectorPreviewsSchema = z.object({
   sectors: z.array(sectorPreviewSchema).transform((arr) => {
-    // Ensure at least 2, at most 3
+    // Ensure at least 2, at most 4 (beacon can add an extra option)
     if (arr.length < 2) return [...arr, ...arr].slice(0, 2)
-    return arr.slice(0, 3)
+    return arr.slice(0, 4)
   }),
 }).passthrough()
 

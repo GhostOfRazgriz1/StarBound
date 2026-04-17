@@ -65,6 +65,7 @@ export interface StateChanges {
   supplies?: number
   credits?: number
   morale?: number
+  research?: number
   equipmentGained?: Array<{
     name: string
     slot: string
