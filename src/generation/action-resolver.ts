@@ -3,7 +3,7 @@ import type { RunState } from '../types/game'
 import type { ActionResult, CombatResult } from '../types/llm'
 import type { FOCrossRunMemory } from '../types/fo'
 import type { PirateEncounter } from '../types/encounters'
-import { buildNarrationContext } from '../llm/context-builder'
+import { buildMultiTurnContext, buildNarrationContext } from '../llm/context-builder'
 import { buildCombatPrompt } from '../prompts/combat'
 import { parseJSONResponse } from '../llm/response-parser'
 import { chatJSONWithStreaming } from '../llm/streaming'
@@ -16,7 +16,7 @@ export async function resolveAction(
   _actionId: string,
   actionLabel: string,
   freeTextInput?: string,
-): Promise<{ result: ActionResult; tokensUsed: { input: number; output: number } }> {
+): Promise<{ result: ActionResult; prompt: string; rawContent: string; tokensUsed: { input: number; output: number } }> {
   const playerAction = freeTextInput
     ? `The Captain types: "${freeTextInput}"`
     : `The Captain chooses: "${actionLabel}"`
@@ -42,15 +42,18 @@ export async function resolveAction(
     'stateChanges values are deltas (e.g., fuel: -5 means lose 5 fuel).',
   ].join('\n')
 
-  const messages = buildNarrationContext(runState, foMemory, prompt)
+  // Use multi-turn context: prior turns are real message pairs, system prompt omits inline history
+  const messages = runState.sectorTurns.length > 0
+    ? buildMultiTurnContext(runState, foMemory, prompt)
+    : buildNarrationContext(runState, foMemory, prompt)
 
-  const { data, tokensUsed } = await chatJSONWithStreaming(
+  const { data, rawContent, tokensUsed } = await chatJSONWithStreaming(
     provider,
     messages,
     (raw) => parseJSONResponse(raw, actionResultSchema),
   )
 
-  return { result: data, tokensUsed }
+  return { result: data, prompt, rawContent, tokensUsed }
 }
 
 export async function resolveCombat(
@@ -60,16 +63,20 @@ export async function resolveCombat(
   enemy: PirateEncounter,
   actionLabel: string,
   freeTextInput?: string,
-): Promise<{ result: CombatResult; tokensUsed: { input: number; output: number } }> {
+): Promise<{ result: CombatResult; prompt: string; rawContent: string; tokensUsed: { input: number; output: number } }> {
   const playerAction = freeTextInput || actionLabel
   const combatPrompt = buildCombatPrompt(runState, enemy, playerAction)
-  const messages = buildNarrationContext(runState, foMemory, combatPrompt)
 
-  const { data, tokensUsed } = await chatJSONWithStreaming(
+  // Use multi-turn context for combat too
+  const messages = runState.sectorTurns.length > 0
+    ? buildMultiTurnContext(runState, foMemory, combatPrompt)
+    : buildNarrationContext(runState, foMemory, combatPrompt)
+
+  const { data, rawContent, tokensUsed } = await chatJSONWithStreaming(
     provider,
     messages,
     (raw) => parseJSONResponse(raw, combatResultSchema),
   )
 
-  return { result: data, tokensUsed }
+  return { result: data, prompt: combatPrompt, rawContent, tokensUsed }
 }

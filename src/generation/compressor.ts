@@ -1,9 +1,11 @@
 import type { LLMProvider } from '../llm/providers/base'
 import type { RunState } from '../types/game'
-import { buildGenerationContext } from '../llm/context-builder'
+import type { ChatMessage } from '../types/llm'
 import { parseJSONResponse } from '../llm/response-parser'
 import { chatJSONWithStreaming } from '../llm/streaming'
 import { compressionResultSchema } from '../schemas/action-result.schema'
+import { useGameStore } from '../storage/game-store'
+import { LANGUAGES } from '../i18n'
 
 export async function compressSector(
   provider: LLMProvider,
@@ -21,6 +23,18 @@ export async function compressSector(
   const sector = runState.currentSector
   if (!sector) throw new Error('No current sector')
 
+  const lang = useGameStore.getState().language
+  const langName = LANGUAGES[lang] ?? 'English'
+  const langInstruction = lang !== 'en'
+    ? `\nAll string values in the JSON MUST be in ${langName}. JSON keys remain in English.`
+    : ''
+
+  const system = [
+    'You compress game sector visits into concise summaries and determine story arc progression.',
+    'Respond with valid JSON only.',
+    langInstruction,
+  ].join('\n')
+
   const prompt = [
     'Compress the following sector visit into a 2-sentence summary.',
     'Also determine if the story arc should advance based on what happened.',
@@ -32,8 +46,7 @@ export async function compressSector(
     'Actions taken:',
     ...runState.sectorHistory,
     '',
-    `Current arc stage: ${runState.storyArc.stage}`,
-    `Antagonist: ${runState.storyArc.antagonist}`,
+    `Story arc — stage: ${runState.storyArc.stage}, antagonist: ${runState.storyArc.antagonist}${runState.storyArc.motivation ? `, motivation: ${runState.storyArc.motivation}` : ''}`,
     '',
     'Respond with JSON:',
     '{ "summary": "2 sentence summary of what happened",',
@@ -46,7 +59,10 @@ export async function compressSector(
     '}',
   ].join('\n')
 
-  const messages = buildGenerationContext(runState, prompt)
+  const messages: ChatMessage[] = [
+    { role: 'system', content: system },
+    { role: 'user', content: prompt },
+  ]
 
   const { data, tokensUsed } = await chatJSONWithStreaming(
     provider,

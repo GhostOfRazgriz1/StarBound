@@ -49,6 +49,8 @@ export async function generateSectorWithNarration(
   narration: string
   foComment: string
   actions: Array<{ id: string; label: string; description: string; type: string }>
+  prompt: string
+  rawContent: string
   tokensUsed: { input: number; output: number }
 }> {
   const encounterInstructions = buildSectorGenerationPrompt(preview.encounterType, preview.name, runState)
@@ -72,7 +74,7 @@ export async function generateSectorWithNarration(
 
   const messages = buildNarrationContext(runState, foMemory, prompt)
 
-  const { data, tokensUsed } = await chatJSONWithStreaming(
+  const { data, rawContent, tokensUsed } = await chatJSONWithStreaming(
     provider,
     messages,
     (raw) => parseJSONResponse(raw, sectorWithNarrationSchema),
@@ -92,6 +94,8 @@ export async function generateSectorWithNarration(
     narration: data.narration,
     foComment: data.foComment,
     actions: data.actions,
+    prompt,
+    rawContent,
     tokensUsed,
   }
 }

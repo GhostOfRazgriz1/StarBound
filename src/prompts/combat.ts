@@ -7,7 +7,6 @@ export function buildCombatPrompt(
   playerAction: string,
 ): string {
   const ship = runState.ship
-  const equipmentContext = buildEquipmentContext(runState)
 
   return [
     `COMBAT RESOLUTION — Player chose: "${playerAction}"`,
@@ -20,14 +19,11 @@ export function buildCombatPrompt(
     `  Motivation: ${enemy.motivation}`,
     `  Negotiable: ${enemy.negotiable}`,
     '',
-    'Player ship:',
-    `  Hull: ${ship.hull}/${ship.maxHull}`,
-    `  Shields: ${ship.equipment.shields ? ship.equipment.shields.name : 'standard issue'}`,
-    equipmentContext,
+    `Player hull: ${ship.hull}/${ship.maxHull}`,
     '',
     'RESOLUTION GUIDELINES:',
     `- Enemy strength ${enemy.strength}/5 means: ${getStrengthDescription(enemy.strength)}`,
-    '- The player\'s equipment directly affects outcome — reference it in narration',
+    '- The player\'s equipment (detailed in system context) directly affects outcome — reference it in narration',
     '- Resource costs should be proportional to enemy strength',
     '- If the player\'s approach is clever and matches their equipment, reward it',
     '- If the player\'s approach ignores their disadvantages, consequences should follow',
@@ -48,31 +44,6 @@ export function buildCombatPrompt(
     '  "newActions": [{ id, label, description, type }],',
     '  "combatContinues": boolean }',
   ].join('\n')
-}
-
-function buildEquipmentContext(state: RunState): string {
-  const eq = state.ship.equipment
-  const lines: string[] = []
-
-  if (eq.weapons) {
-    lines.push(`  Weapons: ${eq.weapons.name} — ${eq.weapons.effect}`)
-  } else {
-    lines.push('  Weapons: standard issue (no special capabilities)')
-  }
-
-  if (eq.shields) {
-    lines.push(`  Shields: ${eq.shields.name} — ${eq.shields.effect}`)
-  }
-
-  if (eq.engine) {
-    lines.push(`  Engine: ${eq.engine.name} — ${eq.engine.effect}`)
-  }
-
-  for (const mod of [eq.module_1, eq.module_2, eq.module_3]) {
-    if (mod) lines.push(`  Module: ${mod.name} — ${mod.effect}`)
-  }
-
-  return lines.join('\n')
 }
 
 function getStrengthDescription(strength: number): string {

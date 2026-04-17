@@ -115,12 +115,6 @@ export const combatResultSchema = z.object({
   combatContinues: coerceBool,
 }).passthrough()
 
-export const narrationResultSchema = z.object({
-  narration: z.string(),
-  foComment: z.string(),
-  actions: coerceArray(actionSchema),
-}).passthrough()
-
 export const compressionResultSchema = z.object({
   summary: z.string(),
   arcUpdate: z.any().transform((val) => {

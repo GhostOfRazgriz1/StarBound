@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { GamePhase, RunState, GameAction, SectorSummary, Scenario, ShipClassId, EquipmentSlot } from '../types/game'
+import type { GamePhase, RunState, GameAction, SectorSummary, Scenario, ShipClassId, EquipmentSlot, SectorTurn } from '../types/game'
 import type { Sector, SectorPreview, TraderItem } from '../types/encounters'
 import type { FOArchetype, FOCrossRunMemory } from '../types/fo'
 import type { Equipment } from '../types/equipment'
@@ -61,6 +61,7 @@ interface GameStore {
   // Action management
   setAvailableActions: (actions: GameAction[]) => void
   appendNarration: (entry: string) => void
+  appendSectorTurn: (turn: SectorTurn) => void
   addTokensUsed: (tokens: { input: number; output: number }) => void
 
   // Ship state
@@ -150,6 +151,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       captainsLog: '',
       standingOrders: loadStandingOrders(),
       sectorHistory: [],
+      sectorTurns: [],
       availableActions: [],
       phase: 'sector_select',
       encounterDepth,
@@ -177,6 +179,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...run,
         currentSector: sector,
         sectorHistory: [],
+        sectorTurns: [],
         phase: 'sector_active',
       },
     })
@@ -202,6 +205,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         sectorMap: [...run.sectorMap, sectorSummary],
         currentSector: null,
         sectorHistory: [],
+        sectorTurns: [],
         currentSectorNumber: nextSectorNumber,
         availableActions: [],
         phase: 'sector_select',
@@ -220,6 +224,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const run = get().run
     if (!run) return
     set({ run: { ...run, sectorHistory: [...run.sectorHistory, entry] } })
+  },
+
+  appendSectorTurn: (turn) => {
+    const run = get().run
+    if (!run) return
+    set({ run: { ...run, sectorTurns: [...run.sectorTurns, turn] } })
   },
 
   addTokensUsed: (tokens) => {

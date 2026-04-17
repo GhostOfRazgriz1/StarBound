@@ -1,4 +1,5 @@
 import type { RunState } from '../types/game'
+import type { Sector } from '../types/encounters'
 import type { FOPersonality, FOCrossRunMemory, FamiliarityTier } from '../types/fo'
 import { buildFOPromptBlock } from './fo-personality'
 import { MAX_CONSUMABLES } from '../types/consumable'
@@ -11,11 +12,12 @@ export function buildSystemPrompt(
   tier: FamiliarityTier,
   foMemory: FOCrossRunMemory,
   playerName?: string,
+  options?: { omitSectorHistory?: boolean },
 ): string {
   const foBlock = buildFOPromptBlock(fo, runState.captainProfile, tier, foMemory, runState.encounterDepth, playerName)
 
   const shipState = serializeShipState(runState)
-  const sectorContext = serializeSectorContext(runState)
+  const sectorContext = serializeSectorContext(runState, options?.omitSectorHistory ?? false)
 
   const lang = useGameStore.getState().language
   const langName = LANGUAGES[lang] ?? 'English'
@@ -43,12 +45,14 @@ export function buildSystemPrompt(
     '- Be vivid but concise — 2-3 short paragraphs max',
     '- Make resource costs and state changes feel consequential in the narration',
     '- Never reveal hidden information (secrets, clues) directly — let the FO connect dots',
+    '- If an item is granted in stateChanges (equipmentGained/consumablesGained), the narration must show the player TAKING it — not just seeing it. Do not offer "secure the item" as a follow-up action for something already in stateChanges.',
     '',
     '# ANTI-REPETITION RULES',
     '- NEVER give the player the same item, information, or reward twice within a sector.',
-    '- If an item was already mentioned as found/acquired in the ACTIONS TAKEN section, do NOT include it in equipmentGained or consumablesGained again. The player already has it.',
-    '- An item that was narratively discovered in a previous action should NOT appear in stateChanges again — reference it in narration only ("the generator you secured earlier").',
-    '- Check the "ACTIONS TAKEN THIS SECTOR" section below — if something was already given or revealed, do NOT repeat it.',
+    '- If an item was already included in equipmentGained or consumablesGained in a PREVIOUS response, do NOT include it again. The player already has it.',
+    '- An item that was narratively discovered or given in a previous response should NOT appear in stateChanges again — reference it in narration only ("the generator you secured earlier").',
+    '- Check your own prior responses in this conversation — if something was already given or revealed, do NOT repeat it.',
+    '- Items mentioned narratively (discovered, spotted) are NOT yet acquired. Only items returned in stateChanges.equipmentGained or consumablesGained are owned. Do not re-grant them.',
     '- If the player shares information with a civilization that the civilization already knows or that came FROM them, acknowledge it but do NOT give the same info/item back.',
     '- After 3-4 meaningful interactions in a sector, the encounter should wind down. Set encounterContinues to false and offer a "move on" action.',
     '- Avoid circular exchanges: if the player received X and shares X back, the response should be "they already know this" not "here is X again."',
@@ -117,7 +121,7 @@ function serializeShipState(state: RunState): string {
   ].join('\n')
 }
 
-function serializeSectorContext(state: RunState): string {
+function serializeSectorContext(state: RunState, omitSectorHistory: boolean): string {
   const lines = ['# MISSION HISTORY']
 
   if (state.sectorMap.length === 0) {
@@ -129,15 +133,53 @@ function serializeSectorContext(state: RunState): string {
   }
 
   if (state.currentSector) {
-    lines.push('', '# CURRENT SECTOR', JSON.stringify(state.currentSector.encounter, null, 2))
+    // Full encounter JSON on first action; compact summary on subsequent actions
+    if (state.sectorHistory.length === 0) {
+      lines.push('', '# CURRENT SECTOR', JSON.stringify(state.currentSector.encounter, null, 2))
+    } else {
+      lines.push('', '# CURRENT SECTOR (summary)', buildCompactEncounterSummary(state.currentSector))
+    }
 
-    if (state.sectorHistory.length > 0) {
+    // In multi-turn mode, history comes from message pairs — skip inline serialization
+    if (!omitSectorHistory && state.sectorHistory.length > 0) {
       lines.push('', '# ACTIONS TAKEN THIS SECTOR')
-      for (const entry of state.sectorHistory) {
-        lines.push(entry)
+      const MAX_FULL_ENTRIES = 3
+      if (state.sectorHistory.length > MAX_FULL_ENTRIES) {
+        const older = state.sectorHistory.slice(0, -MAX_FULL_ENTRIES)
+        const recent = state.sectorHistory.slice(-MAX_FULL_ENTRIES)
+        lines.push(`[${older.length} earlier actions: ${older.map(e => {
+          const firstLine = e.split('\n')[0]
+          return firstLine.length > 80 ? firstLine.slice(0, 77) + '...' : firstLine
+        }).join(' | ')}]`)
+        lines.push('')
+        for (const entry of recent) {
+          lines.push(entry)
+        }
+      } else {
+        for (const entry of state.sectorHistory) {
+          lines.push(entry)
+        }
       }
     }
   }
 
   return lines.join('\n')
+}
+
+function buildCompactEncounterSummary(sector: Sector): string {
+  const enc = sector.encounter
+  switch (enc.type) {
+    case 'trader':
+      return `Trader: ${enc.name} — ${enc.stock.length} items in stock. Personality: ${enc.personality}.`
+    case 'pirate':
+      return `Pirates: ${enc.faction}, strength ${enc.strength}/5, ${enc.ships} ship(s). Demand: ${enc.demand}. Negotiable: ${enc.negotiable}.`
+    case 'civilization':
+      return `Civilization: ${enc.name}, tech ${enc.techLevel}, disposition: ${enc.disposition}. Resource: ${enc.resource}.`
+    case 'derelict':
+      return `Derelict: ${enc.origin}, condition: ${enc.condition}. Hazard: ${enc.hazard}.`
+    case 'anomaly':
+      return `Anomaly: ${enc.phenomenon}. Risk: ${enc.risk}. Reward: ${enc.reward}.`
+    case 'quiet':
+      return `Quiet sector. FO reflection topic: ${enc.foReflection}.`
+  }
 }

@@ -13,12 +13,12 @@ export function Narration({ entries }: { entries: string[] }) {
   return (
     <div className="flex-1 overflow-y-auto space-y-4 pr-2">
       {entries.map((entry, i) => (
-        <div key={i} className="text-sm leading-relaxed text-gray-300">
+        <div key={i} className="text-base leading-loose text-gray-300">
           {formatNarration(stripThinking(entry))}
         </div>
       ))}
       {loading && streamingText && (
-        <div className="text-sm leading-relaxed text-gray-400 animate-pulse">
+        <div className="text-base leading-loose text-gray-400 animate-pulse">
           {extractNarrationFromStream(stripThinking(streamingText))}
           <span className="inline-block w-1.5 h-4 bg-blue-400/60 ml-0.5 animate-pulse" />
         </div>
@@ -98,7 +98,7 @@ function formatNarration(text: string) {
     // FO comment block
     if (trimmed.startsWith('FO: "') || trimmed.startsWith('FO："')) {
       return (
-        <div key={i} className="mt-2 pl-3 border-l-2 border-blue-500/40 text-blue-300/80 italic">
+        <div key={i} className="mt-2 pl-3 border-l-2 border-blue-500/40 text-blue-300/80">
           {renderInlineMarkdown(trimmed)}
         </div>
       )

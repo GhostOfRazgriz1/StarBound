@@ -62,6 +62,11 @@ export interface SectorSummary {
   retreated: boolean
 }
 
+export interface SectorTurn {
+  userPrompt: string
+  assistantResponse: string
+}
+
 export interface RunState {
   id: string
   scenario: ScenarioId
@@ -77,6 +82,7 @@ export interface RunState {
   captainsLog: string         // per-run notes
   standingOrders: string      // persists across runs
   sectorHistory: string[]     // narration entries for current sector
+  sectorTurns: SectorTurn[]   // structured prompt/response pairs for multi-turn context
   availableActions: GameAction[]
   phase: RunPhase
   encounterDepth: 'standard' | 'deep'

@@ -15,7 +15,7 @@ export async function chatJSONWithStreaming<T>(
   provider: LLMProvider,
   messages: ChatMessage[],
   parse: (raw: string) => T,
-): Promise<{ data: T; tokensUsed: LLMResponse['tokensUsed'] }> {
+): Promise<{ data: T; rawContent: string; tokensUsed: LLMResponse['tokensUsed'] }> {
   let lastError: unknown = null
   let lastRawContent = ''
   let totalTokens = { input: 0, output: 0 }
@@ -73,7 +73,7 @@ export async function chatJSONWithStreaming<T>(
       lastRawContent = rawContent
 
       const data = parse(rawContent)
-      return { data, tokensUsed: totalTokens }
+      return { data, rawContent, tokensUsed: totalTokens }
     } catch (err) {
       lastError = err
       if (attempt < MAX_RETRIES) {

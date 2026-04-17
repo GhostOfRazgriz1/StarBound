@@ -112,7 +112,7 @@ export async function selectSector(preview: SectorPreview): Promise<void> {
     store.enterSector(placeholderSector)
 
     // Now generate the full sector data + narration (streams into view)
-    const { sector, narration, foComment, actions, tokensUsed: genTokens } = await generateSectorWithNarration(
+    const { sector, narration, foComment, actions, prompt: arrivalPrompt, rawContent: arrivalRaw, tokensUsed: genTokens } = await generateSectorWithNarration(
       provider,
       preview,
       useGameStore.getState().run!,
@@ -127,6 +127,9 @@ export async function selectSector(preview: SectorPreview): Promise<void> {
         run: { ...currentRun, currentSector: sector },
       })
     }
+
+    // Store the arrival as the first conversation turn for multi-turn context
+    store.appendSectorTurn({ userPrompt: arrivalPrompt, assistantResponse: arrivalRaw })
 
     store.appendNarration(`${narration}\n\nFO: "${foComment}"`)
     store.setAvailableActions(actions.map((a) => ({
@@ -197,7 +200,7 @@ export async function performAction(
     // Check if this is a combat action against a pirate
     const currentEncounter = run.currentSector?.encounter
     if (currentEncounter?.type === 'pirate' && (run.phase === 'combat' || actionType === 'combat')) {
-      const { result, tokensUsed } = await resolveCombat(
+      const { result, prompt: combatUserPrompt, rawContent: combatRaw, tokensUsed } = await resolveCombat(
         provider,
         run,
         foMemory,
@@ -206,6 +209,7 @@ export async function performAction(
         freeTextInput,
       )
       store.addTokensUsed(tokensUsed)
+      store.appendSectorTurn({ userPrompt: combatUserPrompt, assistantResponse: combatRaw })
 
       store.appendNarration(`${result.narration}\n\nFO: "${result.foComment}"`)
       applyStateChanges(result.stateChanges)
@@ -251,7 +255,7 @@ export async function performAction(
       }
     } else {
       // Regular action
-      const { result, tokensUsed } = await resolveAction(
+      const { result, prompt: actionUserPrompt, rawContent: actionRaw, tokensUsed } = await resolveAction(
         provider,
         run,
         foMemory,
@@ -260,6 +264,7 @@ export async function performAction(
         freeTextInput,
       )
       store.addTokensUsed(tokensUsed)
+      store.appendSectorTurn({ userPrompt: actionUserPrompt, assistantResponse: actionRaw })
 
       store.appendNarration(`${result.narration}\n\nFO: "${result.foComment}"`)
       applyStateChanges(result.stateChanges)
@@ -377,6 +382,7 @@ async function handleRetreat(): Promise<void> {
       sectorMap: [...run.sectorMap, sectorSummary],
       currentSector: null,
       sectorHistory: [],
+      sectorTurns: [],
       currentSectorNumber: nextSectorNumber,
       availableActions: [],
       phase: 'sector_select',
@@ -617,7 +623,7 @@ export async function useConsumableItem(consumableId: string): Promise<void> {
       if (!used) return
 
       const updatedRun = useGameStore.getState().run!
-      const { result, tokensUsed } = await resolveAction(
+      const { result, prompt: consumablePrompt, rawContent: consumableRaw, tokensUsed } = await resolveAction(
         provider,
         updatedRun,
         foMemory,
@@ -626,6 +632,7 @@ export async function useConsumableItem(consumableId: string): Promise<void> {
         `The Captain activates "${consumable.name}" (${consumable.type}). Description: ${consumable.effect}. Resolve the unpredictable effect based on the current context. It can be beneficial, harmful, or surprising.`,
       )
       store.addTokensUsed(tokensUsed)
+      store.appendSectorTurn({ userPrompt: consumablePrompt, assistantResponse: consumableRaw })
 
       store.appendNarration(`${result.narration}\n\nFO: "${result.foComment}"`)
       applyStateChanges(result.stateChanges)
