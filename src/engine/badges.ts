@@ -23,13 +23,6 @@ const ALL_BADGES: Array<Badge & { check: (run: RunState) => boolean }> = [
     check: (run) => run.sectorMap.every((s) => !s.retreated),
   },
   {
-    id: 'speedrun',
-    name: 'Speedrunner',
-    description: 'Completed all sectors in under 30 turns',
-    icon: '\u26A1',
-    check: (run) => run.turnCount < 30 && run.sectorMap.length >= run.totalSectors,
-  },
-  {
     id: 'explorer',
     name: 'Completionist',
     description: 'Visited every sector',

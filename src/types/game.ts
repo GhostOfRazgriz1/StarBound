@@ -88,7 +88,6 @@ export interface RunState {
   availableActions: GameAction[]
   phase: RunPhase
   encounterDepth: 'standard' | 'deep'
-  turnCount: number
 }
 
 export interface GameAction {

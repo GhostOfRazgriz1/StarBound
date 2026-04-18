@@ -156,7 +156,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       availableActions: [],
       phase: 'sector_select',
       encounterDepth,
-      turnCount: 0,
     }
 
     set({ run, phase: 'run_active', totalTokensUsed: { input: 0, output: 0 }, error: null })
@@ -611,8 +610,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       } catch { return '' }
     })()
 
+    const restoredRun = saved.run as GameStore['run']
     set({
-      run: saved.run as GameStore['run'],
+      run: restoredRun ? { ...restoredRun, sectorTurns: [], beaconHint: restoredRun.beaconHint ?? null } : null,
       foMemory: saved.foMemory as GameStore['foMemory'],
       totalTokensUsed: (saved.tokensUsed as GameStore['totalTokensUsed']) ?? { input: 0, output: 0 },
       llmConfig,
@@ -632,7 +632,9 @@ function flushSave() {
   autoSaveTimer = null
   const s = useGameStore.getState()
   if (s.run && s.phase === 'run_active') {
-    saveActiveRun(s.run, s.foMemory, s.totalTokensUsed)
+    // Strip sectorTurns from save — raw LLM responses are large and only needed for active session
+    const runToSave = { ...s.run, sectorTurns: [] }
+    saveActiveRun(runToSave, s.foMemory, s.totalTokensUsed)
   }
 }
 

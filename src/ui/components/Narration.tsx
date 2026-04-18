@@ -1,5 +1,13 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { memo, useEffect, useRef, type ReactNode } from 'react'
 import { useGameStore } from '../../storage/game-store'
+
+const NarrationEntry = memo(function NarrationEntry({ entry }: { entry: string }) {
+  return (
+    <div className="text-base leading-loose text-gray-300">
+      {formatNarration(stripThinking(entry))}
+    </div>
+  )
+})
 
 export function Narration({ entries }: { entries: string[] }) {
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -13,9 +21,7 @@ export function Narration({ entries }: { entries: string[] }) {
   return (
     <div className="flex-1 overflow-y-auto space-y-4 pr-2">
       {entries.map((entry, i) => (
-        <div key={i} className="text-base leading-loose text-gray-300">
-          {formatNarration(stripThinking(entry))}
-        </div>
+        <NarrationEntry key={i} entry={entry} />
       ))}
       {loading && streamingText && (
         <div className="text-base leading-loose text-gray-400 animate-pulse">

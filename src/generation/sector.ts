@@ -1,23 +1,44 @@
 import type { LLMProvider } from '../llm/providers/base'
 import type { RunState } from '../types/game'
+import type { ChatMessage } from '../types/llm'
 import type { Sector, SectorPreview, EncounterType } from '../types/encounters'
-import { buildGenerationContext } from '../llm/context-builder'
 import { buildSectorPreviewPrompt, buildSectorGenerationPrompt } from '../prompts/sector-gen'
 import { parseJSONResponse } from '../llm/response-parser'
 import { chatJSONWithStreaming } from '../llm/streaming'
 import type { FOCrossRunMemory } from '../types/fo'
 import { buildNarrationContext } from '../llm/context-builder'
 import { sectorPreviewsSchema, sectorWithNarrationSchema } from '../schemas/sector.schema'
+import { useGameStore } from '../storage/game-store'
+import { LANGUAGES } from '../i18n'
 
 export async function generateSectorPreviews(
   provider: LLMProvider,
   runState: RunState,
 ): Promise<{ previews: SectorPreview[]; tokensUsed: { input: number; output: number } }> {
   const prompt = buildSectorPreviewPrompt(runState)
-  const messages = buildGenerationContext(runState, prompt)
 
-  const { data, tokensUsed } = await chatJSONWithStreaming(
-    provider,
+  // Minimal context — previews only need the prompt, not full ship/equipment state
+  const lang = useGameStore.getState().language
+  const langName = LANGUAGES[lang] ?? 'English'
+  const langInstruction = lang !== 'en'
+    ? `\nAll string values in the JSON MUST be in ${langName}. JSON keys remain in English.`
+    : ''
+
+  const system = [
+    'You are a game content generator for a text-based space exploration game.',
+    'You generate structured JSON content based on the current game state.',
+    'Always respond with valid JSON only, no additional text.',
+    langInstruction,
+  ].join('\n')
+
+  const messages: ChatMessage[] = [
+    { role: 'system', content: system },
+    { role: 'user', content: prompt },
+  ]
+
+  // Use chatJSON directly — no streaming needed for previews
+  // (sector preview JSON has no "narration" field so streaming shows nothing)
+  const { data, tokensUsed } = await provider.chatJSON(
     messages,
     (raw) => parseJSONResponse(raw, sectorPreviewsSchema),
   )
