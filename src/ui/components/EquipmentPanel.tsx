@@ -36,7 +36,7 @@ export const EquipmentPanel = memo(function EquipmentPanel({ equipment }: { equi
 
       {/* Module queue */}
       <div className="flex items-start gap-2 text-sm pt-1 border-t border-gray-800/50">
-        <span className="text-gray-600 w-16 shrink-0">Modules</span>
+        <span className="text-gray-600 w-16 shrink-0">{t('equip.modules' as Parameters<typeof t>[0])}</span>
         {modules.length > 0 ? (
           <div className="space-y-1">
             {modules.map((item, i) => (
@@ -45,7 +45,7 @@ export const EquipmentPanel = memo(function EquipmentPanel({ equipment }: { equi
                 <p className="text-xs text-gray-600">{item!.effect}</p>
               </div>
             ))}
-            <p className="text-[10px] text-gray-700">{modules.length}/3 — oldest replaced when full</p>
+            <p className="text-[10px] text-gray-700">{t('equip.moduleQueue' as Parameters<typeof t>[0], { count: modules.length })}</p>
           </div>
         ) : (
           <span className="text-gray-700">{t('equip.empty' as Parameters<typeof t>[0])}</span>

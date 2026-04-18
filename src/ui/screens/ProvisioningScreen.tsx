@@ -216,7 +216,7 @@ export function ProvisioningScreen() {
                   tab === 'research' ? 'bg-cyan-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
               >
-                Research Lab ({researchBalance} RP)
+                {tt('research.bank')} ({researchBalance} RP)
               </button>
             )}
           </div>
@@ -354,14 +354,16 @@ export function ProvisioningScreen() {
           <>
             <div className="space-y-4">
               <div className="bg-gray-900/50 border border-cyan-800/30 rounded-lg p-4 text-center">
-                <p className="text-sm text-cyan-400">Research Bank</p>
-                <p className="text-3xl font-bold text-cyan-300 font-mono">{researchBalance} RP</p>
-                <p className="text-xs text-gray-500 mt-1">Spend RP to develop prototype equipment for this mission</p>
+                <p className="text-sm text-cyan-400">{tt('research.bank')}</p>
+                <p className="text-3xl font-bold text-cyan-300 font-mono">{tt('research.bankRP', { amount: researchBalance })}</p>
+                <p className="text-xs text-gray-500 mt-1">{tt('research.subtitle')}</p>
               </div>
 
               <div className="grid gap-3">
                 {RESEARCH_TIERS.map((tier) => {
                   const canAfford = researchBalance >= tier.cost
+                  const labelKeys: Record<number, string> = { 10: 'research.basic', 25: 'research.advanced', 50: 'research.breakthrough' }
+                  const descKeys: Record<number, string> = { 10: 'research.basicDesc', 25: 'research.advancedDesc', 50: 'research.breakthroughDesc' }
                   return (
                     <button
                       key={tier.cost}
@@ -375,9 +377,9 @@ export function ProvisioningScreen() {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-200">{tier.label}</h4>
-                          <p className="text-xs text-gray-500">{tier.description}</p>
-                          <p className="text-xs text-gray-600 mt-1">Rarity: {tier.rarityPool}</p>
+                          <h4 className="text-sm font-semibold text-gray-200">{tt(labelKeys[tier.cost] ?? 'research.basic')}</h4>
+                          <p className="text-xs text-gray-500">{tt(descKeys[tier.cost] ?? 'research.basicDesc')}</p>
+                          <p className="text-xs text-gray-600 mt-1">{tt('research.rarity', { pool: tier.rarityPool })}</p>
                         </div>
                         <span className="text-cyan-400 font-mono font-bold shrink-0 ml-3">{tier.cost} RP</span>
                       </div>
@@ -387,18 +389,18 @@ export function ProvisioningScreen() {
               </div>
 
               {rolling && (
-                <p className="text-sm text-cyan-400 text-center animate-pulse">Developing prototype...</p>
+                <p className="text-sm text-cyan-400 text-center animate-pulse">{tt('research.rolling')}</p>
               )}
 
               {rollResult && !rolling && (
                 <div className="bg-gray-900/50 border border-cyan-700/50 rounded-lg p-4 space-y-2">
-                  <p className="text-xs text-cyan-400 uppercase tracking-wider">Prototype Developed</p>
+                  <p className="text-xs text-cyan-400 uppercase tracking-wider">{tt('research.developed')}</p>
                   <p className="text-sm font-semibold" style={{ color: RARITY_CONFIG[rollResult.rarity]?.color }}>
                     {rollResult.name}
                   </p>
                   <p className="text-xs text-gray-500">[{rollResult.slot}] — {rollResult.effect}</p>
                   <p className="text-xs text-gray-600 italic">{rollResult.flavor}</p>
-                  <p className="text-xs text-green-400">Added to mission loadout</p>
+                  <p className="text-xs text-green-400">{tt('research.addedToLoadout')}</p>
                 </div>
               )}
             </div>

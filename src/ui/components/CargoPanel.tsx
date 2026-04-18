@@ -5,13 +5,18 @@ import { RARITY_CONFIG } from '../../types/equipment'
 import { useGameStore } from '../../storage/game-store'
 import { t } from '../../i18n'
 
-const SLOT_LABELS: Record<string, string> = {
-  weapons: 'Weapons',
-  shields: 'Shields',
-  engine: 'Engine',
-  module_1: 'Mod 1',
-  module_2: 'Mod 2',
-  module_3: 'Mod 3',
+const SLOT_TRANSLATION_KEYS: Record<string, string> = {
+  weapons: 'equip.weapons',
+  shields: 'equip.shields',
+  engine: 'equip.engine',
+  module_1: 'equip.modules',
+  module_2: 'equip.modules',
+  module_3: 'equip.modules',
+}
+
+function slotLabel(slot: string): string {
+  const key = SLOT_TRANSLATION_KEYS[slot]
+  return key ? t(key as Parameters<typeof t>[0]) : slot
 }
 
 export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment: ShipEquipment }) {
@@ -52,7 +57,7 @@ export function CargoPanel({ cargo, equipment }: { cargo: Equipment[]; equipment
                         {item.name}
                       </span>
                       <span className="text-xs text-gray-600 ml-1">
-                        [{SLOT_LABELS[item.slot] ?? item.slot}]
+                        [{slotLabel(item.slot)}]
                       </span>
                     </div>
                     <span

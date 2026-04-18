@@ -33,7 +33,7 @@ export const ShipStatus = memo(function ShipStatus({ ship }: { ship: Ship }) {
         <span className="text-gray-300">{ship.credits}</span>
       </div>
       <div className="flex justify-between text-sm">
-        <span className="text-gray-500">Research</span>
+        <span className="text-gray-500">{t('status.research' as Parameters<typeof t>[0])}</span>
         <span className="text-cyan-400">{ship.research}</span>
       </div>
     </div>

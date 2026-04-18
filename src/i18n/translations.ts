@@ -284,6 +284,28 @@ export type TranslationKey =
   | 'badge.curious'
   | 'badge.curious.desc'
 
+  // Equipment extras
+  | 'equip.modules'
+  | 'equip.moduleQueue'
+
+  // Research Lab
+  | 'research.bank'
+  | 'research.bankRP'
+  | 'research.subtitle'
+  | 'research.basic'
+  | 'research.basicDesc'
+  | 'research.advanced'
+  | 'research.advancedDesc'
+  | 'research.breakthrough'
+  | 'research.breakthroughDesc'
+  | 'research.rarity'
+  | 'research.rolling'
+  | 'research.developed'
+  | 'research.addedToLoadout'
+  | 'status.research'
+  | 'end.research'
+  | 'end.researchBanked'
+
   // Misc
   | 'setup.resumeMission'
   | 'game.retry'
@@ -401,6 +423,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': 'Engine',
     'equip.special': 'Special',
     'equip.standardIssue': 'standard issue',
+    'equip.modules': 'Modules',
+    'equip.moduleQueue': '{count}/3 — oldest replaced when full',
 
     // Cargo
     'cargo.title': 'Cargo',
@@ -582,6 +606,24 @@ export const translations: Record<string, Translations> = {
     'game.retry': 'Retry',
     'trade.consumable': 'Consumable',
     'end.bankDeposit': '+{amount} to bank',
+
+    // Research Lab
+    'research.bank': 'Research Bank',
+    'research.bankRP': '{amount} RP',
+    'research.subtitle': 'Spend RP to develop prototype equipment for this mission',
+    'research.basic': 'Basic Research',
+    'research.basicDesc': 'Standard-issue prototypes',
+    'research.advanced': 'Advanced Research',
+    'research.advancedDesc': 'Experimental tech',
+    'research.breakthrough': 'Breakthrough Research',
+    'research.breakthroughDesc': 'Cutting-edge discoveries',
+    'research.rarity': 'Rarity: {pool}',
+    'research.rolling': 'Developing prototype...',
+    'research.developed': 'Prototype Developed',
+    'research.addedToLoadout': 'Added to mission loadout',
+    'status.research': 'Research',
+    'end.research': 'Research',
+    'end.researchBanked': '+{amount} RP banked',
   },
 
   zh: {
@@ -692,6 +734,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': '引擎',
     'equip.special': '特殊',
     'equip.standardIssue': '标准配置',
+    'equip.modules': '模块',
+    'equip.moduleQueue': '{count}/3 — 满时替换最旧的',
 
     // Cargo
     'cargo.title': '货舱',
@@ -873,6 +917,22 @@ export const translations: Record<string, Translations> = {
     'game.retry': '重试',
     'trade.consumable': '消耗品',
     'end.bankDeposit': '+{amount} 存入银行',
+    'research.bank': '研究储备',
+    'research.bankRP': '{amount} RP',
+    'research.subtitle': '消耗研究点开发本次任务的原型装备',
+    'research.basic': '基础研究',
+    'research.basicDesc': '标准原型机',
+    'research.advanced': '高级研究',
+    'research.advancedDesc': '实验性科技',
+    'research.breakthrough': '突破性研究',
+    'research.breakthroughDesc': '尖端发现',
+    'research.rarity': '稀有度：{pool}',
+    'research.rolling': '正在开发原型...',
+    'research.developed': '原型开发完成',
+    'research.addedToLoadout': '已加入任务装备',
+    'status.research': '研究',
+    'end.research': '研究',
+    'end.researchBanked': '+{amount} RP 已存入',
   },
 
   ja: {
@@ -983,6 +1043,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': 'エンジン',
     'equip.special': '特殊',
     'equip.standardIssue': '標準装備',
+    'equip.modules': 'モジュール',
+    'equip.moduleQueue': '{count}/3 — 満杯時は最古を交換',
 
     // Cargo
     'cargo.title': '貨物',
@@ -1164,6 +1226,22 @@ export const translations: Record<string, Translations> = {
     'game.retry': 'リトライ',
     'trade.consumable': '消耗品',
     'end.bankDeposit': '+{amount} バンクへ',
+    'research.bank': '研究バンク',
+    'research.bankRP': '{amount} RP',
+    'research.subtitle': 'RPを使ってこのミッション用のプロトタイプ装備を開発',
+    'research.basic': '基礎研究',
+    'research.basicDesc': '標準プロトタイプ',
+    'research.advanced': '応用研究',
+    'research.advancedDesc': '実験的テクノロジー',
+    'research.breakthrough': '革新的研究',
+    'research.breakthroughDesc': '最先端の発見',
+    'research.rarity': 'レア度：{pool}',
+    'research.rolling': 'プロトタイプ開発中...',
+    'research.developed': 'プロトタイプ完成',
+    'research.addedToLoadout': 'ミッション装備に追加済み',
+    'status.research': '研究',
+    'end.research': '研究',
+    'end.researchBanked': '+{amount} RP 保存済み',
   },
 
   ko: {
@@ -1274,6 +1352,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': '엔진',
     'equip.special': '특수',
     'equip.standardIssue': '기본 지급품',
+    'equip.modules': '모듈',
+    'equip.moduleQueue': '{count}/3 — 가득 차면 가장 오래된 것 교체',
 
     // Cargo
     'cargo.title': '화물',
@@ -1455,6 +1535,22 @@ export const translations: Record<string, Translations> = {
     'game.retry': '재시도',
     'trade.consumable': '소모품',
     'end.bankDeposit': '+{amount} 은행에 입금',
+    'research.bank': '연구 저장소',
+    'research.bankRP': '{amount} RP',
+    'research.subtitle': 'RP를 사용해 이번 임무용 프로토타입 장비를 개발하세요',
+    'research.basic': '기초 연구',
+    'research.basicDesc': '표준 프로토타입',
+    'research.advanced': '고급 연구',
+    'research.advancedDesc': '실험적 기술',
+    'research.breakthrough': '혁신 연구',
+    'research.breakthroughDesc': '최첨단 발견',
+    'research.rarity': '희귀도: {pool}',
+    'research.rolling': '프로토타입 개발 중...',
+    'research.developed': '프로토타입 완성',
+    'research.addedToLoadout': '임무 장비에 추가됨',
+    'status.research': '연구',
+    'end.research': '연구',
+    'end.researchBanked': '+{amount} RP 저장됨',
   },
 
   es: {
@@ -1565,6 +1661,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': 'Motor',
     'equip.special': 'Especial',
     'equip.standardIssue': 'equipo estándar',
+    'equip.modules': 'Módulos',
+    'equip.moduleQueue': '{count}/3 — el más antiguo se reemplaza al llenarse',
 
     // Cargo
     'cargo.title': 'Carga',
@@ -1746,6 +1844,22 @@ export const translations: Record<string, Translations> = {
     'game.retry': 'Reintentar',
     'trade.consumable': 'Consumible',
     'end.bankDeposit': '+{amount} al banco',
+    'research.bank': 'Banco de Investigación',
+    'research.bankRP': '{amount} PI',
+    'research.subtitle': 'Gasta PI para desarrollar equipo prototipo para esta misión',
+    'research.basic': 'Investigación Básica',
+    'research.basicDesc': 'Prototipos estándar',
+    'research.advanced': 'Investigación Avanzada',
+    'research.advancedDesc': 'Tecnología experimental',
+    'research.breakthrough': 'Investigación Revolucionaria',
+    'research.breakthroughDesc': 'Descubrimientos de vanguardia',
+    'research.rarity': 'Rareza: {pool}',
+    'research.rolling': 'Desarrollando prototipo...',
+    'research.developed': 'Prototipo Desarrollado',
+    'research.addedToLoadout': 'Añadido al equipamiento de misión',
+    'status.research': 'Investigación',
+    'end.research': 'Investigación',
+    'end.researchBanked': '+{amount} PI almacenados',
   },
 
   fr: {
@@ -1856,6 +1970,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': 'Moteur',
     'equip.special': 'Spécial',
     'equip.standardIssue': 'équipement standard',
+    'equip.modules': 'Modules',
+    'equip.moduleQueue': '{count}/3 — le plus ancien remplacé quand plein',
 
     // Cargo
     'cargo.title': 'Cargaison',
@@ -2037,6 +2153,22 @@ export const translations: Record<string, Translations> = {
     'game.retry': 'Réessayer',
     'trade.consumable': 'Consommable',
     'end.bankDeposit': '+{amount} en banque',
+    'research.bank': 'Banque de Recherche',
+    'research.bankRP': '{amount} PR',
+    'research.subtitle': 'Dépensez des PR pour développer un prototype pour cette mission',
+    'research.basic': 'Recherche de Base',
+    'research.basicDesc': 'Prototypes standard',
+    'research.advanced': 'Recherche Avancée',
+    'research.advancedDesc': 'Technologie expérimentale',
+    'research.breakthrough': 'Recherche Révolutionnaire',
+    'research.breakthroughDesc': 'Découvertes de pointe',
+    'research.rarity': 'Rareté : {pool}',
+    'research.rolling': 'Développement du prototype...',
+    'research.developed': 'Prototype Développé',
+    'research.addedToLoadout': 'Ajouté à l\'équipement de mission',
+    'status.research': 'Recherche',
+    'end.research': 'Recherche',
+    'end.researchBanked': '+{amount} PR stockés',
   },
 
   de: {
@@ -2147,6 +2279,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': 'Antrieb',
     'equip.special': 'Spezial',
     'equip.standardIssue': 'Standardausrüstung',
+    'equip.modules': 'Module',
+    'equip.moduleQueue': '{count}/3 — ältestes wird bei Vollbelegung ersetzt',
 
     // Cargo
     'cargo.title': 'Fracht',
@@ -2328,6 +2462,22 @@ export const translations: Record<string, Translations> = {
     'game.retry': 'Erneut versuchen',
     'trade.consumable': 'Verbrauchsgut',
     'end.bankDeposit': '+{amount} zur Bank',
+    'research.bank': 'Forschungsbank',
+    'research.bankRP': '{amount} FP',
+    'research.subtitle': 'FP ausgeben, um Prototyp-Ausrüstung für diese Mission zu entwickeln',
+    'research.basic': 'Grundlagenforschung',
+    'research.basicDesc': 'Standard-Prototypen',
+    'research.advanced': 'Fortgeschrittene Forschung',
+    'research.advancedDesc': 'Experimentelle Technologie',
+    'research.breakthrough': 'Durchbruchforschung',
+    'research.breakthroughDesc': 'Bahnbrechende Entdeckungen',
+    'research.rarity': 'Seltenheit: {pool}',
+    'research.rolling': 'Prototyp wird entwickelt...',
+    'research.developed': 'Prototyp Entwickelt',
+    'research.addedToLoadout': 'Zur Missionsausrüstung hinzugefügt',
+    'status.research': 'Forschung',
+    'end.research': 'Forschung',
+    'end.researchBanked': '+{amount} FP gespeichert',
   },
 
   pt: {
@@ -2438,6 +2588,8 @@ export const translations: Record<string, Translations> = {
     'equip.engine': 'Motor',
     'equip.special': 'Especial',
     'equip.standardIssue': 'equipamento padrão',
+    'equip.modules': 'Módulos',
+    'equip.moduleQueue': '{count}/3 — o mais antigo é substituído quando cheio',
 
     // Cargo
     'cargo.title': 'Carga',
@@ -2619,5 +2771,21 @@ export const translations: Record<string, Translations> = {
     'game.retry': 'Tentar novamente',
     'trade.consumable': 'Consumível',
     'end.bankDeposit': '+{amount} para o banco',
+    'research.bank': 'Banco de Pesquisa',
+    'research.bankRP': '{amount} PP',
+    'research.subtitle': 'Gaste PP para desenvolver equipamento protótipo para esta missão',
+    'research.basic': 'Pesquisa Básica',
+    'research.basicDesc': 'Protótipos padrão',
+    'research.advanced': 'Pesquisa Avançada',
+    'research.advancedDesc': 'Tecnologia experimental',
+    'research.breakthrough': 'Pesquisa Revolucionária',
+    'research.breakthroughDesc': 'Descobertas de ponta',
+    'research.rarity': 'Raridade: {pool}',
+    'research.rolling': 'Desenvolvendo protótipo...',
+    'research.developed': 'Protótipo Desenvolvido',
+    'research.addedToLoadout': 'Adicionado ao equipamento de missão',
+    'status.research': 'Pesquisa',
+    'end.research': 'Pesquisa',
+    'end.researchBanked': '+{amount} PP armazenados',
   },
 }

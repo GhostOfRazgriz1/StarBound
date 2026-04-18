@@ -195,10 +195,10 @@ export function RunEndScreen() {
               )}
             </div>
             <div>
-              <span className="text-gray-500">Research</span>
+              <span className="text-gray-500">{t('end.research' as Parameters<typeof t>[0])}</span>
               <p className="text-gray-200 text-lg">{run.ship.research}</p>
               {survived && run.ship.research > 0 && (
-                <p className="text-xs text-cyan-400">+{run.ship.research} RP banked</p>
+                <p className="text-xs text-cyan-400">{t('end.researchBanked' as Parameters<typeof t>[0], { amount: run.ship.research })}</p>
               )}
             </div>
             <div>
