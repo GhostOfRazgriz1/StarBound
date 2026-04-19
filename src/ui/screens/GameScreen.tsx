@@ -7,6 +7,7 @@ import { CargoPanel } from '../components/CargoPanel'
 import { ConsumablesPanel } from '../components/ConsumablesPanel'
 import { CaptainsLog } from '../components/CaptainsLog'
 import { TradePanel } from '../components/TradePanel'
+import { BlackMarketPanel } from '../components/BlackMarketPanel'
 import { Narration } from '../components/Narration'
 import { ActionBar } from '../components/ActionBar'
 import { SectorSelect } from '../components/SectorSelect'
@@ -112,6 +113,14 @@ export function GameScreen() {
           >
             {t('chart.title' as Parameters<typeof t>[0])}
           </button>
+          {run.phase !== 'sector_select' && (
+            <button
+              onClick={() => useGameStore.getState().openBlackMarket()}
+              className="px-2 py-1 bg-red-950/40 hover:bg-red-900/40 border border-red-900/30 text-red-400 rounded text-xs shrink-0"
+            >
+              {t('blackMarket.title' as Parameters<typeof t>[0])}
+            </button>
+          )}
 
           <div className="flex-1 min-w-0">
             <h2 className="text-base md:text-lg text-gray-200 truncate">
@@ -195,6 +204,9 @@ export function GameScreen() {
 
       {/* Trade overlay */}
       <TradePanel />
+
+      {/* Black Market overlay */}
+      <BlackMarketPanel />
     </div>
   )
 }

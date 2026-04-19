@@ -284,6 +284,19 @@ export type TranslationKey =
   | 'badge.curious'
   | 'badge.curious.desc'
 
+  // Black Market
+  | 'blackMarket.title'
+  | 'blackMarket.subtitle'
+  | 'blackMarket.leave'
+  | 'blackMarket.buy'
+  | 'blackMarket.sell'
+  | 'blackMarket.pricePerUnit'
+  | 'blackMarket.tankFull'
+  | 'blackMarket.baysFull'
+  | 'blackMarket.sellFor'
+  | 'blackMarket.sellNote'
+  | 'blackMarket.nothingToSell'
+
   // Equipment extras
   | 'equip.modules'
   | 'equip.moduleQueue'
@@ -624,6 +637,19 @@ export const translations: Record<string, Translations> = {
     'status.research': 'Research',
     'end.research': 'Research',
     'end.researchBanked': '+{amount} RP banked',
+
+    // Black Market
+    'blackMarket.title': 'Black Market',
+    'blackMarket.subtitle': 'Premium prices. No questions. No receipts.',
+    'blackMarket.leave': 'Leave',
+    'blackMarket.buy': 'Buy',
+    'blackMarket.sell': 'Sell',
+    'blackMarket.pricePerUnit': '{price}cr per unit',
+    'blackMarket.tankFull': 'Fuel tanks are full',
+    'blackMarket.baysFull': 'Supply bays are full',
+    'blackMarket.sellFor': 'Sell for {price}cr',
+    'blackMarket.sellNote': 'Prices are lower than legitimate traders (60%)',
+    'blackMarket.nothingToSell': 'Nothing to sell',
   },
 
   zh: {
@@ -933,6 +959,17 @@ export const translations: Record<string, Translations> = {
     'status.research': '研究',
     'end.research': '研究',
     'end.researchBanked': '+{amount} RP 已存入',
+    'blackMarket.title': '黑市',
+    'blackMarket.subtitle': '高价交易，不问来源，不留凭证。',
+    'blackMarket.leave': '离开',
+    'blackMarket.buy': '购买',
+    'blackMarket.sell': '出售',
+    'blackMarket.pricePerUnit': '{price}信用/单位',
+    'blackMarket.tankFull': '燃料箱已满',
+    'blackMarket.baysFull': '补给舱已满',
+    'blackMarket.sellFor': '出售 {price}信用',
+    'blackMarket.sellNote': '价格低于正规商人（60%）',
+    'blackMarket.nothingToSell': '没有可出售的物品',
   },
 
   ja: {
@@ -1242,6 +1279,17 @@ export const translations: Record<string, Translations> = {
     'status.research': '研究',
     'end.research': '研究',
     'end.researchBanked': '+{amount} RP 保存済み',
+    'blackMarket.title': '闇市場',
+    'blackMarket.subtitle': '割高価格。質問なし。領収書なし。',
+    'blackMarket.leave': '立ち去��',
+    'blackMarket.buy': '購入',
+    'blackMarket.sell': '売却',
+    'blackMarket.pricePerUnit': '{price}cr/ユニット',
+    'blackMarket.tankFull': '燃料タンク満杯',
+    'blackMarket.baysFull': '補給庫満杯',
+    'blackMarket.sellFor': '{price}crで売却',
+    'blackMarket.sellNote': '正規の商人より安い価格（60%）',
+    'blackMarket.nothingToSell': '売れるものがありませ��',
   },
 
   ko: {
@@ -1551,6 +1599,17 @@ export const translations: Record<string, Translations> = {
     'status.research': '연구',
     'end.research': '연구',
     'end.researchBanked': '+{amount} RP 저장됨',
+    'blackMarket.title': '암시장',
+    'blackMarket.subtitle': '웃돈 거래. 질문 없음. 영수증 없음.',
+    'blackMarket.leave': '떠나기',
+    'blackMarket.buy': '구매',
+    'blackMarket.sell': '판매',
+    'blackMarket.pricePerUnit': '단위당 {price}cr',
+    'blackMarket.tankFull': '연료 탱크 가득 참',
+    'blackMarket.baysFull': '보급품 창고 가득 참',
+    'blackMarket.sellFor': '{price}cr에 판매',
+    'blackMarket.sellNote': '정규 상인보다 낮은 가격 (60%)',
+    'blackMarket.nothingToSell': '판매할 물품 없음',
   },
 
   es: {
@@ -1860,6 +1919,17 @@ export const translations: Record<string, Translations> = {
     'status.research': 'Investigación',
     'end.research': 'Investigación',
     'end.researchBanked': '+{amount} PI almacenados',
+    'blackMarket.title': 'Mercado Negro',
+    'blackMarket.subtitle': 'Precios premium. Sin preguntas. Sin recibos.',
+    'blackMarket.leave': 'Salir',
+    'blackMarket.buy': 'Comprar',
+    'blackMarket.sell': 'Vender',
+    'blackMarket.pricePerUnit': '{price}cr por unidad',
+    'blackMarket.tankFull': 'Tanques de combustible llenos',
+    'blackMarket.baysFull': 'Bahías de suministros llenas',
+    'blackMarket.sellFor': 'Vender por {price}cr',
+    'blackMarket.sellNote': 'Precios más bajos que comerciantes legítimos (60%)',
+    'blackMarket.nothingToSell': 'Nada que vender',
   },
 
   fr: {
@@ -2169,6 +2239,17 @@ export const translations: Record<string, Translations> = {
     'status.research': 'Recherche',
     'end.research': 'Recherche',
     'end.researchBanked': '+{amount} PR stockés',
+    'blackMarket.title': 'Marché Noir',
+    'blackMarket.subtitle': 'Prix majorés. Pas de questions. Pas de reçus.',
+    'blackMarket.leave': 'Partir',
+    'blackMarket.buy': 'Acheter',
+    'blackMarket.sell': 'Vendre',
+    'blackMarket.pricePerUnit': '{price}cr par unité',
+    'blackMarket.tankFull': 'Réservoirs pleins',
+    'blackMarket.baysFull': 'Soutes pleines',
+    'blackMarket.sellFor': 'Vendre pour {price}cr',
+    'blackMarket.sellNote': 'Prix inférieurs aux marchands légitimes (60%)',
+    'blackMarket.nothingToSell': 'Rien à vendre',
   },
 
   de: {
@@ -2478,6 +2559,17 @@ export const translations: Record<string, Translations> = {
     'status.research': 'Forschung',
     'end.research': 'Forschung',
     'end.researchBanked': '+{amount} FP gespeichert',
+    'blackMarket.title': 'Schwarzmarkt',
+    'blackMarket.subtitle': 'Premiumpreise. Keine Fragen. Keine Quittungen.',
+    'blackMarket.leave': 'Verlassen',
+    'blackMarket.buy': 'Kaufen',
+    'blackMarket.sell': 'Verkaufen',
+    'blackMarket.pricePerUnit': '{price}cr pro Einheit',
+    'blackMarket.tankFull': 'Treibstofftanks voll',
+    'blackMarket.baysFull': 'Vorratslager voll',
+    'blackMarket.sellFor': 'Für {price}cr verkaufen',
+    'blackMarket.sellNote': 'Niedrigere Preise als seriöse Händler (60%)',
+    'blackMarket.nothingToSell': 'Nichts zu verkaufen',
   },
 
   pt: {
@@ -2787,5 +2879,16 @@ export const translations: Record<string, Translations> = {
     'status.research': 'Pesquisa',
     'end.research': 'Pesquisa',
     'end.researchBanked': '+{amount} PP armazenados',
+    'blackMarket.title': 'Mercado Negro',
+    'blackMarket.subtitle': 'Preços premium. Sem perguntas. Sem recibos.',
+    'blackMarket.leave': 'Sair',
+    'blackMarket.buy': 'Comprar',
+    'blackMarket.sell': 'Vender',
+    'blackMarket.pricePerUnit': '{price}cr por unidade',
+    'blackMarket.tankFull': 'Tanques cheios',
+    'blackMarket.baysFull': 'Depósitos cheios',
+    'blackMarket.sellFor': 'Vender por {price}cr',
+    'blackMarket.sellNote': 'Preços mais baixos que comerciantes legítimos (60%)',
+    'blackMarket.nothingToSell': 'Nada para vender',
   },
 }

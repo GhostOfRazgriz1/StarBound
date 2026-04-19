@@ -33,6 +33,9 @@ interface GameStore {
   tradeStock: TraderItem[]
   traderName: string
 
+  // Black Market UI state
+  showBlackMarket: boolean
+
   // Streaming narration
   streamingText: string
   setStreamingText: (text: string) => void
@@ -77,6 +80,14 @@ interface GameStore {
   buyItem: (index: number) => void
   sellFromCargo: (itemId: string) => void
 
+  // Black Market
+  openBlackMarket: () => void
+  closeBlackMarket: () => void
+  blackMarketBuyFuel: (amount: number) => void
+  blackMarketBuySupplies: (amount: number) => void
+  blackMarketSellCargo: (itemId: string) => void
+  blackMarketSellConsumable: (consumableId: string) => void
+
   // Consumables
   addConsumable: (consumable: Consumable) => boolean
   removeConsumable: (consumableId: string) => void
@@ -112,6 +123,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   showTrade: false,
   tradeStock: [],
   traderName: '',
+  showBlackMarket: false,
   streamingText: '',
   captainAnalysis: null,
 
@@ -535,6 +547,71 @@ export const useGameStore = create<GameStore>((set, get) => ({
       : `${sellValue} credits for ${item.name}. Reasonable.`
     const sectorHistory = [...run.sectorHistory,
       `You sell ${item.name} to the trader for ${sellValue} credits.\n\nFO: "${foComment}"`
+    ]
+    set({ run: { ...run, ship: { ...run.ship, consumables: newConsumables, credits }, sectorHistory } })
+  },
+
+  // Black Market
+  openBlackMarket: () => set({ showBlackMarket: true }),
+  closeBlackMarket: () => set({ showBlackMarket: false }),
+
+  blackMarketBuyFuel: (amount) => {
+    const run = get().run
+    if (!run) return
+    const cost = amount * 3  // premium price: 3cr per unit
+    if (run.ship.credits < cost) return
+    if (run.ship.fuel >= run.ship.maxFuel) return
+    const added = Math.min(amount, run.ship.maxFuel - run.ship.fuel)
+    const actualCost = added * 3
+    const ship = { ...run.ship, fuel: run.ship.fuel + added, credits: run.ship.credits - actualCost }
+    const sectorHistory = [...run.sectorHistory,
+      `You purchase ${added} units of fuel on the black market for ${actualCost} credits. The price stings, but fuel is fuel.`
+    ]
+    set({ run: { ...run, ship, sectorHistory } })
+  },
+
+  blackMarketBuySupplies: (amount) => {
+    const run = get().run
+    if (!run) return
+    const cost = amount * 3
+    if (run.ship.credits < cost) return
+    if (run.ship.supplies >= run.ship.maxSupplies) return
+    const added = Math.min(amount, run.ship.maxSupplies - run.ship.supplies)
+    const actualCost = added * 3
+    const ship = { ...run.ship, supplies: run.ship.supplies + added, credits: run.ship.credits - actualCost }
+    const sectorHistory = [...run.sectorHistory,
+      `You acquire ${added} units of supplies through back channels for ${actualCost} credits. No questions asked.`
+    ]
+    set({ run: { ...run, ship, sectorHistory } })
+  },
+
+  blackMarketSellCargo: (itemId) => {
+    const run = get().run
+    if (!run) return
+    const item = run.ship.cargo.find((i) => i.id === itemId)
+    if (!item) return
+    const normalValue = RARITY_CONFIG[item.rarity]?.sellValue ?? 10
+    const sellValue = Math.floor(normalValue * 0.6)
+    const cargo = run.ship.cargo.filter((i) => i.id !== itemId)
+    const credits = run.ship.credits + sellValue
+    const sectorHistory = [...run.sectorHistory,
+      `You offload ${item.name} on the black market for ${sellValue} credits. Not great, but no haggling.`
+    ]
+    set({ run: { ...run, ship: { ...run.ship, cargo, credits }, sectorHistory } })
+  },
+
+  blackMarketSellConsumable: (consumableId) => {
+    const run = get().run
+    if (!run) return
+    const consumables = run.ship.consumables || []
+    const item = consumables.find((c) => c.id === consumableId)
+    if (!item) return
+    const normalValue = CONSUMABLE_SELL_VALUES[item.resolution]
+    const sellValue = Math.floor(normalValue * 0.6)
+    const newConsumables = consumables.filter((c) => c.id !== consumableId)
+    const credits = run.ship.credits + sellValue
+    const sectorHistory = [...run.sectorHistory,
+      `You fence ${item.name} on the black market for ${sellValue} credits. The buyer doesn't ask where it came from.`
     ]
     set({ run: { ...run, ship: { ...run.ship, consumables: newConsumables, credits }, sectorHistory } })
   },
